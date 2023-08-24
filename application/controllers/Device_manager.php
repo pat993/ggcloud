@@ -18,6 +18,10 @@ class Device_manager extends CI_Controller
 
    public function index()
    {
+      $user_id = $this->session->userdata('user_id');
+
+      $data['user_id'] = $user_id;
+
       $data['device'] = $this->M_device_manager->get_data('device');
 
       $data['device_count'] = $this->M_device_manager->get_count('device');

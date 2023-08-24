@@ -145,3 +145,20 @@
         </form>
      </div>
   </div>
+
+  <div id="menu-device-detail" class="menu menu-box-modal rounded-m" style="max-width: 600px; width: 100%">
+     <div class="content">
+        <form method="POST" action="<?= base_url() . 'device_manager/edit_device/'; ?>">
+           <div id="device-edit" class="ms-3 me-3 mb-3">
+              <div class="d-flex">
+                 <div class="mb-2">
+                    <h1><i class="fas fa-tools"></i> Device Detail</h1>
+                 </div>
+              </div>
+              <div id="a-device-detail">
+                 Loading....
+              </div>
+           </div>
+        </form>
+     </div>
+  </div>

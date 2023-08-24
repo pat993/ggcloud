@@ -16,6 +16,10 @@ class User_manager extends CI_Controller
 
    public function index()
    {
+      $user_id = $this->session->userdata('user_id');
+
+      $data['user_id'] = $user_id;
+
       $data['user'] = $this->M_user_manager->get_data('user');
 
       $data['user_count'] = $this->M_user_manager->get_count('user');

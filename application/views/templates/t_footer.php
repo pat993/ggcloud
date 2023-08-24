@@ -135,156 +135,153 @@
 <?php
 } ?>
 
-<script>
-   $(function() {
-      var t = $('#tb_device').DataTable({
-         order: [
-            [2, 'asc']
-         ],
-         "pageLength": 50
-      });
+<?php if (isset($user_id)) {
+   if ($user_id == '1') { ?>
+      <script>
+         $(function() {
+            var t = $('#tb_device').DataTable({
+               order: [
+                  [2, 'asc']
+               ],
+               "pageLength": 50
+            });
 
-      t.on('order.dt search.dt', function() {
-         let i = 1;
+            t.on('order.dt search.dt', function() {
+               let i = 1;
 
-         t.cells(null, 0, {
-            search: 'applied',
-            order: 'applied'
-         }).every(function(cell) {
-            this.data(i++);
+               t.cells(null, 0, {
+                  search: 'applied',
+                  order: 'applied'
+               }).every(function(cell) {
+                  this.data(i++);
+               });
+            }).draw();
          });
-      }).draw();
-   });
 
-   // $(function() {
-   //    $('#tb_purchase').DataTable({
-   //       "searching": false,
-   //       "info": false,
-   //       "bLengthChange": false
-   //    });
-   // });
+         function get_daftar_paket(select) {
+            var a = document.getElementById("div-daftar-paket");
+            a.innerHTML = "Loading....";
 
-   function get_daftar_paket(select) {
-      var a = document.getElementById("div-daftar-paket");
-      a.innerHTML = "Loading....";
+            str = select.options[select.selectedIndex].text;
 
-      str = select.options[select.selectedIndex].text;
-
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/daftar_paket/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/daftar_paket/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function detailVoucher(str) {
-      var checkExist = document.getElementById("voucher-detail");
-      // checkExist.innerHTML = ""
-      if (checkExist != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               document.getElementById("voucher-detail").innerHTML = this.responseText;
+         function detailVoucher(str) {
+            var checkExist = document.getElementById("voucher-detail");
+            // checkExist.innerHTML = ""
+            if (checkExist != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     document.getElementById("voucher-detail").innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "_ajax/ajx_voucher-detail.php?id=" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "_ajax/ajx_voucher-detail.php?id=" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function a_device_detail(str) {
-      var a = document.getElementById("a-device-detail");
-      a.innerHTML = "Loading....";
+         function a_device_detail(str) {
+            var a = document.getElementById("a-device-detail");
+            a.innerHTML = "Loading....";
 
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>device_manager/get_detail/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>device_manager/get_detail/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function a_device_info(str) {
-      var a = document.getElementById("a-device-info");
-      a.innerHTML = "<div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 50px; width: 300px'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-4 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div>";
+         function a_device_info(str) {
+            var a = document.getElementById("a-device-info");
+            a.innerHTML = "<div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 50px; width: 300px'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-2 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div><div class='mb-4 rounded-s' style='background-color: #E7E7E7; height: 20px;'></div>";
 
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>dashboard/get_detail/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>dashboard/get_detail/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function a_voucher_detail(str) {
-      var a = document.getElementById("a-voucher-detail");
-      a.innerHTML = "Loading....";
+         function a_voucher_detail(str) {
+            var a = document.getElementById("a-voucher-detail");
+            a.innerHTML = "Loading....";
 
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/get_detail/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/get_detail/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function a_device_edit(str) {
-      var a = document.getElementById("a-device-edit");
-      a.innerHTML = "Loading....";
+         function a_device_edit(str) {
+            var a = document.getElementById("a-device-edit");
+            a.innerHTML = "Loading....";
 
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>device_manager/get_detail_edit/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>device_manager/get_detail_edit/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   function a_user_edit(str) {
-      var a = document.getElementById("a-user-edit");
-      a.innerHTML = "Loading....";
+         function a_user_edit(str) {
+            var a = document.getElementById("a-user-edit");
+            a.innerHTML = "Loading....";
 
-      // checkExist.innerHTML = ""
-      if (a != null) {
-         var xmlhttp = new XMLHttpRequest();
-         xmlhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-               a.innerHTML = this.responseText;
+            // checkExist.innerHTML = ""
+            if (a != null) {
+               var xmlhttp = new XMLHttpRequest();
+               xmlhttp.onreadystatechange = function() {
+                  if (this.readyState == 4 && this.status == 200) {
+                     a.innerHTML = this.responseText;
+                  }
+               };
+               xmlhttp.open("GET", "<?= base_url() ?>user_manager/get_detail/" + str, true);
+               xmlhttp.send();
             }
-         };
-         xmlhttp.open("GET", "<?= base_url() ?>user_manager/get_detail/" + str, true);
-         xmlhttp.send();
-      }
-   }
+         }
 
-   var base_url = "<?= base_url(); ?>";
-</script>
+         var base_url = "<?= base_url(); ?>";
+      </script>
+<?php
+   }
+} ?>
 
 <script type="text/javascript" src="<?= base_url(); ?>scripts/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

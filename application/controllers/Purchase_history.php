@@ -16,6 +16,10 @@ class Purchase_history extends CI_Controller
 
    public function index()
    {
+      $user_id = $this->session->userdata('user_id');
+
+      $data['user_id'] = $user_id;
+      
       $data['tanggal'] = '';
       $data['bulan'] = '';
       $data['tahun'] = '';

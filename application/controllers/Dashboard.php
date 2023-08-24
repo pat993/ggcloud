@@ -17,11 +17,14 @@ class Dashboard extends CI_Controller
    public function index()
    {
 
+      $user_id = $this->session->userdata('user_id');
+
       $where = array(
-         'user_id' => $this->session->userdata('user_id'),
+         'user_id' => $user_id,
          'status' => 'active'
       );
 
+      $data['user_id'] = $user_id;
       $data['device_list'] = $this->M_dashboard->get_data('assigned', $where);
       $this->load->view('templates/t_header');
       $this->load->view('templates/t_footbar');

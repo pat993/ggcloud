@@ -23,6 +23,10 @@ class Voucher_manager extends CI_Controller
 
    public function index()
    {
+      $user_id = $this->session->userdata('user_id');
+
+      $data['user_id'] = $user_id;
+
       $data['voucher_count'] = $this->M_voucher_manager->get_count('voucher');
       $data['voucher_used_count'] = $this->M_voucher_manager->get_used('voucher');
 
