@@ -75,10 +75,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'db_ggcloud',
+	'hostname' => '103.55.39.38',
+	'username' => 'ggcloudi_apollo',
+	'password' => '@ggcloud1234',
+	'database' => 'ggcloudi_apollo',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
