@@ -16,7 +16,7 @@ class M_device_manager extends CI_Model
 
    function get_ajax_data($table, $where)
    {
-      $this->db->select('*, device.id as device_id');
+      $this->db->select('*, device.id as device_id, assigned.status as device_status');
       $this->db->join('assigned', 'assigned.device_id = device.id', 'left');
       $this->db->join('user', 'user.id = assigned.user_id', 'left');
       $this->db->where($where);

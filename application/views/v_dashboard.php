@@ -7,7 +7,7 @@
          <p class="color-white mt-n1 mb-0">Select device to launch</p>
       </div>
       <div class="card-center me-3">
-         <a href="#" data-menu="menu-submit-voucher" class="back-button btn btn-m float-end rounded-m shadow-xl text-uppercase font-800 bg-highlight"><i class="fas fa-ticket"></i> Voucher Claim</a>
+         <a href="#" data-menu="menu-submit-voucher" class="back-button btn btn-m float-end rounded-m shadow-xl text-uppercase font-800 bg-highlight">Voucher Claim</a>
       </div>
       <div class="card-overlay bg-black opacity-80"></div>
    </div>

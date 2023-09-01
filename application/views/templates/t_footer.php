@@ -135,9 +135,9 @@
 <?php
 } ?>
 
-<?php if (isset($user_id)) {
-   if ($user_id == '1') { ?>
-      <script>
+<script>
+   <?php if (isset($user_id)) {
+      if ($user_id == '1') { ?>
          $(function() {
             var t = $('#tb_device').DataTable({
                order: [
@@ -276,12 +276,12 @@
                xmlhttp.send();
             }
          }
+   <?php
+      }
+   } ?>
 
-         var base_url = "<?= base_url(); ?>";
-      </script>
-<?php
-   }
-} ?>
+   var base_url = "<?= base_url(); ?>";
+</script>
 
 <script type="text/javascript" src="<?= base_url(); ?>scripts/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>

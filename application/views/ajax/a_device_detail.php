@@ -23,12 +23,16 @@ foreach ($device as $result) {
          <td><?= $result["type"]; ?></td>
       </tr>
       <tr>
-         <td style="width: 150px">Last Assign</td>
-         <td><?= $result["email"]; ?></td>
+         <td style="width: 150px">Status</td>
+         <td><?= $result["device_status"]; ?></td>
       </tr>
       <tr>
-         <td style="width: 150px">Last Used</td>
+         <td style="width: 150px">Last Assign</td>
          <td><?= $result["end_date"]; ?></td>
+      </tr>
+      <tr>
+         <td style="width: 150px">Last User</td>
+         <td><?= $result["email"]; ?></td>
       </tr>
    </table>
 <?php
