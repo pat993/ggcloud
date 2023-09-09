@@ -1,0 +1,33 @@
+.DraggableDiv {
+    /* to allow the draggable div's to scroll with the content make the position absolute */
+   position: absolute;
+      z-index: 9;
+      top: 5px;
+      left: 10px;
+      font-size: 20px;
+      color: white;
+      background-color: darkslategrey;
+      border-radius: 20px;
+      text-align: center;
+      padding: 5px;
+      width: 42px;
+      opacity: 70%;
+}
+ 
+.DraggableDiv div {
+    padding: 5px;
+}
+ 
+.DraggableDiv .Header {
+    cursor: move;
+    font-weight: bold;
+    color: #ffffff;
+    border-bottom: 1px solid #000000;
+    background-color: #566895;
+}
+ 
+#DraggableDiv2 {
+    cursor: move;
+    top: 40%;
+    left: 25%;
+}
