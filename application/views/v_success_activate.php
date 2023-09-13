@@ -5,16 +5,16 @@
          <div class="card-top notch-clear">
             <div class="d-flex">
                <a href="login" class="me-auto icon icon-m"><i class="font-14 fa fa-arrow-left color-theme"></i></a>
-               <a href="#" data-toggle-theme class="show-on-theme-light ms-auto icon icon-m"><i class="font-12 fa fa-moon color-theme"></i></a>
-               <a href="#" data-toggle-theme class="show-on-theme-dark ms-auto icon icon-m"><i class="font-12 fa fa-lightbulb color-yellow-dark"></i></a>
+               <!-- <a href="#" data-toggle-theme class="show-on-theme-light ms-auto icon icon-m"><i class="font-12 fa fa-moon color-theme"></i></a>
+            <a href="#" data-toggle-theme class="show-on-theme-dark ms-auto icon icon-m"><i class="font-12 fa fa-lightbulb color-yellow-dark"></i></a> -->
             </div>
          </div>
          <div class="card-center">
-            <div class="ps-5 pe-5 text-center">
-               <div style="padding-bottom: 20px" class="text-center">
-                  <img style="width: 100px; height: auto" class="text-center" src="../images/verified.png" alt="">
-               </div>
-               <h1 class="text-center font-800 font-40 mb-1">Account Verified</h1>
+            <div class="ps-5 pe-5">
+               <!-- <div style="padding-bottom: 20px" class="text-center">
+               <img class="text-center" src="images/ggcloud.png" alt="">
+            </div> -->
+               <h1 class="text-center font-200 font-40 mb-4">Account Verified</h1>
                <!-- <p class="text-center font-12">Register new member</p> -->
 
                Akun berhasil di-verifikasi, silahkan login untuk memulai

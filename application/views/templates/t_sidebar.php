@@ -12,10 +12,10 @@
       <div class="bg-theme mx-3 rounded-m shadow-m my-3">
          <div class="d-flex px-2 pb-2 pt-2">
             <div class="align-self-center">
-               <a href="#"><img src="<?= base_url(); ?>images/ggcloud.png" width="40" class="rounded-sm" alt="img"></a>
+               <a href="#"><img src="<?= base_url(); ?>images/user.png" width="40" class="rounded-sm" alt="img"></a>
             </div>
             <div class="ps-2 align-self-center">
-               <h5 class="ps-1 mb-1 pt-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
+               <h5 class="ps-1 mb-1 p  t-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
                <h6 class="ps-1 mb-0 font-400 opacity-40 font-12"><?= $this->session->userdata('email'); ?></h6>
             </div>
             <div class="ms-auto">
@@ -100,7 +100,7 @@
       } ?>
 
    </div>
-   <div class="position-sticky w-100 bottom-0 end-0 pb-1">
+   <!-- <div class="position-sticky w-100 bottom-0 end-0 pb-1">
       <div class="card card-style mb-3">
          <div class="content my-0 py-">
             <div class="list-group list-custom-small list-icon-0">
@@ -116,5 +116,5 @@
             </div>
          </div>
       </div>
-   </div>
+   </div> -->
 </div>
