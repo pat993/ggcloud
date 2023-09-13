@@ -217,8 +217,8 @@ body.stream {
 }
 
 .text-with-shadow, .more-box label {
-    color: var(--text-color);
-    text-shadow: var(--text-shadow-color) 0 0 .357rem;
+    color: white *;
+    /* text-shadow: var(--text-shadow-color) 0 0 .357rem; */
     margin-bottom: 10px;
 }
 

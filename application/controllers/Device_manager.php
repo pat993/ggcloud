@@ -132,4 +132,37 @@ class Device_manager extends CI_Controller
 
       $this->load->view('ajax/a_device_edit.php', $data);
    }
+
+   public function configure($id)
+   {
+      $where = array(
+         'id' => $id
+      );
+
+      $dev_data = $this->M_device_manager->get_configure_data('device', $where);
+
+      foreach ($dev_data as $dev_data_r) {
+         $data['dev_id'] = $dev_data_r['id'];
+         $data['ip'] = $dev_data_r['ip'];
+         $data['port'] = $dev_data_r['port'];
+      }
+
+      $this->load->view('v_player', $data);
+      $this->load->view('templates/t_configure');
+   }
+
+   public function done_configure($id)
+   {
+      $where = array(
+         'id' => $id
+      );
+
+      $data = array(
+         'status_id' => 2
+      );
+
+      $this->M_device_manager->update_data('device', $data, $where);
+
+      echo 'Berhasil Konfigurasi';
+   }
 }

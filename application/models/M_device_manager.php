@@ -62,4 +62,11 @@ class M_device_manager extends CI_Model
       $this->db->where($where);
       $this->db->delete($table);
    }
+
+   function get_configure_data($table, $where)
+   {
+      $result = $this->db->get_where($table, $where)->result_array();
+
+      return $result;
+   }
 }

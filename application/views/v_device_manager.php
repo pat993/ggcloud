@@ -58,10 +58,13 @@
                           <div class="dropleft">
                              <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
                              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <?php if ($result['status_id'] == 1) { ?>
+                                   <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Re-configure</button></a>
+                                   <div class="dropdown-divider"></div>
+                                <?php
+                                 } ?>
                                 <button class="dropdown-item" data-menu="menu-device-detail" onclick="a_device_detail(<?= $result['device_id']; ?>)"><i class="fas fa-info-circle"></i> Detail</button>
-                                <div class="dropdown-divider"></div>
                                 <button class="dropdown-item" data-menu="menu-device-edit" onclick="a_device_edit(<?= $result['device_id']; ?>)"><i class="fas fa-pen"></i> Edit</button>
-                                <button class="dropdown-item" data-menu="menu-device-edit" onclick="a_device_edit(<?= $result['device_id']; ?>)"><i class="fas fa-arrow-alt-circle-right"></i> Clean-up</button>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="<?= base_url() ?>device_manager/delete_device/<?= $result["device_id"]; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fas fa-trash"></i> Delete</a>
                              </div>

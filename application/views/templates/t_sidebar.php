@@ -23,10 +23,10 @@
                <div class="dropdown-menu bg-transparent border-0 mb-n5">
                   <div class="card card-style rounded-m shadow-xl me-1">
                      <div class="list-group list-custom-small list-icon-0 px-3 mt-n1">
-                        <a href="profile" class="mb-n2 mt-n1">
+                        <!-- <a href="profile" class="mb-n2 mt-n1">
                            <span>Your Profile</span>
                            <i class="fa fa-angle-right"></i>
-                        </a>
+                        </a> -->
                         <a href="signout" class="mb-n1">
                            <span>Sign Out</span>
                            <i class="fa fa-angle-right"></i>

@@ -1,4 +1,4 @@
-  <div style="max-width: 1100px; margin: auto; background-color: white" class="page-content header-clear-medium">
+  <div style="max-width: 1100px; margin: auto" class="page-content header-clear-medium">
 
      <div style="height: 100%;">
         <div class="content mb-2 ms-4 me-4">
@@ -85,16 +85,11 @@
                           </select>
                        </div>
                     </div>
-
-                    <div class="col-sm-5">
-                       <div class="row">
-                          <div class="col-4">
+                          <div class="col-sm-2">
                              <a type="submit" class="btn btn-full btn-l bg-light rounded-xl" href="<?= base_url(); ?>purchase_history"><i class="fas fa-redo-alt"></i></a>
                           </div>
-                          <div class="col-4">
+                          <div class="col-sm-2">
                              <button type="submit" class="btn btn-full btn-l rounded-xl bg-primary text-white"><i class="fas fa-search"></i></button>
-                          </div>
-                       </div>
                     </div>
                  </div>
               </form>
