@@ -12,6 +12,16 @@ class M_dashboard extends CI_Model
       return $result;
    }
 
+   function get_jenis_paket($table, $where)
+   {
+      $this->db->select('jenis_paket');
+      $this->db->join('device', 'device.id=assigned.device_id');
+
+      $result = $this->db->get_where($table, $where)->result_array();
+
+      return $result;
+   }
+
    function get_existing($table, $where)
    {
       $this->db->where($where);

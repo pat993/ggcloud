@@ -14,6 +14,13 @@ class M_voucher_manager extends CI_Model
       return $result;
    }
 
+   function jenis_paket($table)
+   {
+      $result = $this->db->get_where($table)->result_array();
+
+      return $result;
+   }
+
    function get_count($table)
    {
       $result = $this->db->get_where($table);

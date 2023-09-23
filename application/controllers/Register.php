@@ -107,7 +107,7 @@ class Register extends CI_Controller
       $mail->addReplyTo('noreply@ggcloud.id', ''); //user email
 
       // Add a recipient
-      $mail->addAddress('patra.brave@gmail.com'); //email tujuan pengiriman email
+      $mail->addAddress($email); //email tujuan pengiriman email
       //$mail->addAddress($email); //email tujuan pengiriman email
 
       // Email subject

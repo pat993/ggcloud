@@ -132,11 +132,22 @@
               <!-- <label for="txt_kode-voucher" style="background-color: transparent" class="color-green-dark font-600">Kode Voucher</label> -->
 
               <div class="input-style has-borders no-icon mb-4 input-style-active">
-                 Jenis Paket :
-                 <select class="form-select" name="txt_jenis" onchange="if (this.selectedIndex) get_daftar_paket(this);" required>
+                 Tipe Paket :
+                 <select class="form-select" name="txt_tipe" id="txt_tipe" onchange="if (this.selectedIndex) get_daftar_paket();" required>
                     <option selected disabled>-- Pilih Salah Satu --</option>
-                    <option value="Baru">Baru</option>
+                    <option value="Baru" selected>Baru</option>
                     <option value="Perpanjang">Perpanjang</option>
+                 </select>
+              </div>
+
+              <div class="input-style has-borders no-icon mb-4 input-style-active">
+                 Jenis Paket :
+                 <select class="form-select" name="txt_jenis" id="txt_jenis" onchange="if (this.selectedIndex) get_daftar_paket();" required>
+                    <option selected disabled>-- Pilih Salah Satu --</option>
+                    <?php foreach ($jenis_paket_list as $jenis_paket_list_p) { ?>
+                       <option value="<?= $jenis_paket_list_p['id']; ?>"><?= $jenis_paket_list_p['nama_paket']; ?></option>
+                    <?php
+                     } ?>
                  </select>
               </div>
 
@@ -148,7 +159,6 @@
                     </select>
                  </div>
               </div>
-
 
               <div class="input-style has-borders no-icon mb-4 input-style-active">
                  Kode Pemesanan :

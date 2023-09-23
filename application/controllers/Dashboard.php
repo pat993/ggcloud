@@ -167,9 +167,20 @@ class Dashboard extends CI_Controller
       $voucher_code = $this->input->post('txt_voucher_ext');
       $assign_id = $this->input->post('txt_assign_id');
 
+      $where1 = array(
+         'assigned.id' => $assign_id
+      );
+
+      $jenis_paket_ary = $this->M_dashboard->get_jenis_paket('assigned', $where1);
+
+      foreach ($jenis_paket_ary as $jenis_paket_r) {
+         $jenis_paket = $jenis_paket_r['jenis_paket'];
+      }
+
       $where = array(
          'kode_voucher' => $voucher_code,
          'jenis_voucher' => 'Perpanjang',
+         'jenis_paket' => $jenis_paket
       );
 
       //cek validitas voucher dan ambil data
@@ -238,7 +249,7 @@ class Dashboard extends CI_Controller
             //update status digunakan voucher
             $this->M_dashboard->update_data('voucher', $where2, $data2);
 
-            $this->session->set_flashdata('success', "Berhasil Input Data");
+            $this->session->set_flashdata('success', "Perpanjang Perangkat Berhasil");
 
             redirect($_SERVER['HTTP_REFERER']);
          } else {
@@ -247,7 +258,7 @@ class Dashboard extends CI_Controller
             redirect($_SERVER['HTTP_REFERER']);
          }
       } else {
-         $this->session->set_flashdata('error', "Voucher tidak valid!");
+         $this->session->set_flashdata('error', "Kode tidak valid!");
 
          redirect($_SERVER['HTTP_REFERER']);
       }

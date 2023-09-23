@@ -10,9 +10,9 @@ class M_satpam extends CI_Model
       $this->db->query($sql);
    }
 
-   function update_firewall($end_date)
+   function update_firewall($id)
    {
-      $sql = "UPDATE firewall INNER JOIN assigned on firewall.assign_id = assigned.id SET firewall.status = 'blocked' WHERE end_date <= '" . $end_date . "'";
+      $sql = "UPDATE firewall INNER JOIN assigned on firewall.assign_id = assigned.id SET firewall.status = 'blocked' WHERE assign_id = '" . $id . "'";
 
       $this->db->query($sql);
    }
@@ -21,6 +21,7 @@ class M_satpam extends CI_Model
    {
       $this->db->join('assigned', 'firewall.assign_id=assigned.id');
       $this->db->where('assigned.status', 'expired');
+      $this->db->where('firewall.status', 'active');
 
       $result = $this->db->get_where($table)->result_array();
 

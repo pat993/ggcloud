@@ -1,7 +1,7 @@
 <!--start of page content, add your stuff here-->
 <div style="max-width: 600px; margin: auto" class="page-content header-clear-medium">
 
-   <div class="card card-style preload-img mb-2" data-src="images/ragnarok-x.jpg" data-card-height="150">
+   <div class="card card-style preload-img mb-2" data-src="images/banner-ggc.png" data-card-height="150">
       <div class="card-center ms-3">
          <h1 class="color-white mb-0 font-200">My Device</h1>
          <!-- <p class="color-white mt-n1 mb-0">Select device to launch</p> -->
@@ -13,7 +13,7 @@
    </div>
 
    <div class="ms-4 mt-0 mb-0 opacity-50">
-      <small><i class="fas fa-long-arrow-alt-right"></i> Geser untuk melihat perangkat lainnya</small>
+      <small><i class="fas fa-long-arrow-alt-right"></i> Swipe untuk melihat perangkat lainnya</small>
    </div>
 
    <div class="splide double-slider slider-no-arrows slider-no-dots" id="double-slider-home-2">
@@ -42,7 +42,7 @@
 
                ?>
                <div class="splide__slide">
-                  <div data-card-height="180" class="card mx-3 rounded-m shadow-l card-style preload-img" data-src="images/android.jpg">
+                  <div data-card-height="180" class="card mx-3 rounded-m shadow-l card-style preload-img" data-src="images/garuda_basic.png">
                      <div class="card-bottom ms-3 mb-3" style="color: white">
                         <small>HP</small>
                         <div class="progress mt-0 mb-1" style="height:3px; width: 40px">
@@ -59,7 +59,7 @@
                      </div>
 
                      <div class="card-top me-4 mt-3">
-                        <button class="btn color-white font-900 mb-0 float-end" data-menu="menu-device-info-<?= $device['id'] ?>"><i class="fas fa-ellipsis-v"></i></button>
+                        <button style="width: 10px; padding:0" class="btn color-white mt-0 float-end" data-menu="menu-device-info-<?= $device['id'] ?>"><i class="fas fa-ellipsis-v"></i></button>
                      </div>
                      <!-- <div class="card-top">
                         <p class="text-end me-3 font-10 font-500 opacity-50 color-white mt-3"><button data-menu="menu-edit-device"><i class="fas fa-pencil"></i></button></p>
@@ -84,13 +84,14 @@
 
 <div id="menu-submit-voucher" class="menu menu-box-bottom menu-box-detached rounded-m" style="max-width: 700px; margin: auto">
    <div class="menu-title mb-2">
-      <h1 class="font-200">Voucher Claim</h1>
+      <h1 class="font-200 mb-2">Voucher Claim</h1>
+      <p>Tambah perangkat menggunakan voucher</p>
       <!-- <p>Claim voucher to add device</p> -->
    </div>
    <div style="margin: 0px 20px 0px 20px" class="content">
       <form action="<?= base_url() ?>dashboard/voucher_claim/" method="POST">
          <div class="input-style input-style-always-active validate-field no-borders no-icon">
-            <input style="border-radius: 10px; background-color: #F8F8F8" class="text-center" type="text" name="txt_voucher_code" autocomplete="off" required>
+            <input style="border-radius: 10px; background-color: #F8F8F8" class="text-center" type="text" name="txt_voucher_code" autocomplete="off" placeholder="Input kode voucher disini" required>
             <!-- <label for="txt_voucher-code" class="color-theme opacity-20 text-uppercase font-700 font-10 mt-1">Voucher Code</label> -->
          </div>
          <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-4 mt-4"><i class="far fa-check-circle"></i></button>
@@ -99,24 +100,14 @@
 </div>
 
 <div id="menu-buy-voucher" class="menu menu-box-bottom menu-box-detached rounded-m" style="max-width: 700px; margin: auto">
-   <div class="menu-title">
-      <h1>Add Device</h1>
-      <p>Add new device to your account</p><a href="#" class="close-menu"><i class="fa fa-times"></i></a>
+   <div class="menu-title mb-1">
+      <h1 class="font-200">Add Device</h1>
+      <!-- <p>Claim voucher to add device</p> -->
    </div>
-   <div class="content">
-      Anda dapat menambahkan perangkat dengan cara membeli voucher terlebih dahulu di official store kami pada marketplace berikut: <br>
+   <div style="margin: 0px 20px 0px 20px" class="content">
+      Untuk saat ini penambahan perangkat hanya dapat dilakukan melalui pembelian voucher, dapatkan voucher di official store kami pada marketplace berikut: <br>
       <div class="text-center"><a target="_blank" href="https://shopee.co.id"><img src="images/shopee.png" alt=""></a></div>
-      <hr>
-      <form action="" method="POST">
-         <div class="input-style input-style-always-active validate-field no-borders no-icon">
-            <input type="text" name="txt_voucher-code" required>
-            <label for="txt_voucher-code" class="color-theme opacity-30 text-uppercase font-700 font-10 mt-1">Voucher Code</label>
-            <i class="fa fa-times disabled invalid color-red-dark"></i>
-            <i class="fa fa-check disabled valid color-green-dark"></i>
-            <em>(required)</em>
-         </div>
-         <button href="#" type="submit" name="submit-voucher" style="width: 100%" class="btn btn-full btn-m rounded-m bg-green-dark font-700 text-uppercase mb-4 mt-4">Simpan</button>
-      </form>
+      <br>
    </div>
 </div>
 
@@ -145,7 +136,7 @@ foreach ($device_list as $result) {
                      <p>Nama Perangkat</p>
                   </td>
                   <td style="position: relative;"><?= $result["custom_name"]; ?>
-                     <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"><i class="fas fa-pencil-alt"></i></button>
+                     <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"><i class="fas fa-wrench"></i></button>
                   </td>
                </tr>
                <tr>
@@ -198,7 +189,7 @@ foreach ($device_list as $result) {
                <input maxlength="10" style="border-radius: 10px; background-color: #F8F8F8" class="text-center" type="text" name="txt_rename_device" value="<?= $result["custom_name"]; ?>" autocomplete="off" required>
                <!-- <label for="txt_voucher-code" class="color-theme opacity-20 text-uppercase font-700 font-10 mt-1">Voucher Code</label> -->
             </div>
-            <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m bg-green-dark font-700 text-uppercase mb-4 mt-4"><i class="far fa-check-circle"></i></button>
+            <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-4 mt-4"><i class="far fa-check-circle"></i></button>
          </form>
       </div>
    </div>

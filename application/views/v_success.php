@@ -17,7 +17,9 @@
                <h1 class="text-center font-200 font-40 mb-4">Sign Up</h1>
                <!-- <p class="text-center font-12">Register new member</p> -->
 
-               Berhasil registrasi, silahkan cek email untuk aktivasi akun kamu
+               <p class="text-center">
+                  Berhasil registrasi, silahkan cek email untuk aktivasi akun kamu
+               </p>
 
                <div class="text-center mb-5 mt-5">
                   <a href="../login" class="font-12">Kembali ke login</a>

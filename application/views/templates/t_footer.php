@@ -158,11 +158,15 @@
             }).draw();
          });
 
-         function get_daftar_paket(select) {
+         function get_daftar_paket() {
             var a = document.getElementById("div-daftar-paket");
             a.innerHTML = "Loading....";
 
-            str = select.options[select.selectedIndex].text;
+            var tipe = document.getElementById("txt_tipe");
+            var str = tipe.options[tipe.selectedIndex].value;
+
+            var tipe = document.getElementById("txt_jenis");
+            var str2 = tipe.options[tipe.selectedIndex].value;
 
             // checkExist.innerHTML = ""
             if (a != null) {
@@ -172,7 +176,7 @@
                      a.innerHTML = this.responseText;
                   }
                };
-               xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/daftar_paket/" + str, true);
+               xmlhttp.open("GET", "<?= base_url() ?>voucher_manager/daftar_paket/" + str + "/" + str2, true);
                xmlhttp.send();
             }
          }

@@ -16,9 +16,10 @@
             </div> -->
                <h1 class="text-center font-200 font-40 mb-4">Account Verified</h1>
                <!-- <p class="text-center font-12">Register new member</p> -->
-
-               Akun berhasil di-verifikasi, silahkan login untuk memulai
-
+               <p class="text-center">
+               Akun berhasil di-verifikasi, silahkan login untuk masuk ke akun kamu
+               </p>
+               
                <div class="text-center mb-5 mt-5">
                   <a href="../login" class="font-12">Kembali ke login</a>
                </div>

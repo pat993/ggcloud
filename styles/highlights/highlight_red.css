@@ -1,6 +1,10 @@
 /* Generating Color Pack*/
-.color-highlight {
+.color-highlight-purple {
   color: #DA4453 !important;
+}
+
+.color-highlight-purple {
+  color: #8E54E9 !important;
 }
 
 .bg-highlight {

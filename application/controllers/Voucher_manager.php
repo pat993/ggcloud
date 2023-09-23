@@ -40,13 +40,15 @@ class Voucher_manager extends CI_Controller
 
       $data['voucher_list'] = $this->M_voucher_manager->get_voucher_list('voucher');
 
+      $data['jenis_paket_list'] = $this->M_voucher_manager->jenis_paket('jenis_paket');
+
       $this->load->view('templates/t_header');
       $this->load->view('templates/t_sidebar');
       $this->load->view('v_voucher_manager', $data);
       $this->load->view('templates/t_footer');
    }
 
-   public function daftar_paket($str)
+   public function daftar_paket($str, $str2)
    {
 
       if ($str == 'Baru') {
@@ -56,7 +58,8 @@ class Voucher_manager extends CI_Controller
       }
 
       $where = array(
-         'tipe' => $str
+         'tipe' => $str,
+         'jenis_paket_id' => $str2
       );
 
       $data['package_list'] = $this->M_voucher_manager->get_package_list('package', $where);
@@ -68,6 +71,7 @@ class Voucher_manager extends CI_Controller
    {
       $kode_voucher = $this->input->post('txt_kode_voucher');
       $paket_id = $this->input->post('txt_paket_id');
+      $tipe = $this->input->post('txt_tipe');
       $jenis = $this->input->post('txt_jenis');
       $order_id = $this->input->post('txt_order_id');
       $email = $this->input->post('txt_email');
@@ -78,7 +82,8 @@ class Voucher_manager extends CI_Controller
       $data = array(
          'kode_voucher' => $kode_voucher,
          'paket_id' => $paket_id,
-         'jenis_voucher' => $jenis,
+         'jenis_voucher' => $tipe,
+         'jenis_paket' => $jenis,
          'order_id' => $order_id,
          'email_tujuan' => $email,
          'tanggal_expired' => $expired
