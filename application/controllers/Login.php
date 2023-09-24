@@ -28,7 +28,8 @@ class Login extends CI_Controller
 
       $google_client->setClientSecret('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'); //Define your Client Secret Key
 
-      $google_client->setRedirectUri('https://8000-pat993-ggcloud-c6xxrtwvwv2.ws-us104.gitpod.io/login'); //Define your Redirect Uri
+      // $google_client->setRedirectUri('https://8000-pat993-ggcloud-c6xxrtwvwv2.ws-us104.gitpod.io/login'); //Define your Redirect Uri
+      $google_client->setRedirectUri('https://ggcloud.id/login'); //Define your Redirect Uri
 
       $google_client->addScope('email');
 
