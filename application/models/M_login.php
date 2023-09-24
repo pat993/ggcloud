@@ -14,4 +14,15 @@ class M_login extends CI_Model
 
       return $result;
    }
+
+   function cek_email($email)
+   {
+      $this->db->where('email', $email);
+      $result = $this->db->get('user');
+      if ($result->num_rows() > 0) {
+         return true;
+      } else {
+         return false;
+      }
+   }
 }

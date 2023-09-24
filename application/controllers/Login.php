@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require_once 'vendor/autoload.php';
+
+
 class Login extends CI_Controller
 {
 
@@ -17,8 +20,76 @@ class Login extends CI_Controller
 
    function index()
    {
+      // include_once APPPATH . "libraries/vendor/autoload.php";
+
+      $google_client = new Google_Client();
+
+      $google_client->setClientId('202490747901-sep9vrasqf7imp704iorairj8n3t8n4f.apps.googleusercontent.com'); //Define your ClientID
+
+      $google_client->setClientSecret('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'); //Define your Client Secret Key
+
+      $google_client->setRedirectUri('https://8000-pat993-ggcloud-c6xxrtwvwv2.ws-us104.gitpod.io/login'); //Define your Redirect Uri
+
+      $google_client->addScope('email');
+
+      $google_client->addScope('profile');
+
+      if (isset($_GET["code"])) {
+         $token = $google_client->fetchAccessTokenWithAuthCode($_GET["code"]);
+
+         if (!isset($token["error"])) {
+            $google_client->setAccessToken($token['access_token']);
+
+            $this->session->set_userdata('access_token', $token['access_token']);
+
+            $google_service = new Google_Service_Oauth2($google_client);
+
+            $data = $google_service->userinfo->get();
+
+            $current_datetime = date('Y-m-d H:i:s');
+
+            if ($this->M_login->cek_email($data['email'])) {
+               //update data
+               // $user_data = array(
+               //    'email_address' => $data['email'],
+               // );
+
+               // $email = $data['email'];
+
+               $where = array(
+                  'email' => $data['email']
+               );
+
+               $user = $this->M_login->cek_login('user', $where);
+
+               foreach ($user as $user_p) {
+                  $username = $user_p['username'];
+                  $email = $user_p['email'];
+                  $user_id = $user_p['id'];
+               };
+
+               $data_session = array(
+                  'username' => $username,
+                  'email' => $email,
+                  'status' => "login",
+                  'user_id' => $user_id
+               );
+
+               $this->session->set_userdata($data_session);
+
+               redirect(base_url("dashboard"));
+            } else {
+               $this->session->set_flashdata('error', "Silahkan registrasi terlebih dahulu");
+               $this->session->set_flashdata('email', $data['email']);
+
+               redirect('register');
+            }
+         }
+      }
+
+      $data['auth_url'] = $google_client->createAuthUrl();
       $this->load->view('templates/t_header');
-      $this->load->view('v_login');
+      $this->load->view('v_login', $data);
       $this->load->view('templates/t_footer');
    }
 
@@ -57,5 +128,9 @@ class Login extends CI_Controller
 
          redirect('login');
       }
+   }
+
+   function google()
+   {
    }
 }

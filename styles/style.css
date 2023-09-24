@@ -5585,7 +5585,7 @@ input[type=number] {
 }
 
 .bg-red-dark {
-  background-color: #8E54E9 !important;
+  background-color: #ED5565 !important;
   color: #FFF !important;
 }
 
@@ -6943,7 +6943,7 @@ input[type=number] {
 }
 
 .bg-blue-purple {
-  background-image: linear-gradient(to right, #4776E6 0%, #8E54E9  100%);
+  background-image: linear-gradient(to right, #4776E6 0%, #8E54E9  51%);
   color: #FFF !important;
 }
 

@@ -147,7 +147,7 @@ class Dashboard extends CI_Controller
 
             $this->M_dashboard->update_data('device', $where3, $data3);
 
-            $this->session->set_flashdata('success', "Berhasil Input Data");
+            $this->session->set_flashdata('success', "Success");
 
             redirect($_SERVER['HTTP_REFERER']);
          } else {

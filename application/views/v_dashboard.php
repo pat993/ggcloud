@@ -136,7 +136,8 @@ foreach ($device_list as $result) {
                      <p>Nama Perangkat</p>
                   </td>
                   <td style="position: relative;"><?= $result["custom_name"]; ?>
-                     <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"><i class="fas fa-wrench"></i></button>
+                     <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"> <i class="fa fa-angle-right"></i>
+                     </button>
                   </td>
                </tr>
                <tr>

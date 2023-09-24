@@ -11,22 +11,21 @@
          </div>
          <div class="card-center">
             <div class="ps-5 pe-5">
-               <!-- <div style="padding-bottom: 20px" class="text-center">
-               <img class="text-center" src="images/ggcloud.png" alt="">
-            </div> -->
+               <div style="padding-bottom: 20px" class="text-center mb-1">
+                  <img class="text-center" src="/images/verified.png" width="80" alt="">
+               </div>
                <h1 class="text-center font-200 font-40 mb-4">Account Verified</h1>
                <!-- <p class="text-center font-12">Register new member</p> -->
                <p class="text-center">
-               Akun berhasil di-verifikasi, silahkan login untuk masuk ke akun kamu
+                  Akun berhasil di-verifikasi, silahkan login untuk masuk ke akun kamu
                </p>
-               
+
                <div class="text-center mb-5 mt-5">
                   <a href="../login" class="font-12">Kembali ke login</a>
                </div>
             </div>
          </div>
       </div>
-
    </div>
    <!-- End of Page Content-->
 <?php

@@ -9,17 +9,17 @@
 <!-- Sidebar 1 -->
 <div id="menu-sidebar-left-1" class="menu menu-box-left menu-box-detached menu-sidebar" data-menu-width="310">
    <div class="sidebar-content">
-      <div class="bg-theme mx-3 rounded-m shadow-m my-3">
+      <div class="bg-blue-purple mx-3 rounded-m shadow-m my-3">
          <div class="d-flex px-2 pb-2 pt-2">
             <div class="align-self-center">
-               <a href="#"><img style="background-color: white;" src="<?= base_url(); ?>images/user_default.png" width="40" class="rounded-sm" alt="img"></a>
+               <a href="#"><img style="background-color: white; padding: 5px" src="<?= base_url(); ?>images/user_default.png" width="40" class="rounded-xl" alt="img"></a>
             </div>
             <div class="ps-2 align-self-center">
-               <h5 class="ps-1 mb-1 color-highlight-purple t-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
-               <h6 class="ps-1 mb-0 font-400 opacity-40 font-12"><?= $this->session->userdata('email'); ?></h6>
+               <h5 class="ps-1 mb-1 text-white t-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
+               <h6 class="ps-1 mb-0 text-white font-400 opacity-40 font-12"><?= $this->session->userdata('email'); ?></h6>
             </div>
             <div class="ms-auto">
-               <a href="#" data-bs-toggle="dropdown" class="icon icon-m ps-3"><i class="fa fa-ellipsis-v font-18 color-theme"></i></a>
+               <a href="#" data-bs-toggle="dropdown" class="icon icon-m ps-3"><i class="fa fa-ellipsis-v font-18 text-white"></i></a>
                <div class="dropdown-menu bg-transparent border-0 mb-n5">
                   <div class="card card-style rounded-m shadow-m me-1">
                      <div class="list-group list-custom-small list-icon-0 px-3 mt-n1">
