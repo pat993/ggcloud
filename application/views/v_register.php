@@ -40,10 +40,10 @@
                   <input type="password" class="form-control" placeholder="Confirm your Password" name="password2" minlength="8" required>
                </div>
 
-               <div class="form-check icon-check mb-4 mt-2">
+               <div class="form-check icon-check mb-4 mt-4">
                   <input class="form-check-input" type="checkbox" value="" id="check4" required>
                   <label class="form-check-label" for="check4">
-                     <small>Dengan ini saya menyetujui <a href="" data-menu="modal-tos">TOS</a> yang berlaku pada layanan</small>
+                     <small>Dengan ini saya menyetujui <a href="" data-menu="modal-tos">T.O.S</a> yang berlaku selama menggunakan layanan</small>
                   </label>
                   <i class="icon-check-1 far fa-circle color-gray-dark font-16"></i>
                   <i class="icon-check-2 far fa-check-circle font-16 color-highlight-purple"></i>
