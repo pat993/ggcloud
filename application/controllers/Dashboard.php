@@ -39,18 +39,22 @@ class Dashboard extends CI_Controller
       $assign_id = $this->input->post('txt_assign_id');
       $user_id = $this->session->userdata('user_id');
 
-      $data = array(
-         'custom_name' => $device_name
-      );
+      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $device_name)) {
+         $data = array(
+            'custom_name' => $device_name
+         );
 
-      $where = array(
-         'id' => $assign_id,
-         'user_id' => $user_id
-      );
+         $where = array(
+            'id' => $assign_id,
+            'user_id' => $user_id
+         );
 
-      $this->M_dashboard->update_data('assigned', $where, $data);
+         $this->M_dashboard->update_data('assigned', $where, $data);
 
-      redirect($_SERVER['HTTP_REFERER']);
+         redirect($_SERVER['HTTP_REFERER']);
+      } else {
+         redirect($_SERVER['HTTP_REFERER']);
+      }
    }
 
    public function voucher_claim()

@@ -54,7 +54,7 @@
             <!-- <a class="navbar-brand logo-text page-scroll" href="index.html">Tivo</a> -->
 
             <!-- Image Logo -->
-            <a class="navbar-brand logo-image" href="/"><img src="addon/images/ggc_white.png" alt="alternative"></a> <span style="color: white;">GGCLOUD</span>
+            <a style="text-decoration: none;" class="navbar-brand logo-image" href="/"><img src="addon/images/ggc_white.png" alt="alternative"> <span style="color: white; font-size: 14px">GGCLOUD</span></a>
 
             <!-- Mobile Menu Toggle Button -->
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -112,7 +112,7 @@
                     <div class="col-lg-6 col-xl-5">
                         <div class="text-container">
                             <h1>Cloud Emulator Lokal Ga Pake Mahal !</h1>
-                            <p class="p-large">Jalankan Game dan Aplikasimu 24/7 Non-stop tanpa worry, GAME ON !</p>
+                            <p class="p-large">Jalankan Game dan Aplikasimu 24/7 non-stop tanpa worry dengan harga dan paket yang flexibel</p>
                             <a class="btn-solid-lg page-scroll" href="register">SIGN UP</a>
                         </div> <!-- end of text-container -->
                     </div> <!-- end of col -->
@@ -230,11 +230,11 @@
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">8 Cores GPU</div>
+                                        <div class="media-body">8 Cores CPU</div>
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">Mid-end GPU</div>
+                                        <div class="media-body">Fast GPU</div>
                                     </li>
                                 </ul>
                                 <div class="button-wrapper">
@@ -266,11 +266,11 @@
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">8 Cores GPU</div>
+                                        <div class="media-body">8 Cores CPU</div>
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">Mid-end GPU</div>
+                                        <div class="media-body">Fast GPU</div>
                                     </li>
                                 </ul>
                                 <div class="button-wrapper">
@@ -302,11 +302,11 @@
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">8 Cores GPU</div>
+                                        <div class="media-body">8 Cores CPU</div>
                                     </li>
                                     <li class="media">
                                         <i class="fas fa-check"></i>
-                                        <div class="media-body">Mid-end GPU</div>
+                                        <div class="media-body">Fast GPU</div>
                                     </li>
                                 </ul>
                                 <div class="button-wrapper">
@@ -344,7 +344,7 @@
                 <div class="col-md-4">
                     <div class="footer-col first">
                         <h4>Tentang GGCLOUD</h4>
-                        <p class="p-small">Merupakan Projek Proof of Concept pengembangan ekosistem cloud android lokal</p>
+                        <p class="p-small">Proyek Startup layanan cloud Android pertama di Indonesia</p>
                     </div>
                 </div> <!-- end of col -->
                 <div class="col-md-4">

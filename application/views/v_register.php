@@ -22,6 +22,7 @@
                   <i class="fa fa-user"></i>
                   <input type="text" class="form-control" id="username" placeholder="Username" name="username" required>
                </div>
+               <small>* Hanya berupa karakter, nomor dan garis bawah ('_')</small>
                <?php if (null !== $this->session->flashdata('email')) {
                   $email = $this->session->flashdata('email');
                } else {

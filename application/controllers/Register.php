@@ -31,48 +31,57 @@ class Register extends CI_Controller
    function aksi_register()
    {
       $username = $this->input->post('username');
-      $email = $this->input->post('email');
-      $password1 = $this->input->post('password1');
-      $password2 = $this->input->post('password2');
 
-      if ($password1 == $password2) {
-         $options = [
-            'cost' => 10,
-         ];
+      //prevent script inject by user
 
-         $check_existing = $this->M_register->check_existing($username, $email);
+      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $username)) {
+         $email = $this->input->post('email');
+         $password1 = $this->input->post('password1');
+         $password2 = $this->input->post('password2');
 
-         if ($check_existing != true) {
-            $password_hash = password_hash($password1, PASSWORD_BCRYPT, $options);
+         if ($password1 == $password2) {
+            $options = [
+               'cost' => 10,
+            ];
 
-            $activation_code = $this->M_register->randomString(10);
+            $check_existing = $this->M_register->check_existing($username, $email);
 
-            $data = array(
-               'username' => $username,
-               'email' => $email,
-               'password' => $password_hash,
-               'activation_code' => $activation_code
-            );
+            if ($check_existing != true) {
+               $password_hash = password_hash($password1, PASSWORD_BCRYPT, $options);
 
-            $this->M_register->input_data("user", $data);
+               $activation_code = $this->M_register->randomString(10);
 
-            $this->session->set_flashdata('success', "Berhasil register user");
-            $this->session->set_flashdata('username', $username);
-            $this->session->set_flashdata('email', $email);
-            $this->session->set_flashdata('activation_code', $activation_code);
+               $data = array(
+                  'username' => $username,
+                  'email' => $email,
+                  'password' => $password_hash,
+                  'activation_code' => $activation_code
+               );
 
-            redirect('register/success');
+               $this->M_register->input_data("user", $data);
+
+               $this->session->set_flashdata('success', "Berhasil register user");
+               $this->session->set_flashdata('username', $username);
+               $this->session->set_flashdata('email', $email);
+               $this->session->set_flashdata('activation_code', $activation_code);
+
+               redirect('register/success');
+            } else {
+               $this->session->set_flashdata('error', "Username / email sudah terdaftar");
+               $this->session->set_flashdata('username', $username);
+               $this->session->set_flashdata('email', $email);
+
+               redirect('register');
+            }
          } else {
-            $this->session->set_flashdata('error', "Username / email sudah terdaftar");
+            $this->session->set_flashdata('error', "Password tidak sesuai");
             $this->session->set_flashdata('username', $username);
             $this->session->set_flashdata('email', $email);
 
             redirect('register');
          }
       } else {
-         $this->session->set_flashdata('error', "Password tidak sesuai");
-         $this->session->set_flashdata('username', $username);
-         $this->session->set_flashdata('email', $email);
+         $this->session->set_flashdata('error', "Invalid Username Format");
 
          redirect('register');
       }
