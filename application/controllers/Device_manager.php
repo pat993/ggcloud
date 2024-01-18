@@ -13,6 +13,7 @@ class Device_manager extends CI_Controller
          redirect(base_url("login"));
       } else {
          $this->load->model('M_device_manager');
+         $this->load->model('M_player');
       }
    }
 
