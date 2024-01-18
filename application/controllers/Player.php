@@ -80,7 +80,7 @@ class Player extends CI_Controller
                 // echo "firewall exist";
             }
             $data2['user_id'] = $user_id;
-            $data2['ip'] = '103.82.93.205';
+            $data2['ip'] = 'www.hypercube.my.id';
             $data2['port'] = $dev_port;
 
             $this->load->view('v_player', $data2);

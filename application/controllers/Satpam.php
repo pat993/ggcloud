@@ -24,7 +24,9 @@ class Satpam extends CI_Controller
    {
       $end_date = date('Y-m-d H:i:s');
 
-      $this->M_satpam->razia($end_date);
+      $this->M_satpam->razia1($end_date);
+      $this->M_satpam->razia2($end_date);
+
       $firewall_list = $this->M_satpam->get_firewall_list('firewall');
 
       echo json_encode($firewall_list);
