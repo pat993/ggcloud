@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport" />
-    <title>WS scrcpy</title>
+    <title>Cloud Player</title>
     <link href="/ws/main.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/ws/styles/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/ws/styles/style.css">
