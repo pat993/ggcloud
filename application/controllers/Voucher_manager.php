@@ -133,30 +133,36 @@ class Voucher_manager extends CI_Controller
 
       // Email body content
       $mailContent = "
-            <div style='max-width: 500px;  padding: 10px; border-radius: 10px; margin: auto; background-color: #57BAFF'>
-              <div style='text-align: center; margin-bottom: 5px'>
-                 <b style='color: white'>GGCLOUD</b></a>
-              </div>
-              <div style='background-color: #ffffff; padding: 10px; border-radius: 10px'>
-                 <h3 style='margin-bottom: 2px'>Terima Kasih 🧡</h3>
-                 Gunakan kode voucher di bawah untuk menambahkan perangkat kamu <br>
-                 Jenis Paket : " . $info_paket[0]['keterangan'] . "
-                 <div style='background-color:  #f2f2f2; border-radius: 20px; font-size: 20px; padding: 10px; margin: 10px 0 10px 0; text-align: center; color: green'>
-                    " . $kode_voucher . "
-                 </div>
-                 <small><i>Voucher Expiration : " . $expired_konversi . "</i></small>
-                 <div style='background-color: #f2f2f2;  margin-top: 5px; padding: 5px'>
-                    <strong>Detail Pembelian :</strong><br>
-                 </div>
-                 <div style='border: 1px solid #f2f2f2; padding : 5px'>
-                    Tangal Pembelian : " . date("d F Y") . "<br>
-                    Order ID : " . $order_id . "<br>
-                    Subtotal : " . $info_paket[0]['harga'] . " IDR<br>
-                 </div>
+      <div style='background-color: #EEF1FF; padding: 15px 0 15px 0'>
+         <div style='max-width: 500px;  padding: 10px 10px 20px 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
+            <div style='text-align: center; margin-top: 15px'>
+               <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
+            </div>
+            <div style='padding: 10px; border-radius: 10px'>
+               <h3 style='margin-bottom: 2px'>Terima Kasih 🧡</h3>
+               Gunakan kode voucher di bawah untuk menambahkan perangkat kamu <br>
+               Jenis Paket : " . $info_paket[0]['keterangan'] . "
+               <div style='background-color:  #f2f2f2; border-radius: 20px; font-size: 20px; padding: 10px; margin: 20px 0 20px 0; text-align: center; color: green'>
+                  " . $kode_voucher . "
+               </div>
+               <small><i>Voucher Expiration : " . $expired_konversi . "</i></small>
+               <br>
+               <br>
+               <div style='background-color: #f2f2f2;  margin-top: 5px; padding: 5px'>
+                  <strong>Detail Pembelian :</strong><br>
+               </div>
+               <div style='border: 1px solid #f2f2f2; padding : 5px'>
+                  Tangal Pembelian : " . date("d F Y") . "<br>
+                  Order ID : " . $order_id . "<br>
+                  Subtotal : " . $info_paket[0]['harga'] . " IDR<br>
+               </div>
 
-                 <small><b>Penting!</b> Segera lakukan klaim voucher pada akun kamu sebelum tanggal expired!</small>
-              </div>
-           </div>";
+               <br>
+               <br>
+               <small><b>Penting!</b> Segera lakukan klaim voucher pada akun kamu sebelum tanggal expired!</small>
+            </div>
+         </div>
+      </div>";
 
       $mail->Body = $mailContent;
 

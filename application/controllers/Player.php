@@ -26,6 +26,7 @@ class Player extends CI_Controller
         // echo $allow_ip;
 
         $where = array(
+            'user_id' => $user_id,
             'device_identifier' => $id
         );
 
@@ -83,6 +84,8 @@ class Player extends CI_Controller
             $data2['port'] = $dev_port;
 
             $this->load->view('v_player', $data2);
+        } else {
+            redirect('dashboard');
         }
     }
 }

@@ -1,6 +1,10 @@
 <!--start of page content, add your stuff here-->
 <div style="max-width: 600px; margin: auto" class="page-content header-clear-medium">
 
+   <div style="background-color: #FD8A8A; color: white; margin: 5px; padding: 5px 15px 5px 15px; border-radius: 10px; margin-bottom: 15px;">
+      Perhatian : untuk saat ini player belum support audio
+   </div>
+
    <div class="card card-style preload-img mb-2" data-src="images/banner-ggc.png" data-card-height="150">
       <div class="card-center ms-3">
          <h1 class="color-white mb-0 font-200">My Device</h1>
@@ -12,7 +16,7 @@
       <div class="card-overlay bg-black opacity-80"></div>
    </div>
 
-   <div class="ms-4 mt-0 mb-0 opacity-50">
+   <div class="ms-4 mt-0 mb-0 opacity-70">
       <small><i class="fas fa-long-arrow-alt-right"></i> Swipe untuk melihat perangkat lainnya</small>
    </div>
 

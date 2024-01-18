@@ -129,24 +129,32 @@ class Register extends CI_Controller
 
       // Email body content
       $mailContent = "
-            <div style='max-width: 500px;  padding: 10px; border-radius: 10px; margin: auto; background-color: #57BAFF'>
-              <div style='text-align: center; margin-bottom: 5px'>
-                 <b style='color: white'>GGCLOUD.ID</b></a>
-              </div>
-              <div style='background-color: #ffffff; padding: 10px; border-radius: 10px'>
-                 <h3 style='margin-bottom: 2px'>Aktivasi Pendaftaran</h3><br>
-                 Dear " . $username . ",<br>
-                 Terima kasih sudah mendaftar di ggcloud.id, silahkan klik link di bawah ini untuk melakukan aktivasi akun kamu<br>
-                 <br>
-                 <a href='" . base_url() . "register/activation?token=" . $activation_code . "'>" . base_url() . "register/activation?token=" . $activation_code . "</a>
-                 <br>
-                 <br>
-                 Regards,<br>
-                 ggcloud team<br>
-                 <br>
-              </div>
-              <div style='text-align: right; color: white'><small>Powered by GGCLOUD Project @ 2017-2023</small></div>
-           </div>";
+      <div style='background-color: #EEF1FF; padding: 15px 0 15px 0'>
+         <div style='max-width: 500px;  padding: 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
+            <div style='text-align: center; margin-top: 15px'>
+               <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
+            </div>
+            <div style='padding: 10px; border-radius: 10px'>
+               <h3 style='margin-bottom: 2px'>Aktivasi Pendaftaran</h3><br>
+               Dear " . $username . ",<br>
+               Terima kasih sudah mendaftar di ggcloud.id, silahkan klik tombol di bawah ini untuk melakukan aktivasi akun kamu<br>
+               <br>
+               
+               <div style='width: 100%; margin: 10px 0 10px 0; text-align: center; '>
+               <a style='text-decoration: none; background-color: #98A8F8; border: 0; border-radius: 20px; color: white; padding: 15px; ' href='" . base_url() . "register/activation?token=" . $activation_code . "'>
+               ACTIVATE ACCOUNT
+               </a>
+               
+               </div>
+
+               <br>
+               <br>
+               Regards,<br>
+               Ggcloud team<br>
+            </div>
+            <div style='text-align: right; color: white'><small>Ggcloud.id</small></div>
+         </div>
+      </div>";
 
       $mail->Body = $mailContent;
 

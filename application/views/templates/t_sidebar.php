@@ -12,7 +12,7 @@
       <div class="bg-blue-purple mx-3 rounded-m shadow-m my-3">
          <div class="d-flex px-2 pb-2 pt-2">
             <div class="align-self-center">
-               <a href="#"><img style="background-color: white; padding: 5px" src="<?= base_url(); ?>images/user_default.png" width="40" class="rounded-xl" alt="img"></a>
+               <a href="#"><img style="background-color: white;" src="<?= base_url(); ?>images/user.png" width="40" class="rounded-xl" alt="img"></a>
             </div>
             <div class="ps-2 align-self-center">
                <h5 class="ps-1 mb-1 text-white t-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
@@ -41,7 +41,7 @@
          <div class="content my-0">
             <!-- <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Navigation</h5> -->
             <div class="list-group list-custom-small list-icon-0">
-               <a href="<?= base_url(); ?>">
+               <a href="<?= base_url(); ?>dashboard">
                   <!-- <i class="fas fa-cloud"></i> -->
                   <!-- <i class="fa font-12 fa-home gradient-green rounded-sm color-white"></i> -->
                   <span>My Device</span>

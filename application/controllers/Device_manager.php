@@ -135,6 +135,9 @@ class Device_manager extends CI_Controller
 
    public function configure($id)
    {
+      $user_id = $this->session->userdata('user_id');
+      $allow_ip = $this->M_player->get_client_ip();
+
       $where = array(
          'id' => $id
       );
@@ -143,8 +146,40 @@ class Device_manager extends CI_Controller
 
       foreach ($dev_data as $dev_data_r) {
          $data['dev_id'] = $dev_data_r['id'];
-         $data['ip'] = $dev_data_r['ip'];
+         $data['ip'] = '103.82.93.205';
          $data['port'] = $dev_data_r['port'];
+
+         $dev_port = $dev_data_r['port'];
+      }
+
+      $where = array(
+         'ip' => $allow_ip,
+         'port' => $data['port'],
+         'user_id' => $user_id
+      );
+
+      $firewall_exist = $this->M_player->check_existing('firewall', $where);
+
+      if (count($firewall_exist) == 0) {
+         $ssh = new SSH2('103.82.93.205');
+         if (!$ssh->login('patra', '@Patraana007')) {
+            exit('Login Failed');
+         } else {
+            // echo 'allowed ip: ' . $allow_ip;
+            // echo 'allowed port: ' . $allow_port;
+            $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $dev_port . "");
+
+            $data = array(
+               'user_id' => $user_id,
+               'assign_id' => '',
+               'ip' => $allow_ip,
+               'port' => $dev_port
+            );
+
+            $this->M_player->add_firewall('firewall', $data);
+
+            //exit('Success');
+         }
       }
 
       $this->load->view('v_player', $data);
