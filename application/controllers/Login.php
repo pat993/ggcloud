@@ -96,38 +96,53 @@ class Login extends CI_Controller
 
    function aksi_login()
    {
-      $password_cek = '';
 
-      $username = $this->input->post('username');
-      $password = $this->input->post('password');
-      $where = array(
-         'username' => $username,
-         'status' => 'aktif'
-      );
-      $cek = $this->M_login->cek_login("user", $where);
+      //recaptca
+      $response = $this->input->post('g-recaptcha-response');
+      $error = "";
+      $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
+      $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
+      $verify = json_decode(file_get_contents($url));
 
-      foreach ($cek as $cek_p) {
-         $username = $cek_p['username'];
-         $email = $cek_p['email'];
-         $password_cek = $cek_p['password'];
-         $user_id = $cek_p['id'];
-      };
+      if ($verify->success) {
 
-      //echo print_r($cek);
-      if (password_verify($password, $password_cek)) {
+         $password_cek = '';
 
-         $data_session = array(
+         $username = $this->input->post('username');
+         $password = $this->input->post('password');
+         $where = array(
             'username' => $username,
-            'email' => $email,
-            'status' => "login",
-            'user_id' => $user_id
+            'status' => 'aktif'
          );
+         $cek = $this->M_login->cek_login("user", $where);
 
-         $this->session->set_userdata($data_session);
+         foreach ($cek as $cek_p) {
+            $username = $cek_p['username'];
+            $email = $cek_p['email'];
+            $password_cek = $cek_p['password'];
+            $user_id = $cek_p['id'];
+         };
 
-         redirect(base_url("dashboard"));
+         //echo print_r($cek);
+         if (password_verify($password, $password_cek)) {
+
+            $data_session = array(
+               'username' => $username,
+               'email' => $email,
+               'status' => "login",
+               'user_id' => $user_id
+            );
+
+            $this->session->set_userdata($data_session);
+
+            redirect(base_url("dashboard"));
+         } else {
+            $this->session->set_flashdata('error', "Username / Password tidak sesuai");
+
+            redirect('login');
+         }
       } else {
-         $this->session->set_flashdata('error', "Username / Password tidak sesuai");
+         $this->session->set_flashdata('error', "Captcha tidak sesuai");
 
          redirect('login');
       }

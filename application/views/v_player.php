@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport" />
-    <title>Cloud Player</title>
+    <title>Connecting to Server ...</title>
     <link href="/ws/main.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/ws/styles/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/ws/styles/style.css">
@@ -33,12 +33,19 @@
             height: 100%;
         }
 
-        .center {
-            margin: auto;
-            width: 60%;
-            border: 3px solid #73AD21;
-            padding: 10px;
+        .center2 {
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -100px;
+            text-align: center;
+            color: white;
         }
+
+
     </style>
 </head>
 
@@ -53,6 +60,32 @@
         <br>
         <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
     </div>
+
+    <div style="display: none;" class="center2" id="notification">
+        <i style="font-size: 50px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
+
+        <br>
+        <b>Oops</b>, tampaknya terjadi kendala jaringan, silahkan cek koneksi anda dan coba refresh kembali
+        <br>
+        <br>
+        <b>Tips:</b>
+        Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
+    </div>
+
+    <script>
+        // Function to show the hidden div after a delay
+        function notification() {
+            // Get the div element
+            var notification = document.getElementById('notification');
+
+            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
+            setTimeout(function() {
+                notification.style.display = 'block';
+            }, 10000);
+        }
+
+        window.onload = notification();
+    </script>
 
     <script>
         var dev_ip = "<?= $ip; ?>";

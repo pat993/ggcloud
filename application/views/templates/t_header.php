@@ -22,6 +22,8 @@
    <script src="<?= base_url(); ?>scripts/jquery.dataTables.min.js"></script>
    <script src="<?= base_url(); ?>scripts/dataTables.bootstrap4.min.js"></script>
 
+   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
 </head>
 
 <body class="theme-light" data-highlight="highlight-red" data-gradient="body-default">
