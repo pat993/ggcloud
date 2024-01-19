@@ -41,9 +41,9 @@
                   <input type="password" class="form-control" placeholder="Confirm your Password" name="password2" minlength="8" required>
                </div>
 
-               <div class="g-recaptcha mb-2" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq"></div>
+               <div class="g-recaptcha mt-4" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
 
-               <div class="form-check icon-check mb-2 mt-4">
+               <div class="form-check icon-check mb-2">
                   <input class="form-check-input" type="checkbox" value="" id="check4" required>
                   <label class="form-check-label" for="check4">
                      <small>Dengan ini saya menyetujui <a href="" data-menu="modal-tos">T.O.S</a> yang berlaku selama menggunakan layanan</small>
