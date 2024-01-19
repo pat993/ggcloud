@@ -41,9 +41,7 @@
                   <input type="password" class="form-control" placeholder="Confirm your Password" name="password2" minlength="8" required>
                </div>
 
-               <div style="margin: auto; width: 60%">
-                  <div class="g-recaptcha mb-2" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq"></div>
-               </div>
+               <div class="g-recaptcha mb-2" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq"></div>
 
                <div class="form-check icon-check mb-2 mt-4">
                   <input class="form-check-input" type="checkbox" value="" id="check4" required>

@@ -20,9 +20,7 @@
                   <input type="password" class="form-control validate-password" placeholder="Password" name="password" required>
                </div>
 
-               <div style="margin: auto; width: 60%">
-                  <div class="g-recaptcha mb-2" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq"></div>
-               </div>
+               <div class="g-recaptcha mb-2" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq"></div>
 
                <button style="width: 100%" type="submit" name="signin" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad mt-4">LOGIN</button>
                <!-- <div class="text-center">or</div>
