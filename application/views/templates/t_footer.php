@@ -136,6 +136,13 @@
 } ?>
 
 <script>
+   $(function() {
+      $('[data-toggle="tooltip"]').tooltip({
+         html: true
+      })
+   })
+
+
    <?php if (isset($user_id)) {
       if ($user_id == '1') { ?>
          $(function() {

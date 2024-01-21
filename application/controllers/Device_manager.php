@@ -183,8 +183,8 @@ class Device_manager extends CI_Controller
          }
       }
 
-      $this->load->view('v_player', $data);
-      $this->load->view('templates/t_configure');
+      $this->load->view('v_player2', $data);
+      // $this->load->view('templates/t_configure', $data);
    }
 
    public function done_configure($id)

@@ -4,30 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport" />
-    <title>WS scrcpy</title>
-    <link href="<?= base_url(); ?>/ws/main.css" rel="stylesheet">
+    <title>Connecting to Server ...</title>
+    <link href="/ws/main.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/ws/styles/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/ws/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/ws/draggable.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.0/css/all.min.css" integrity="sha512-ykRBEJhyZ+B/BIJcBuOyUoIxh0OfdICfHPnPfBy7eIiyJv536ojTCsgX8aqrLQ9VJZHGz4tvYyzOM0lkgmQZGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
     <script>
         $(document).ready(function() {
-            $(".slide-toggle").click(function() {
+            $("#slide-toggle").click(function() {
                 $(".control-wrapper").animate({
-                    width: "toggle"
+                    height: "toggle"
                 });
+            });
+            $("#fullscreen-toggle").click(function() {
+                document.body.requestFullscreen();
             });
         });
     </script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        .center2 {
+            width: 200px;
+            height: 200px;
+            position: fixed;
+            top: 40%;
+            left: 50%;
+            margin-top: -100px;
+            margin-left: -100px;
+            text-align: center;
+            color: white;
+        }
+
+
+    </style>
 </head>
 
-<body>
-    <button type="button" style="position: absolute; z-index: 2" class="slide-toggle">X</button>
-    <button id="goFS" style="position: absolute; z-index: 2; bottom: 0" class="fullscreen">O</button>
+<body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
+
+    <div id="preloader">
+        <div class="spinner-border color-highlight" role="status"></div>
+    </div>
+
+    <div class="DraggableDiv">
+        <button class="btn btn-dark rounded-xl" style="width: 32px; height: 32px; font-size: 9px;" type="button" id="fullscreen-toggle"><i class="fas fa-expand"></i></button>
+        <br>
+        <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
+    </div>
+
+    <div style="display: none;" class="center2" id="notification">
+        <i style="font-size: 50px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
+
+        <br>
+        <b>Oops</b>, tampaknya terjadi kendala jaringan, silahkan cek koneksi anda dan coba refresh kembali
+        <br>
+        <br>
+        <b>Tips:</b>
+        Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
+    </div>
+
+    <a style="position:absolute; bottom: 10px; right: 10px; z-index: 99" class="btn btn-primary" href="<?= base_url() . 'device_manager/done_configure/' . $dev_id; ?>"><button>Done Configure</button></a>
 
     <script>
-        var goFS = document.getElementById("goFS");
-        goFS.addEventListener("click", function() {
-            document.body.requestFullscreen();
-        }, false);
+        // Function to show the hidden div after a delay
+        function notification() {
+            // Get the div element
+            var notification = document.getElementById('notification');
+
+            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
+            setTimeout(function() {
+                notification.style.display = 'block';
+            }, 10000);
+        }
+
+        window.onload = notification();
     </script>
 
     <script>
@@ -35,7 +94,15 @@
         var dev_port = "<?= $port; ?>";
     </script>
 
-    <script src="<?= base_url(); ?>/ws/ggcloud.js"></script>
+    <script src="/ws/ggcloud.js"></script>
+    <script type="text/javascript" src="/ws/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/ws/scripts/custom.js"></script>
+    <script src="/ws/draggable.js"></script>
+
+    <script>
+        $('.DraggableDiv').draggableTouch();
+    </script>
+
 </body>
 
 </html>

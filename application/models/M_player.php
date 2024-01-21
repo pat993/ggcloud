@@ -24,6 +24,7 @@ class M_player extends CI_Model
     {
         $this->db->select('assigned.id as assign_id, ip, port');
         $this->db->where($where);
+        $this->db->where('end_date>=CURRENT_TIMESTAMP()');
         $this->db->join('device', 'device.id=' . $table . '.device_id');
 
         $result = $this->db->get_where($table)->result_array();

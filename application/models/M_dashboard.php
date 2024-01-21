@@ -5,9 +5,9 @@ class M_dashboard extends CI_Model
 {
    function get_data($table, $where)
    {
-      $this->db->where($where);
+      $this->db->where('end_date>=CURRENT_TIMESTAMP()');
 
-      $result = $this->db->get_where($table)->result_array();
+      $result = $this->db->get_where($table, $where)->result_array();
 
       return $result;
    }

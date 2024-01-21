@@ -31,10 +31,14 @@ class Register extends CI_Controller
    function aksi_register()
    {
       $username = $this->input->post('username');
+      $password1 = $this->input->post('password1');
+
+      //password validation
+      $password_regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
 
       //prevent script inject by user
 
-      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $username)) {
+      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $username) && preg_match($password_regex, $password1)) {
          $email = $this->input->post('email');
          $password1 = $this->input->post('password1');
          $password2 = $this->input->post('password2');
@@ -81,7 +85,7 @@ class Register extends CI_Controller
             redirect('register');
          }
       } else {
-         $this->session->set_flashdata('error', "Invalid Username Format");
+         $this->session->set_flashdata('error', "Invalid Username / Pasword Format");
 
          redirect('register');
       }

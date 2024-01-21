@@ -24,6 +24,12 @@
 
    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
+   <style>
+      .tooltip-inner {
+         text-align: left;
+      }
+   </style>
+
 </head>
 
 <body class="theme-light" data-highlight="highlight-red" data-gradient="body-default">

@@ -20,7 +20,15 @@
                   <input type="password" class="form-control validate-password" placeholder="Password" name="password" required>
                </div>
 
-               <div class="g-recaptcha " data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
+               <?php
+               if (null !== $this->session->userdata('err_count')) {
+               ?>
+
+                  <div class="g-recaptcha " data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
+
+               <?php
+               }
+               ?>
 
                <button style="width: 100%" type="submit" name="signin" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad mt-1">LOGIN</button>
                <!-- <div class="text-center">or</div>
@@ -30,7 +38,7 @@
                </a> -->
 
                <div class="text-center mb-5 mt-5">
-                  <a href="register" class="font-12">Create Account</a>
+                  <a href="#" onclick="window.location.href='register';return true;" class="font-12">Create Account</a>
                </div>
             </form>
          </div>

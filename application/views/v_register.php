@@ -32,8 +32,13 @@
                   <i class="fa fa-at"></i>
                   <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="<?= $email ?>" required>
                </div>
-               <div class="input-style no-borders has-icon mt-2">
+               <div class="input-style no-borders has-icon mt-2" style="position: relative;">
                   <i class="fa fa-lock"></i>
+                  <i style="position: absolute; right:5px; top: 15px" class="fa-solid fa-circle-question" data-toggle="tooltip" data-html="true" title="Has minimum 8 characters in length.<br>
+                     At least one uppercase letter.<br>
+                     At least one lowercase letter.<br>
+                     At least one digit.<br>
+                     At least one special character."></i>
                   <input type="password" class="form-control" placeholder="Choose a Password" name="password1" minlength="8" required>
                </div>
                <div class="input-style no-borders has-icon mt-2">
@@ -54,8 +59,8 @@
 
                <button style="width: 100%" type="submit" name="signup" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad">Create Account</button>
 
-               <div class="text-center mb-5 mt-5">
-                  <a href="login" class="font-12">Already Registered? Sign in Here</a>
+               <div class="text-center mb-5 mt-2">
+                  <a href="#" onclick="window.location.href='login';return true;" class="font-12">Already Registered? Sign in Here</a>
                </div>
             </form>
          </div>

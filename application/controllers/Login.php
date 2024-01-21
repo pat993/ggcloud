@@ -97,14 +97,20 @@ class Login extends CI_Controller
    function aksi_login()
    {
 
-      //recaptca
-      $response = $this->input->post('g-recaptcha-response');
-      $error = "";
-      $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
-      $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
-      $verify = json_decode(file_get_contents($url));
+      $err_count = $this->session->userdata('err_count');
 
-      if ($verify->success) {
+      if ($err_count == 1) {
+         //recaptca
+         $response = $this->input->post('g-recaptcha-response');
+         $error = "";
+         $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
+         $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
+         $verify = json_decode(file_get_contents($url));
+      } else {
+         $bypass = 1;
+      }
+
+      if ($verify->success || $bypass == 1) {
 
          $password_cek = '';
 
@@ -130,7 +136,8 @@ class Login extends CI_Controller
                'username' => $username,
                'email' => $email,
                'status' => "login",
-               'user_id' => $user_id
+               'user_id' => $user_id,
+               'err_count' => 0
             );
 
             $this->session->set_userdata($data_session);
@@ -138,6 +145,12 @@ class Login extends CI_Controller
             redirect(base_url("dashboard"));
          } else {
             $this->session->set_flashdata('error', "Username / Password tidak sesuai");
+
+            $data_session = array(
+               'err_count' => 1
+            );
+
+            $this->session->set_userdata($data_session);
 
             redirect('login');
          }
