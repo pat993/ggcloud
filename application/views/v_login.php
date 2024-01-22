@@ -37,8 +37,11 @@
                   Login with Google
                </a> -->
 
-               <div class="text-center mb-5 mt-5">
-                  <a href="#" onclick="window.location.href='register';return true;" class="font-12">Create Account</a>
+               <div class="text-center mt-2">
+                  <a href="#" onclick="window.location.href='/register';return true;" class="font-12">Create Account</a>
+               </div>
+               <div class="text-center mb-5">
+                  <a href="#" onclick="window.location.href='/forget';return true;" class="font-12">Forget Password</a>
                </div>
             </form>
          </div>

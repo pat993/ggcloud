@@ -31,61 +31,76 @@ class Register extends CI_Controller
    function aksi_register()
    {
       $username = $this->input->post('username');
+      $email = $this->input->post('email');
       $password1 = $this->input->post('password1');
+      $password2 = $this->input->post('password2');
 
-      //password validation
-      $password_regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
+      //recaptca
+      $response = $this->input->post('g-recaptcha-response');
+      $error = "";
+      $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
+      $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
+      $verify = json_decode(file_get_contents($url));
 
-      //prevent script inject by user
+      if ($verify->success) {
+         //password validation
+         $password_regex = "/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/";
 
-      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $username) && preg_match($password_regex, $password1)) {
-         $email = $this->input->post('email');
-         $password1 = $this->input->post('password1');
-         $password2 = $this->input->post('password2');
+         //prevent script inject by user
 
-         if ($password1 == $password2) {
-            $options = [
-               'cost' => 10,
-            ];
+         if (preg_match("^[a-zA-Z0-9_\\-]+$^", $username) && preg_match($password_regex, $password1)) {
+            if ($password1 == $password2) {
+               $options = [
+                  'cost' => 10,
+               ];
 
-            $check_existing = $this->M_register->check_existing($username, $email);
+               $check_existing = $this->M_register->check_existing($username, $email);
 
-            if ($check_existing != true) {
-               $password_hash = password_hash($password1, PASSWORD_BCRYPT, $options);
+               if ($check_existing != true) {
+                  $password_hash = password_hash($password1, PASSWORD_BCRYPT, $options);
 
-               $activation_code = $this->M_register->randomString(10);
+                  $activation_code = $this->M_register->randomString(10);
 
-               $data = array(
-                  'username' => $username,
-                  'email' => $email,
-                  'password' => $password_hash,
-                  'activation_code' => $activation_code
-               );
+                  $data = array(
+                     'username' => $username,
+                     'email' => $email,
+                     'password' => $password_hash,
+                     'activation_code' => $activation_code
+                  );
 
-               $this->M_register->input_data("user", $data);
+                  $this->M_register->input_data("user", $data);
 
-               $this->session->set_flashdata('success', "Berhasil register user");
-               $this->session->set_flashdata('username', $username);
-               $this->session->set_flashdata('email', $email);
-               $this->session->set_flashdata('activation_code', $activation_code);
+                  $this->session->set_flashdata('success', "Berhasil register user");
+                  $this->session->set_flashdata('username', $username);
+                  $this->session->set_flashdata('email', $email);
+                  $this->session->set_flashdata('activation_code', $activation_code);
 
-               redirect('register/success');
+                  redirect('register/success');
+               } else {
+                  $this->session->set_flashdata('error', "Username / email sudah terdaftar");
+                  $this->session->set_flashdata('username', $username);
+                  $this->session->set_flashdata('email', $email);
+
+                  redirect('register');
+               }
             } else {
-               $this->session->set_flashdata('error', "Username / email sudah terdaftar");
+               $this->session->set_flashdata('error', "Password tidak sesuai");
                $this->session->set_flashdata('username', $username);
                $this->session->set_flashdata('email', $email);
 
                redirect('register');
             }
          } else {
-            $this->session->set_flashdata('error', "Password tidak sesuai");
+            $this->session->set_flashdata('error', "Username / Password tidak sesuai persyaratan");
             $this->session->set_flashdata('username', $username);
             $this->session->set_flashdata('email', $email);
 
             redirect('register');
          }
       } else {
-         $this->session->set_flashdata('error', "Invalid Username / Pasword Format");
+         $this->session->set_flashdata('error', "Captcha error");
+         $this->session->set_flashdata('username', $username);
+         $this->session->set_flashdata('email', $email);
 
          redirect('register');
       }

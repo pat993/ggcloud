@@ -96,7 +96,6 @@ class Login extends CI_Controller
 
    function aksi_login()
    {
-
       $err_count = $this->session->userdata('err_count');
 
       if ($err_count == 1) {
@@ -107,6 +106,7 @@ class Login extends CI_Controller
          $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
          $verify = json_decode(file_get_contents($url));
       } else {
+         $verify = '';
          $bypass = 1;
       }
 
@@ -155,13 +155,9 @@ class Login extends CI_Controller
             redirect('login');
          }
       } else {
-         $this->session->set_flashdata('error', "Captcha tidak sesuai");
+         $this->session->set_flashdata('error', "Captcha error");
 
          redirect('login');
       }
-   }
-
-   function google()
-   {
    }
 }

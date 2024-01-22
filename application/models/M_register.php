@@ -8,6 +8,20 @@ class M_register extends CI_Model
       $this->db->insert($table, $data);
    }
 
+   function update_data($table, $where, $data)
+   {
+      $this->db->where($where);
+
+      $this->db->update($table, $data);
+   }
+
+   function get_data($table, $where)
+   {
+      $result = $this->db->get_where($table, $where)->result_array();
+
+      return $result;
+   }
+
    function randomString($length)
    {
       $chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
