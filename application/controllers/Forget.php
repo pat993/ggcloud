@@ -243,7 +243,7 @@ class Forget extends CI_Controller
             </div>
             <div style='padding: 10px; border-radius: 10px'>
                <h3 style='margin-bottom: 1px'>Permintaan reset password</h3><br>
-               Dear " . $username . ",<br>
+               Dear <b>" . $username . "</b>,<br>
                Anda telah melakukan permintaan reset password, silahkan klik tombol di bawah ini untuk melakukan reset password akun kamu<br>
                <br>
                
