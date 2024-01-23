@@ -154,7 +154,7 @@ class Register extends CI_Controller
                <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
             </div>
             <div style='padding: 10px; border-radius: 10px'>
-               <h3 style='margin-bottom: 2px'>Aktivasi Pendaftaran</h3><br>
+               <h3 style='margin-bottom: 1px'>Aktivasi Pendaftaran</h3><br>
                Dear " . $username . ",<br>
                Terima kasih sudah mendaftar di ggcloud.id, silahkan klik tombol di bawah ini untuk melakukan aktivasi akun kamu<br>
                <br>

@@ -124,7 +124,7 @@ class Voucher_manager extends CI_Controller
       $mail->addAddress($email); //email tujuan pengiriman email
 
       // Email subject
-      $mail->Subject = 'Your Voucher Code is Here!'; //subject email
+      $mail->Subject = 'Voucher kamu sampai nih'; //subject email
 
       // Set email format to HTML
       $mail->isHTML(true);

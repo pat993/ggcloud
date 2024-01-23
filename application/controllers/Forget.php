@@ -229,7 +229,7 @@ class Forget extends CI_Controller
         //$mail->addAddress($email); //email tujuan pengiriman email
 
         // Email subject
-        $mail->Subject = 'Permintaan reset password'; //subject email
+        $mail->Subject = 'Lupa password'; //subject email
 
         // Set email format to HTML
         $mail->isHTML(true);
@@ -244,7 +244,7 @@ class Forget extends CI_Controller
                <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
             </div>
             <div style='padding: 10px; border-radius: 10px'>
-               <h3 style='margin-bottom: 2px'>Aktivasi Pendaftaran</h3><br>
+               <h3 style='margin-bottom: 1px'>Permintaan reset password</h3><br>
                Dear " . $username . ",<br>
                Anda telah melakukan permintaan reset password, silahkan klik tombol di bawah ini untuk melakukan reset password akun kamu<br>
                <br>
@@ -253,10 +253,9 @@ class Forget extends CI_Controller
                <a style='text-decoration: none; background-color: #98A8F8; border: 0; border-radius: 20px; color: white; padding: 15px; ' href='" . base_url() . "forget/reset_password?token=" . $auth_code . "'>
                RESET PASSWORD
                </a>
-
-               <br>
-               Jika anda merasa tidak melakukan permintaan reset password, silahkan abaikan pesan ini.
                </div>
+               <br>
+               Jika anda merasa tidak melakukan permintaan reset password berikut, silahkan abaikan pesan ini.
 
                <br>
                <br>
