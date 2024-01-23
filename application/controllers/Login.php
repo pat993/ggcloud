@@ -88,7 +88,18 @@ class Login extends CI_Controller
          }
       }
 
+      $username_c = $this->input->cookie('username', TRUE);
+      $password_c = $this->input->cookie('password', TRUE);
+
+      echo $username_c;
+
+      if ($username_c != '') {
+         $this->auto_login($username_c, $password_c);
+      }
+
       $data['auth_url'] = $google_client->createAuthUrl();
+      $data['username_cookie'] = $google_client->createAuthUrl();
+
       $this->load->view('templates/t_header');
       $this->load->view('v_login', $data);
       $this->load->view('templates/t_footer');
@@ -105,12 +116,12 @@ class Login extends CI_Controller
          $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
          $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
          $verify = json_decode(file_get_contents($url));
+         $auth = $verify->success;
       } else {
-         $verify = '';
-         $bypass = 1;
+         $auth = 1;
       }
 
-      if ($verify->success || $bypass == 1) {
+      if ($auth == 1) {
 
          $password_cek = '';
 
@@ -142,6 +153,8 @@ class Login extends CI_Controller
 
             $this->session->set_userdata($data_session);
 
+            $this->set_cookie($username, $password);
+
             redirect(base_url("dashboard"));
          } else {
             $this->session->set_flashdata('error', "Username / Password tidak sesuai");
@@ -159,5 +172,80 @@ class Login extends CI_Controller
 
          redirect('login');
       }
+   }
+
+   public function auto_login($username, $password)
+   {
+      $password_cek = '';
+
+      $where = array(
+         'username' => $username,
+         'status' => 'aktif'
+      );
+      $cek = $this->M_login->cek_login("user", $where);
+
+      foreach ($cek as $cek_p) {
+         $username = $cek_p['username'];
+         $email = $cek_p['email'];
+         $password_cek = $cek_p['password'];
+         $user_id = $cek_p['id'];
+      };
+
+      //echo print_r($cek);
+      if (password_verify($password, $password_cek)) {
+
+         $data_session = array(
+            'username' => $username,
+            'email' => $email,
+            'status' => "login",
+            'user_id' => $user_id,
+            'err_count' => 0
+         );
+
+         $this->session->set_userdata($data_session);
+
+         redirect(base_url("dashboard"));
+      } else {
+         $this->session->set_flashdata('error', "Username / Password tidak sesuai");
+
+         $data_session = array(
+            'err_count' => 1
+         );
+
+         $this->session->set_userdata($data_session);
+
+         redirect('login');
+      }
+   }
+
+   public function set_cookie($username, $password)
+   {
+      // Set the cookie parameters for username
+      $username_cookie = array(
+         'name'   => 'username',
+         'value'  => $username,
+         'expire' => time() + 360000000, // Cookie expiration time (1 hour from now)
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($username_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $password_cookie = array(
+         'name'   => 'password',
+         'value'  => $password,
+         'expire' => time() + 360000000,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($password_cookie);
    }
 }
