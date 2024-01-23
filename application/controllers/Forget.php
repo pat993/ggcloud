@@ -68,8 +68,6 @@ class Forget extends CI_Controller
 
             $verify = $this->M_register->get_data('reset_password', $data);
 
-            echo json_encode($verify);
-
             if (!$verify) {
                 redirect('login');
             } else {
