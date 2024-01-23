@@ -91,8 +91,6 @@ class Login extends CI_Controller
       $username_c = $this->input->cookie('username', TRUE);
       $password_c = $this->input->cookie('password', TRUE);
 
-      echo $username_c;
-
       if ($username_c != '') {
          $this->auto_login($username_c, $password_c);
       }
