@@ -89,29 +89,37 @@ class Player extends CI_Controller
         }
     }
 
-    function get_client_ip($single = 2)
+    function get_client_ip()
     {
-        $ipaddress = array();
-        if ($single == 2) {
-            if (isset($_SERVER['HTTP_CLIENT_IP']))
-                $ipaddress[] = $_SERVER['HTTP_CLIENT_IP'];
-            if (isset($_SERVER['HTTP_X_FORWARDED_FOR']))
-                $ipaddress[] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-            if (isset($_SERVER['HTTP_X_FORWARDED']))
-                $ipaddress[] = $_SERVER['HTTP_X_FORWARDED'];
-            if (isset($_SERVER['HTTP_FORWARDED_FOR']))
-                $ipaddress[] = $_SERVER['HTTP_FORWARDED_FOR'];
-            if (isset($_SERVER['HTTP_FORWARDED']))
-                $ipaddress[] = $_SERVER['HTTP_FORWARDED'];
-            if (isset($_SERVER['REMOTE_ADDR']))
-                $ipaddress[] = $_SERVER['REMOTE_ADDR'];
-            if (count($ipaddress) == 0)
-                $ipaddress[] = 'UNKNOWN';
-            $ips = implode(", ", array_unique($ipaddress));
+        // API endpoint
+        $apiUrl = 'https://api.ipify.org';
+
+        // Initialize cURL session
+        $ch = curl_init();
+
+        // Set cURL options
+        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Execute cURL session and store the result in $response
+        $response = curl_exec($ch);
+
+        // Check for cURL errors
+        if (curl_errno($ch)) {
+            echo 'Curl error: ' . curl_error($ch);
         }
-        if ($single == 1) {
-            $ips = $_SERVER['REMOTE_ADDR'];
+
+        // Close cURL session
+        curl_close($ch);
+
+        // Decode the JSON response
+        $data = json_decode($response, true);
+
+        // Output the IP address
+        if ($data && isset($data['ip'])) {
+            echo 'Your IP address is: ' . $data['ip'];
+        } else {
+            echo 'Unable to retrieve IP address.';
         }
-        echo $ips;
     }
 }
