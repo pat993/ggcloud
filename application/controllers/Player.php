@@ -91,35 +91,22 @@ class Player extends CI_Controller
 
     function get_client_ip()
     {
-        // API endpoint
-        $apiUrl = 'https://api.ipify.org';
-
-        // Initialize cURL session
+        // persiapkan curl
         $ch = curl_init();
 
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // set url 
+        curl_setopt($ch, CURLOPT_URL, "https://api.ipify.org");
 
-        // Execute cURL session and store the result in $response
-        $response = curl_exec($ch);
+        // return the transfer as a string 
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            echo 'Curl error: ' . curl_error($ch);
-        }
+        // $output contains the output string 
+        $output = curl_exec($ch);
 
-        // Close cURL session
+        // tutup curl 
         curl_close($ch);
 
-        // Decode the JSON response
-        $data = json_decode($response, true);
-
-        // Output the IP address
-        if ($data && isset($data['ip'])) {
-            echo 'Your IP address is: ' . $data['ip'];
-        } else {
-            echo 'Unable to retrieve IP address.';
-        }
+        // menampilkan hasil curl
+        echo $output;
     }
 }
