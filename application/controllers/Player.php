@@ -95,7 +95,7 @@ class Player extends CI_Controller
         $ch = curl_init();
 
         // set url 
-        curl_setopt($ch, CURLOPT_URL, "https://api.ipify.org");
+        curl_setopt($ch, CURLOPT_URL, "https://api.bigdatacloud.net/data/client-ip");
 
         // return the transfer as a string 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
