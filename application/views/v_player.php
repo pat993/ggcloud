@@ -44,8 +44,6 @@
             text-align: center;
             color: white;
         }
-
-
     </style>
 </head>
 
@@ -96,9 +94,16 @@
     <script type="text/javascript" src="/ws/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/ws/scripts/custom.js"></script>
     <script src="/ws/draggable.js"></script>
+    <script src="/scripts/ifvisible.js"></script>
+
 
     <script>
         $('.DraggableDiv').draggableTouch();
+
+        ifvisible.on("wakeup", function() {
+            // go back updating data
+            window.location.reload();
+        });
     </script>
 
 </body>

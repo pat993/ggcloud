@@ -91,40 +91,42 @@ class Player extends CI_Controller
 
     function get_client_ip()
     {
-        // Function to get the client's IP address
-        function getClientIP()
-        {
-            // Check for shared internet/ISP IP
-            if (!empty($_SERVER['HTTP_CLIENT_IP']) && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
-                return $_SERVER['HTTP_CLIENT_IP'];
-            }
-
-            // Check for IP address from proxy
-            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                // If multiple IP addresses are present in the HTTP_X_FORWARDED_FOR header, use the last one
-                $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-                foreach ($ips as $ip) {
-                    if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                        return $ip;
-                    }
-                }
-            }
-
-            // Remote address (normal case)
-            if (!empty($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)) {
-                return $_SERVER['REMOTE_ADDR'];
-            }
-
-            // No valid IP found, return empty string
-            return '';
+        $direct_ip = '';
+        // Gets the default ip sent by the user
+        if (!empty($_SERVER['REMOTE_ADDR'])) {
+            $direct_ip = $_SERVER['REMOTE_ADDR'];
         }
-
-        // Get client IP address
-        $clientIP = getClientIP();
-
-        // Store the IP in an array
-        $clientIPs = array($clientIP);
-
-        echo json_encode($clientIPs);
+        // Gets the proxy ip sent by the user
+        $proxy_ip     = '';
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $proxy_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED'])) {
+            $proxy_ip = $_SERVER['HTTP_X_FORWARDED'];
+        } else if (!empty($_SERVER['HTTP_FORWARDED_FOR'])) {
+            $proxy_ip = $_SERVER['HTTP_FORWARDED_FOR'];
+        } else if (!empty($_SERVER['HTTP_FORWARDED'])) {
+            $proxy_ip = $_SERVER['HTTP_FORWARDED'];
+        } else if (!empty($_SERVER['HTTP_VIA'])) {
+            $proxy_ip = $_SERVER['HTTP_VIA'];
+        } else if (!empty($_SERVER['HTTP_X_COMING_FROM'])) {
+            $proxy_ip = $_SERVER['HTTP_X_COMING_FROM'];
+        } else if (!empty($_SERVER['HTTP_COMING_FROM'])) {
+            $proxy_ip = $_SERVER['HTTP_COMING_FROM'];
+        }
+        // Returns the true IP if it has been found, else FALSE
+        if (empty($proxy_ip)) {
+            // True IP without proxy
+            return $direct_ip;
+        } else {
+            $is_ip = preg_match('|^([0-9]{1,3}\.){3,3}[0-9]{1,3}|', $proxy_ip, $regs);
+            if ($is_ip && (count($regs) > 0)) {
+                // True IP behind a proxy
+                return $regs[0];
+            } else {
+                // Can't define IP: there is a proxy but we don't have
+                // information about the true IP
+                return $direct_ip;
+            }
+        }
     }
 }
