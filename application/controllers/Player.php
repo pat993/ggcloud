@@ -91,22 +91,40 @@ class Player extends CI_Controller
 
     function get_client_ip()
     {
-        // persiapkan curl
-        $ch = curl_init();
+        // Function to get the client's IP address
+        function getClientIP()
+        {
+            // Check for shared internet/ISP IP
+            if (!empty($_SERVER['HTTP_CLIENT_IP']) && filter_var($_SERVER['HTTP_CLIENT_IP'], FILTER_VALIDATE_IP)) {
+                return $_SERVER['HTTP_CLIENT_IP'];
+            }
 
-        // set url 
-        curl_setopt($ch, CURLOPT_URL, "https://api.bigdatacloud.net/data/client-ip");
+            // Check for IP address from proxy
+            if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                // If multiple IP addresses are present in the HTTP_X_FORWARDED_FOR header, use the last one
+                $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+                foreach ($ips as $ip) {
+                    if (filter_var($ip, FILTER_VALIDATE_IP)) {
+                        return $ip;
+                    }
+                }
+            }
 
-        // return the transfer as a string 
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            // Remote address (normal case)
+            if (!empty($_SERVER['REMOTE_ADDR']) && filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP)) {
+                return $_SERVER['REMOTE_ADDR'];
+            }
 
-        // $output contains the output string 
-        $output = curl_exec($ch);
+            // No valid IP found, return empty string
+            return '';
+        }
 
-        // tutup curl 
-        curl_close($ch);
+        // Get client IP address
+        $clientIP = getClientIP();
 
-        // menampilkan hasil curl
-        echo $output;
+        // Store the IP in an array
+        $clientIPs = array($clientIP);
+
+        echo json_encode($clientIPs);
     }
 }
