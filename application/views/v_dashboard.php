@@ -76,7 +76,7 @@
             <div class="splide__slide">
                <div data-card-height="180" class="card mx-3 rounded-m shadow-l">
                   <div class="text-center card-center">
-                     <a data-menu="menu-buy-voucher" href='#' class="text-center color-white font-40"><i class="fas fa-plus"></i></a>
+                     <a href='/pricing' class="text-center color-white font-40"><i class="fas fa-plus"></i></a>
                   </div>
                   <div class="card-overlay bg-black opacity-100"></div>
                </div>
@@ -102,19 +102,6 @@
       </form>
    </div>
 </div>
-
-<div id="menu-buy-voucher" class="menu menu-box-bottom menu-box-detached rounded-m" style="max-width: 700px; margin: auto">
-   <div class="menu-title mb-1">
-      <h1 class="font-200">Add Device</h1>
-      <!-- <p>Claim voucher to add device</p> -->
-   </div>
-   <div style="margin: 0px 20px 0px 20px" class="content">
-      Untuk saat ini penambahan perangkat hanya dapat dilakukan melalui pembelian voucher, dapatkan voucher di official store kami pada marketplace berikut: <br>
-      <div class="text-center"><a target="_blank" href="https://shopee.co.id"><img src="images/shopee.png" alt=""></a></div>
-      <br>
-   </div>
-</div>
-
 
 <?php
 foreach ($device_list as $result) {

@@ -14,6 +14,8 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
+    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/images/ggc_play.png">
+
     <script>
         $(document).ready(function() {
             $("#slide-toggle").click(function() {
