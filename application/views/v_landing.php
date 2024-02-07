@@ -30,7 +30,7 @@
     <link href="addon/css/styles-landing.css" rel="stylesheet">
 
     <!-- Favicon  -->
-    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/addon/images/ggcloud.png">
+    <link rel="icon" type="image/x-icon" href="images/ggcloud.png">
 </head>
 
 <body data-spy="scroll" data-target=".fixed-top">
@@ -111,7 +111,7 @@
                 <div class="row">
                     <div class="col-lg-6 col-xl-5">
                         <div class="text-container">
-                            <h1>Cloud Emulator Lokal Ga Pake Mahal !</h1>
+                            <h1>Cloud Emulator Ga Pake Mahal!</h1>
                             <p class="p-large">Jalankan Game dan Aplikasimu 24/7 non-stop tanpa worry dengan harga dan paket yang flexibel</p>
                             <a class="btn-solid-lg page-scroll" href="register">SIGN UP</a>
                         </div> <!-- end of text-container -->
@@ -119,7 +119,7 @@
                     <div class="col-lg-6 col-xl-7">
                         <div class="image-container">
                             <div class="img-wrapper">
-                                <img class="img-fluid" src="addon/images/header-software-app.png" alt="alternative">
+                                <img class="img-fluid" src="images/ggc_illustration_1_min.png" alt="alternative">
                             </div> <!-- end of img-wrapper -->
                         </div> <!-- end of image-container -->
                     </div> <!-- end of col -->
@@ -156,7 +156,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="addon/images/description-1.png" alt="alternative">
+                            <img class="img-fluid" src="images/ggc_illustration_5_min.png" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Spek Dewa Harga Bersahabat</h4>
@@ -168,7 +168,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="addon/images/description-2.png" alt="alternative">
+                            <img class="img-fluid" src="images/ggc_illustration_3_min.png" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Kompabilitas Luas</h4>
@@ -180,7 +180,7 @@
                     <!-- Card -->
                     <div class="card">
                         <div class="card-image">
-                            <img class="img-fluid" src="addon/images/description-3.png" alt="alternative">
+                            <img class="img-fluid" src="images/ggc_illustration_4_min.png" alt="alternative">
                         </div>
                         <div class="card-body">
                             <h4 class="card-title">Prioritas Keamanan Pengguna</h4>
