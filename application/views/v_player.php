@@ -102,7 +102,7 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
-        ifvisible.on("idle", function() {
+        ifvisible.on("wakeup", function() {
             // go back updating data
             window.location.reload();
         });
