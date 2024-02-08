@@ -52,7 +52,7 @@
 <body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
 
     <div id="preloader">
-        <div class="spinner-border color-highlight" role="status"></div>
+        <div class="spinner-border color-highlight-purple" role="status"></div>
     </div>
 
     <div class="DraggableDiv">
@@ -61,7 +61,7 @@
         <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
     </div>
 
-    <div style="display: none;" class="center2" id="notification">
+    <!-- <div style="display: none;" class="center2" id="notification">
         <i style="font-size: 50px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
 
         <br>
@@ -70,7 +70,7 @@
         <br>
         <b>Tips:</b>
         Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
-    </div>
+    </div> -->
 
     <script>
         // Function to show the hidden div after a delay
@@ -102,7 +102,7 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
-        ifvisible.on("wakeup", function() {
+        ifvisible.on("idle", function() {
             // go back updating data
             window.location.reload();
         });
