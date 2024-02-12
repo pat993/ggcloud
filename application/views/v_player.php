@@ -87,11 +87,6 @@
         window.onload = notification();
     </script>
 
-    <script>
-        var dev_ip = "<?= $ip; ?>";
-        var dev_port = "<?= $port; ?>";
-    </script>
-
     <script src="/ws/ggcloud.js"></script>
     <script type="text/javascript" src="/ws/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/ws/scripts/custom.js"></script>

@@ -187,3 +187,8 @@ foreach ($device_list as $result) {
    </div>
 <?php
 } ?>
+
+
+<script>
+
+</script>

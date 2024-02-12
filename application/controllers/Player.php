@@ -80,8 +80,11 @@ class Player extends CI_Controller
                 // echo "firewall exist";
             }
             $data2['user_id'] = $user_id;
-            $data2['ip'] = 'www.hypercube.my.id';
-            $data2['port'] = $dev_port;
+
+            $d_ip = 'www.hypercube.my.id';
+            $d_port = $dev_port;
+
+            $this->set_cookie($d_ip, $d_port);
 
             $this->load->view('v_player', $data2);
         } else {
@@ -128,5 +131,36 @@ class Player extends CI_Controller
                 return $direct_ip;
             }
         }
+    }
+
+    public function set_cookie($ip, $port)
+    {
+        // Set the cookie parameters for username
+        $ip_cookie = array(
+            'name'   => 'bumi',
+            'value'  => $ip,
+            'expire' => time() + 1, // Cookie expiration time (1 hour from now)
+            'path'   => '/',
+            'domain' => '',
+            'secure' => FALSE,
+            'httponly' => FALSE
+        );
+
+        // Set the cookie using the set_cookie function
+        $this->input->set_cookie($ip_cookie);
+
+        // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+        $port_cookie = array(
+            'name'   => 'langit',
+            'value'  => $port,
+            'expire' => time() + 1,
+            'path'   => '/',
+            'domain' => '',
+            'secure' => FALSE,
+            'httponly' => FALSE
+        );
+
+        // Set the cookie using the set_cookie function
+        $this->input->set_cookie($port_cookie);
     }
 }

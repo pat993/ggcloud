@@ -1,3 +1,30 @@
+
+   // Function to read a specific cookie
+   function getData(cookieName) {
+      // Split all cookies into an array
+      var cookies = document.cookie.split(';');
+
+      // Loop through each cookie
+      for (var i = 0; i < cookies.length; i++) {
+         var cookie = cookies[i].trim();
+
+         // Check if the cookie starts with the provided cookieName
+         if (cookie.startsWith(cookieName + '=')) {
+            // Return the value of the cookie
+            return cookie.substring(cookieName.length + 1);
+         }
+      }
+
+      // If the cookie is not found, return null
+      return null;
+   }
+
+   // Example usage:
+   var bumi = getData('bumi');
+   var langit = getData('langit');
+
+   alert(bumi + ' ' + langit);
+
 !function(e){var t={};function r(i){if(t[i])return t[i].exports;var n=t[i]={i:i,l:!1,exports:{}};return e[i].call(n.exports,n,n.exports,r),n.l=!0,n.exports}r.m=e,r.c=t,r.d=function(e,t,i){r.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:i})},r.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var i=Object.create(null);if(r.r(i),Object.defineProperty(i,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var n in e)r.d(i,n,function(t){return e[t]}.bind(null,n));return i},r.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return r.d(t,"a",t),t},r.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},r.p="",r(r.s=47)}([function(e,t,r){"use strict";r.r(t),r.d(t,"__extends",(function(){return n})),r.d(t,"__assign",(function(){return o})),r.d(t,"__rest",(function(){return s})),r.d(t,"__decorate",(function(){return a})),r.d(t,"__param",(function(){return c})),r.d(t,"__metadata",(function(){return l})),r.d(t,"__awaiter",(function(){return u})),r.d(t,"__generator",(function(){return h})),r.d(t,"__createBinding",(function(){return f})),r.d(t,"__exportStar",(function(){return d})),r.d(t,"__values",(function(){return p})),r.d(t,"__read",(function(){return _})),r.d(t,"__spread",(function(){return v})),r.d(t,"__spreadArrays",(function(){return m})),r.d(t,"__await",(function(){return g})),r.d(t,"__asyncGenerator",(function(){return y})),r.d(t,"__asyncDelegator",(function(){return S})),r.d(t,"__asyncValues",(function(){return b})),r.d(t,"__makeTemplateObject",(function(){return E})),r.d(t,"__importStar",(function(){return C})),r.d(t,"__importDefault",(function(){return w})),r.d(t,"__classPrivateFieldGet",(function(){return T})),r.d(t,"__classPrivateFieldSet",(function(){return A}));
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation.
