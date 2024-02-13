@@ -2,9 +2,9 @@
 foreach ($device as $result) {
 ?>
 
-   <table class="table table-borderless table-striped rounded-sm shadow-xs mb-3" style="overflow: hidden;" id="tb_device">
+   <table class="table table-borderless rounded-sm" style="overflow: hidden;" id="tb_device">
       <tr>
-         <td style="width: 70px; vertical-align: middle">ID</td>
+         <td style="width: 70px; vertical-align: middle;">ID</td>
          <td>
             <div class="input-style has-borders input-style-active">
                <input type="text" value="<?= $result["device_id"]; ?>" name="txt_id" readonly>

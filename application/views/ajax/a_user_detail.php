@@ -1,7 +1,7 @@
 <?php
 foreach ($user as $user_r) {
 ?>
-   <table class="table table-borderless table-striped rounded-sm" style="overflow: hidden;" id="tb_device">
+   <table class="table table-borderless rounded-sm" style="overflow: hidden;" id="tb_device">
       <tr>
          <th style="width: 150px">ID</th>
          <td><?= $user_r["id"]; ?></td>

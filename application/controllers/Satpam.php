@@ -11,13 +11,11 @@ class Satpam extends CI_Controller
    {
       parent::__construct();
 
-      // if ($this->session->userdata('status') != "login") {
-      //    redirect(base_url("login"));
-      // } else {
-      //    $this->load->model('M_satpam');
-      // }
-
-      $this->load->model('M_satpam');
+      if ($this->session->userdata('username') == "admin") {
+         $this->load->model('M_satpam');
+      } else {
+         redirect(base_url("dashboard"));
+      }
    }
 
    public function index()

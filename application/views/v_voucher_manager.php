@@ -37,36 +37,40 @@
            <div class="row mb-3">
               <div class="col-sm-4 ml-5">
                  <h1 style="font-size: 38px;">
-                    <i class="fas fa-ticket" style="color: #176B87"></i> VOUCHER MANAGER
+                    VOUCHER MANAGER
                  </h1>
                  <div class="ps-1 opacity-80">Voucher management dashboard</div>
               </div>
-              <div class="col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center" style="background-color: #176B87; color: white">Total Voucher</b>
+              <div class="col-sm-4">
+              </div>
+              <div class="col-sm-4">
+                 <a href="#" data-menu="menu-create-voucher" class="btn btn-m btn-full mb-3 text-uppercase font-900 shadow-s bg-green-dark">Generate Voucher</a>
+              </div>
+           </div>
+           <div class="row">
+              <div class="col-sm-4">
+                 <div class="card bg-light mb-1 rounded" style="width: 100%">
+                    <b class="text-center rounded-top" style="background-color: #176B87; color: white">Total Voucher</b>
                     <h1 class="text-center"><?= $voucher_count; ?></h1>
                  </div>
               </div>
-              <div class="col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center" style="background-color: #176B87; color: white">Voucher Digunakan</b>
+              <div class="col-sm-4">
+                 <div class="card bg-light mb-1 rounded" style="width: 100%">
+                    <b class="text-center rounded-top" style="background-color: #176B87; color: white">Voucher Digunakan</b>
                     <h1 class="text-center"><?= $voucher_used_count; ?></h1>
                  </div>
               </div>
-              <div class="col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center" style="background-color: #176B87; color: white">Voucher Tersedia</b>
+              <div class="col-sm-4" >
+                 <div class="card bg-light mb-1 rounded" style="width: 100%;">
+                    <b class="text-center rounded-top" style="background-color: #176B87; color: white">Voucher Tersedia</b>
                     <h1 style="color: green" class="text-center"><?= $device_count ?></h1>
                  </div>
               </div>
-              <div class="col-sm-2">
-                 <a href="#" data-menu="menu-create-voucher" class="btn btn-m btn-full mb-3 text-uppercase font-900 shadow-s bg-green-dark"><i class="fas fa-cube"></i> Generate Voucher</a>
-              </div>
            </div>
 
-           <table class="table table-borderless table-striped shadow-xs" id="tb_device">
+           <table class="table border" id="tb_device">
               <thead>
-                 <tr class="bg-night-light">
+                 <tr class="bg-fade-night-dark">
                     <th scope="col" class="color-white">#</th>
                     <th scope="col" class="color-white">Kode Voucher</th>
                     <th scope="col" class="color-white">Status</th>
@@ -126,7 +130,7 @@
               <h1><i class="fas fa-ticket"></i> Generate Voucher</h1>
            </div>
         </div>
-        <div class="ms-3 me-3 mb-4">
+        <div class="ms-3 me-3 mb-5">
            <form method="POST" action="<?= base_url() ?>voucher_manager/add_voucher/">
               <input type="hidden" class="form-control" id="txt_kode-voucher" name="txt_kode_voucher" value="<?= randomString(); ?>" readonly>
               <!-- <label for="txt_kode-voucher" style="background-color: transparent" class="color-green-dark font-600">Kode Voucher</label> -->
@@ -177,7 +181,7 @@
                  <input type="text" class="form-control" id="txt_ip" name="txt_expired" value="<?= voucherExpired(); ?> WIB" readonly>
                  <!-- <label for="txt_ip" style="background-color: transparent" class="color-green-dark font-600">Expired</label> -->
               </div>
-              <button type="submit" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase ms-auto"><i class="fas fa-save"></i> Simpan</button>
+              <button type="submit" style="width: 100%;" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase mt-4"><i class="fas fa-save"></i> Simpan</button>
            </form>
         </div>
      </div>

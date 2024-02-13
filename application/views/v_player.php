@@ -14,7 +14,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/images/ggc_play.png">
+    <link rel="icon" type="image/x-icon" href="https://ggcloud.id//images/ggc_play.png">
 
     <script>
         $(document).ready(function() {
@@ -72,6 +72,21 @@
         Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
     </div> -->
 
+    <script>
+        // Function to show the hidden div after a delay
+        function notification() {
+            // Get the div element
+            var notification = document.getElementById('notification');
+
+            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
+            setTimeout(function() {
+                notification.style.display = 'block';
+            }, 10000);
+        }
+
+        window.onload = notification();
+    </script>
+
     <script src="/ws/ggcloud.js"></script>
     <script type="text/javascript" src="/ws/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/ws/scripts/custom.js"></script>
@@ -86,19 +101,6 @@
             // go back updating data
             window.location.reload();
         });
-
-        // Function to show the hidden div after a delay
-        function notification() {
-            // Get the div element
-            var notification = document.getElementById('notification');
-
-            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
-            setTimeout(function() {
-                notification.style.display = 'block';
-            }, 10000);
-        }
-
-        window.onload = notification();
     </script>
 
 </body>

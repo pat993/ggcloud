@@ -5,32 +5,35 @@
            <div class="row mb-3">
               <div class="col-sm-6">
                  <h1 style="font-size: 40px;">
-                    <i class="fas fa-users" style="color: #6554AF"></i> USER MANAGER
+                    USER MANAGER
                  </h1>
                  <div class="ps-1 opacity-80">User management dashboard</div>
               </div>
-              <div class=" col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center text-white" style="background-color: #6554AF">User Aktif</b>
+           </div>
+
+           <div class="row">
+              <div class=" col-sm-4">
+                 <div class="card bg-light mb-1 rounded" style="width: 100%">
+                    <b class="text-center text-white rounded-top" style="background-color: #6096B4">User Aktif</b>
                     <h1 class="text-center"><?= $user_count_active; ?></h1>
                  </div>
               </div>
-              <div class="col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center text-white" style="background-color: #6554AF">User Non-aktif</b>
+              <div class="col-sm-4">
+                 <div class="card bg-light mb-1 rounded" style="width: 100%">
+                    <b class="text-center text-white rounded-top" style="background-color: #6096B4">User Non-aktif</b>
                     <h1 class="text-center" style="color: red;"><?= $user_count - $user_count_active; ?></h1>
                  </div>
               </div>
-              <div class="col-sm-2">
-                 <div class="card bg-light mb-1" style="width: 100%">
-                    <b class="text-center text-white" style="background-color: #6554AF">Total</b>
+              <div class="col-sm-4">
+                 <div class="card bg-light mb-1 rounded" style="width: 100%">
+                    <b class="text-center text-white rounded-top" style="background-color: #6096B4">Total</b>
                     <h1 style="color: green" class="text-center"><?= $user_count ?></h1>
                  </div>
               </div>
            </div>
-           <table class="table table-borderless table-striped shadow-xs" style="overflow: hidden;" id="tb_device">
+           <table class="table border" style="overflow: hidden;" id="tb_device">
               <thead>
-                 <tr class="bg-night-light">
+                 <tr class="bg-fade-night-dark">
                     <th scope="col" class="color-white">#</th>
                     <th scope="col" class="color-white">Username</th>
                     <th scope="col" class="color-white">Email</th>
@@ -84,13 +87,8 @@
               <div id="a-user-edit">
                  Loading....
               </div>
-              <div class="row mb-4 mt-1">
-                 <div class="col-sm-6">
-                 </div>
-                 <div class="col-sm-6">
-                    <button type="submit" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase ms-auto"><i class="fas fa-save"></i> Simpan</button>
-                 </div>
-              </div>
+
+              <button type="submit" style="width: 100%;" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase mb-4"><i class="fas fa-save"></i> Simpan</button>
            </div>
         </form>
      </div>

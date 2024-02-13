@@ -44,8 +44,6 @@
             text-align: center;
             color: white;
         }
-
-
     </style>
 </head>
 
@@ -61,7 +59,7 @@
         <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
     </div>
 
-    <div style="display: none;" class="center2" id="notification">
+    <!-- <div style="display: none;" class="center2" id="notification">
         <i style="font-size: 50px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
 
         <br>
@@ -70,7 +68,7 @@
         <br>
         <b>Tips:</b>
         Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
-    </div>
+    </div> -->
 
     <a style="position:absolute; bottom: 10px; right: 10px; z-index: 99" class="btn btn-primary" href="<?= base_url() . 'device_manager/done_configure/' . $dev_id; ?>"><button>Done Configure</button></a>
 
