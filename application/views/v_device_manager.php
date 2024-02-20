@@ -108,7 +108,7 @@
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
               Port :
-              <input type="number" class="form-control validate-number" id="txt_port" name="txt_port">
+              <input type="number" class="form-control validate-number" id="txt_port" name="txt_port" value="<?= $last_port; ?>">
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
               Local IP Address:

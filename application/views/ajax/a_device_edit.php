@@ -12,7 +12,7 @@ foreach ($device as $result) {
          </td>
       </tr>
       <tr>
-         <td style="width: 70px; vertical-align: middle">IP</td>
+         <td style="width: 70px; vertical-align: middle">Remote IP Address</td>
          <td>
             <div class="input-style has-borders input-style-active">
                <input type="text" value="<?= $result["ip"]; ?>" name="txt_ip">
@@ -24,6 +24,14 @@ foreach ($device as $result) {
          <td>
             <div class="input-style has-borders input-style-active">
                <input type="text" value="<?= $result["port"]; ?>" name="txt_port">
+            </div>
+         </td>
+      </tr>
+      <tr>
+         <td style="width: 70px; vertical-align: middle">Local IP Address</td>
+         <td>
+            <div class="input-style has-borders input-style-active">
+               <input type="text" value="<?= $result["ip_local"]; ?>" name="txt_ip">
             </div>
          </td>
       </tr>

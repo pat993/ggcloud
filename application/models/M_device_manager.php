@@ -29,6 +29,21 @@ class M_device_manager extends CI_Model
       return $result;
    }
 
+   function get_last_port($table)
+   {
+      $this->db->select('port');
+      $this->db->order_by('port DESC');
+      $this->db->limit(1);
+
+      $result = $this->db->get_where($table)->result_array();
+
+      foreach ($result as $result_r) {
+         $last_port = $result_r['port'] + 1;
+      }
+
+      return $last_port;
+   }
+
    function get_count($table)
    {
       $result = $this->db->get_where($table);

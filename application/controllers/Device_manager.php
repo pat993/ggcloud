@@ -21,12 +21,16 @@ class Device_manager extends CI_Controller
    {
       $user_id = $this->session->userdata('user_id');
 
+      $data['last_port'] = '';
+
       $data['user_id'] = $user_id;
 
       $data['device'] = $this->M_device_manager->get_data('device');
 
       $data['device_count'] = $this->M_device_manager->get_count('device');
       $data['device_used_count'] = $this->M_device_manager->get_used('device');
+
+      $data['last_port'] = $this->M_device_manager->get_last_port('device');
 
       $this->load->view('templates/t_header');
       $this->load->view('templates/t_sidebar', $data);
@@ -37,12 +41,14 @@ class Device_manager extends CI_Controller
    public function add_device()
    {
       $ip = $this->input->post('txt_ip');
+      $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
 
       $data = array(
          'ip' => $ip,
+         'ip_local' => $ip_local,
          'port' => $port,
          'name' => $name,
          'type' => $type
@@ -66,9 +72,9 @@ class Device_manager extends CI_Controller
          // echo 'allowed port: ' . $allow_port;
 
          $ssh->exec("sudo sh -c 'echo \" \" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"[" . $ip . "]\" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"accept = " . $port . "\" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"connect = " . $ip . ":8886\" >> /etc/stunnel/stunnel.conf'");
+         $ssh->exec("sudo sh -c 'echo \"[$ip|$port] \" >> /etc/stunnel/stunnel.conf'");
+         $ssh->exec("sudo sh -c 'echo \"accept = $port \" >> /etc/stunnel/stunnel.conf'");
+         $ssh->exec("sudo sh -c 'echo \"connect = $ip:$port \" >> /etc/stunnel/stunnel.conf'");
 
          $ssh->exec("sudo systemctl restart stunnel");
       }
@@ -78,6 +84,7 @@ class Device_manager extends CI_Controller
    {
       $id = $this->input->post('txt_id');
       $ip = $this->input->post('txt_ip');
+      $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
@@ -88,6 +95,7 @@ class Device_manager extends CI_Controller
 
       $data = array(
          'ip' => $ip,
+         'ip_local' => $ip_local,
          'port' => $port,
          'name' => $name,
          'type' => $type
