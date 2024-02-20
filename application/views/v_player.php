@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" name="viewport" />
     <title>Connecting to Server ...</title>
-    <link href="/ws/main.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="/ws/styles/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/ws/styles/style.css">
-    <link rel="stylesheet" type="text/css" href="/ws/draggable.css">
+    <link href="/ggc/main.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/ggc/styles/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/ggc/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/ggc/draggable.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.0/css/all.min.css" integrity="sha512-ykRBEJhyZ+B/BIJcBuOyUoIxh0OfdICfHPnPfBy7eIiyJv536ojTCsgX8aqrLQ9VJZHGz4tvYyzOM0lkgmQZGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -87,10 +87,10 @@
         window.onload = notification();
     </script>
 
-    <script src="/ws/ggcloud.js"></script>
-    <script type="text/javascript" src="/ws/scripts/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/ws/scripts/custom.js"></script>
-    <script src="/ws/draggable.js"></script>
+    <script src="/ggc/ggcloud.js"></script>
+    <script type="text/javascript" src="/ggc/scripts/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/ggc/scripts/custom.js"></script>
+    <script src="/ggc/draggable.js"></script>
     <script src="/scripts/ifvisible.js"></script>
 
 

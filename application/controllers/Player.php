@@ -40,6 +40,7 @@ class Player extends CI_Controller
                 $assign_id = $device_r['assign_id'];
                 // $dev_ip = $device_r['ip'];
                 $dev_port = $device_r['port'];
+                $dev_name = $device_r['custom_name'];
             }
 
             // echo $user_id;
@@ -83,8 +84,9 @@ class Player extends CI_Controller
 
             $d_ip = 'www.hypercube.my.id';
             $d_port = $dev_port;
+            $d_name = $dev_name;
 
-            $this->set_cookie($d_ip, $d_port);
+            $this->set_cookie($d_ip, $d_port, $d_name);
 
             $this->load->view('v_player', $data2);
         } else {
@@ -133,7 +135,7 @@ class Player extends CI_Controller
         }
     }
 
-    public function set_cookie($ip, $port)
+    public function set_cookie($ip, $port, $nama)
     {
         // Set the cookie parameters for username
         $ip_cookie = array(
@@ -153,6 +155,20 @@ class Player extends CI_Controller
         $port_cookie = array(
             'name'   => 'langit',
             'value'  => $port,
+            'expire' => time() + 1,
+            'path'   => '/',
+            'domain' => '',
+            'secure' => FALSE,
+            'httponly' => FALSE
+        );
+
+        // Set the cookie using the set_cookie function
+        $this->input->set_cookie($port_cookie);
+
+        // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+        $port_cookie = array(
+            'name'   => 'bintang',
+            'value'  => $nama,
             'expire' => time() + 1,
             'path'   => '/',
             'domain' => '',
