@@ -22,6 +22,8 @@
                 $(".control-wrapper").animate({
                     height: "toggle"
                 });
+                // Check if the setting-box is currently visible
+                $(".setting-box").toggle();
             });
             $("#fullscreen-toggle").click(function() {
                 document.body.requestFullscreen();
@@ -87,7 +89,7 @@
         window.onload = notification();
     </script>
 
-    <script src="/ggc/ggcloud.js"></script>
+    <script src="/ggc/bundle.js"></script>
     <script type="text/javascript" src="/ggc/scripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="/ggc/scripts/custom.js"></script>
     <script src="/ggc/draggable.js"></script>

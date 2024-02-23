@@ -64,7 +64,8 @@
                                 <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                    <?php if ($result['status_id'] == 1) { ?>
-                                      <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Re-configure</button></a>
+                                      <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure</button></a>
+                                      <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure (Local)</button></a>
                                       <div class="dropdown-divider"></div>
                                    <?php
                                     } ?>

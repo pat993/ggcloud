@@ -37,8 +37,12 @@ class M_device_manager extends CI_Model
 
       $result = $this->db->get_where($table)->result_array();
 
-      foreach ($result as $result_r) {
-         $last_port = $result_r['port'] + 1;
+      if (count($result) > 0) {
+         foreach ($result as $result_r) {
+            $last_port = $result_r['port'] + 1;
+         }
+      } else {
+         $last_port = '';
       }
 
       return $last_port;
