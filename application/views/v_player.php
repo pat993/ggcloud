@@ -23,7 +23,9 @@
                     height: "toggle"
                 });
                 // Check if the setting-box is currently visible
-                $(".setting-box").toggle();
+                if ($('.more-box').is(':visible')) {
+                    $('#input_show_more').trigger('click');
+                }
             });
             $("#fullscreen-toggle").click(function() {
                 document.body.requestFullscreen();
