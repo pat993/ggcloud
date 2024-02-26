@@ -5,7 +5,7 @@
       Perhatian : untuk saat ini player belum support audio
    </div>
 
-   <div class="card card-style preload-img mb-2" data-src="images/banner-ggc.png" data-card-height="150">
+   <div class="card card-style preload-img mb-2" data-src="images/banner-ggc_min.png" data-card-height="150">
       <div class="card-center ms-3">
          <h1 class="color-white mb-0 font-200">My Device</h1>
          <!-- <p class="color-white mt-n1 mb-0">Select device to launch</p> -->

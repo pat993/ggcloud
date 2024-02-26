@@ -22,6 +22,7 @@ class Device_manager extends CI_Controller
       $user_id = $this->session->userdata('user_id');
 
       $data['last_port'] = '';
+      $data['last_port_f'] = '';
 
       $data['user_id'] = $user_id;
 
@@ -30,7 +31,12 @@ class Device_manager extends CI_Controller
       $data['device_count'] = $this->M_device_manager->get_count('device');
       $data['device_used_count'] = $this->M_device_manager->get_used('device');
 
-      $data['last_port'] = $this->M_device_manager->get_last_port('device');
+      $last_port = $this->M_device_manager->get_last_port('device');
+
+      foreach ($last_port as $last_port_r) {
+         $data['last_port'] = $last_port_r['port'] + 1;
+         $data['last_port_f'] = $last_port_r['port_forward'] + 1;
+      }
 
       $this->load->view('templates/t_header');
       $this->load->view('templates/t_sidebar', $data);
@@ -43,6 +49,7 @@ class Device_manager extends CI_Controller
       $ip = $this->input->post('txt_ip');
       $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
+      $port_f = $this->input->post('txt_port_f');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
 
@@ -50,38 +57,39 @@ class Device_manager extends CI_Controller
          'ip' => $ip,
          'ip_local' => $ip_local,
          'port' => $port,
+         'port_forward' => $port_f,
          'name' => $name,
          'type' => $type
       );
 
       $this->M_device_manager->insert_data('device', $data);
-      $this->update_config($ip, $port);
+      // $this->update_config($ip, $port);
 
       $this->session->set_flashdata('success', "Berhasil Input Data");
 
       redirect($_SERVER['HTTP_REFERER']);
    }
 
-   public function update_config($ip, $port)
-   {
-      $ssh = new SSH2('103.82.93.205');
-      if (!$ssh->login('patra', '@Patraana007')) {
-         exit('Login Failed');
-      } else {
-         // echo 'allowed ip: ' . $allow_ip;
-         // echo 'allowed port: ' . $allow_port;
+   // public function update_config($ip, $port)
+   // {
+   //    $ssh = new SSH2('103.82.93.205');
+   //    if (!$ssh->login('patra', '@Patraana007')) {
+   //       exit('Login Failed');
+   //    } else {
+   //       // echo 'allowed ip: ' . $allow_ip;
+   //       // echo 'allowed port: ' . $allow_port;
 
-         $port1 = $port;
-         $port2 = $port - 1000;
+   //       $port1 = $port;
+   //       $port2 = $port - 1000;
 
-         $ssh->exec("sudo sh -c 'echo \" \" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"[$ip|$port] \" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"accept = $port1 \" >> /etc/stunnel/stunnel.conf'");
-         $ssh->exec("sudo sh -c 'echo \"connect = $ip:$port2 \" >> /etc/stunnel/stunnel.conf'");
+   //       $ssh->exec("sudo sh -c 'echo \" \" >> /etc/stunnel/stunnel.conf'");
+   //       $ssh->exec("sudo sh -c 'echo \"[$ip|$port] \" >> /etc/stunnel/stunnel.conf'");
+   //       $ssh->exec("sudo sh -c 'echo \"accept = $port1 \" >> /etc/stunnel/stunnel.conf'");
+   //       $ssh->exec("sudo sh -c 'echo \"connect = $ip:$port2 \" >> /etc/stunnel/stunnel.conf'");
 
-         $ssh->exec("sudo systemctl restart stunnel");
-      }
-   }
+   //       $ssh->exec("sudo systemctl restart stunnel");
+   //    }
+   // }
 
    public function edit_device()
    {
@@ -89,6 +97,7 @@ class Device_manager extends CI_Controller
       $ip = $this->input->post('txt_ip');
       $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
+      $port_f = $this->input->post('txt_port_f');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
 
@@ -100,6 +109,7 @@ class Device_manager extends CI_Controller
          'ip' => $ip,
          'ip_local' => $ip_local,
          'port' => $port,
+         'port_forward' => $port_f,
          'name' => $name,
          'type' => $type
       );
@@ -163,87 +173,88 @@ class Device_manager extends CI_Controller
          $d_name = $dev_data_r['name'];
       }
 
-      $this->set_cookie($d_ip, $d_port, $d_name);
+      // $this->set_cookie($d_ip, $d_port, $d_name);
 
-      $where = array(
-         'ip' => $allow_ip,
-         'port' => $d_port,
-         'user_id' => $user_id
-      );
+      // $where = array(
+      //    'ip' => $allow_ip,
+      //    'port' => $d_port,
+      //    'user_id' => $user_id
+      // );
 
-      $firewall_exist = $this->M_player->check_existing('firewall', $where);
+      // $firewall_exist = $this->M_player->check_existing('firewall', $where);
 
-      if (count($firewall_exist) == 0) {
-         $ssh = new SSH2('103.82.93.205');
-         if (!$ssh->login('patra', '@Patraana007')) {
-            exit('Login Failed');
-         } else {
-            // echo 'allowed ip: ' . $allow_ip;
-            // echo 'allowed port: ' . $allow_port;
-            $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $d_port . "");
+      // if (count($firewall_exist) == 0) {
+      //    $ssh = new SSH2('103.82.93.205');
+      //    if (!$ssh->login('patra', '@Patraana007')) {
+      //       exit('Login Failed');
+      //    } else {
+      //       // echo 'allowed ip: ' . $allow_ip;
+      //       // echo 'allowed port: ' . $allow_port;
+      //       $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $d_port . "");
 
-            $data = array(
-               'user_id' => $user_id,
-               'assign_id' => 'NULL',
-               'ip' => $allow_ip,
-               'port' => $d_port
-            );
+      //       $data = array(
+      //          'user_id' => $user_id,
+      //          'assign_id' => 'NULL',
+      //          'ip' => $allow_ip,
+      //          'port' => $d_port
+      //       );
 
-            $this->M_player->add_firewall('firewall', $data);
+      //       $this->M_player->add_firewall('firewall', $data);
 
-            //exit('Success');
-         }
-      }
+      //       //exit('Success');
+      //    }
+      // }
 
 
-      $this->load->view('v_player', $data);
+      $this->load->view('v_player2', $data);
       // $this->load->view('templates/t_configure', $data);
    }
 
-   public function set_cookie($ip, $port, $nama)
-   {
-      // Set the cookie parameters for username
-      $ip_cookie = array(
-         'name'   => 'bumi',
-         'value'  => $ip,
-         'expire' => time() + 1, // Cookie expiration time (1 hour from now)
-         'path'   => '/',
-         'domain' => '',
-         'secure' => FALSE,
-         'httponly' => FALSE
-      );
+   // public function set_cookie($ip, $port, $nama)
+   // {
+   //    // Set the cookie parameters for username
+   //    $ip_cookie = array(
+   //       'name'   => 'bumi',
+   //       'value'  => $ip,
+   //       'expire' => time() + 1, // Cookie expiration time (1 hour from now)
+   //       'path'   => '/',
+   //       'domain' => '',
+   //       'secure' => FALSE,
+   //       'httponly' => FALSE
+   //    );
 
-      // Set the cookie using the set_cookie function
-      $this->input->set_cookie($ip_cookie);
+   //    // Set the cookie using the set_cookie function
+   //    $this->input->set_cookie($ip_cookie);
 
-      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-      $port_cookie = array(
-         'name'   => 'langit',
-         'value'  => $port,
-         'expire' => time() + 1,
-         'path'   => '/',
-         'domain' => '',
-         'secure' => FALSE,
-         'httponly' => FALSE
-      );
+   //    // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+   //    $port_cookie = array(
+   //       'name'   => 'langit',
+   //       'value'  => $port,
+   //       'expire' => time() + 1,
+   //       'path'   => '/',
+   //       'domain' => '',
+   //       'secure' => FALSE,
+   //       'httponly' => FALSE
+   //    );
 
-      // Set the cookie using the set_cookie function
-      $this->input->set_cookie($port_cookie);
+   //    // Set the cookie using the set_cookie function
+   //    $this->input->set_cookie($port_cookie);
 
-      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-      $port_cookie = array(
-         'name'   => 'bintang',
-         'value'  => $nama,
-         'expire' => time() + 1,
-         'path'   => '/',
-         'domain' => '',
-         'secure' => FALSE,
-         'httponly' => FALSE
-      );
+   //    // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+   //    $port_cookie = array(
+   //       'name'   => 'bintang',
+   //       'value'  => $nama,
+   //       'expire' => time() + 1,
+   //       'path'   => '/',
+   //       'domain' => '',
+   //       'secure' => FALSE,
+   //       'httponly' => FALSE
+   //    );
 
-      // Set the cookie using the set_cookie function
-      $this->input->set_cookie($port_cookie);
-   }
+   //    // Set the cookie using the set_cookie function
+   //    $this->input->set_cookie($port_cookie);
+   // }
+
    public function done_configure($id)
    {
       $where = array(

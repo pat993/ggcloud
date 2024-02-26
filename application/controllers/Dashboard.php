@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use phpseclib\Net\SSH2;
+
 class Dashboard extends CI_Controller
 {
    function __construct()
@@ -85,6 +87,9 @@ class Dashboard extends CI_Controller
 
          foreach ($available_device as $available_device_r) {
             $device_id = $available_device_r['id'];
+            $device_ip =  $available_device_r['ip'];
+            $access_port = $available_device_r['port'];
+            $forward_port = $available_device_r['port_forward'];
          }
 
          if (count($available_device) > 0) {
@@ -94,11 +99,15 @@ class Dashboard extends CI_Controller
             //generate device identifier
             $device_identifier = $this->M_dashboard->randomString(32);
 
+            //generate device token
+            $access_token = $this->M_dashboard->randomString(32);
+
             //proses assign
             $data = array(
                'user_id' => $user_id,
                'device_id' => $device_id,
                'device_identifier' => $device_identifier,
+               'access_token' => $access_token,
                'end_date' => $enddate_calc
             );
 
@@ -151,6 +160,8 @@ class Dashboard extends CI_Controller
 
             $this->M_dashboard->update_data('device', $where3, $data3);
 
+            $this->add_config($device_ip, $access_port, $forward_port, $access_token);
+
             $this->session->set_flashdata('success', "Success");
 
             redirect($_SERVER['HTTP_REFERER']);
@@ -165,6 +176,31 @@ class Dashboard extends CI_Controller
          redirect($_SERVER['HTTP_REFERER']);
       }
    }
+
+   public function add_config($ip, $access_port, $forward_port, $access_token)
+   {
+      $ssh = new SSH2('103.82.93.205');
+      if (!$ssh->login('patra', '@Patraana007')) {
+         exit('Login Failed');
+      } else {
+         // echo 'allowed ip: ' . $allow_ip;
+         // echo 'allowed port: ' . $allow_port;
+
+         $ssh->exec("sudo sh -c 'echo \" \" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"frontend ws_frontend_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"    bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"    acl valid_token_$access_port urlp(token) -m str $access_token\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"    http-request deny if !valid_token_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"    use_backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"\" >> /etc/haproxy/haproxy.cfg'");
+
+         $ssh->exec("sudo sh -c 'echo \"backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+         $ssh->exec("sudo sh -c 'echo \"    server ws_$access_port $ip:$forward_port\" >> /etc/haproxy/haproxy.cfg'");
+
+         $ssh->exec("sudo systemctl restart haproxy");
+      }
+   }
+
 
    public function voucher_extend()
    {

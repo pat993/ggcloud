@@ -40,6 +40,7 @@ class Player extends CI_Controller
                 $assign_id = $device_r['assign_id'];
                 // $dev_ip = $device_r['ip'];
                 $dev_port = $device_r['port'];
+                $access_token = $device_r['access_token'];
                 $dev_name = $device_r['custom_name'];
             }
 
@@ -85,8 +86,9 @@ class Player extends CI_Controller
             $d_ip = 'www.hypercube.my.id';
             $d_port = $dev_port;
             $d_name = $dev_name;
+            $d_token = $access_token;
 
-            $this->set_cookie($d_ip, $d_port, $d_name);
+            $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
 
             $this->load->view('v_player', $data2);
         } else {
@@ -135,7 +137,7 @@ class Player extends CI_Controller
         }
     }
 
-    public function set_cookie($ip, $port, $nama)
+    public function set_cookie($ip, $port, $nama, $token)
     {
         // Set the cookie parameters for username
         $ip_cookie = array(
@@ -166,7 +168,7 @@ class Player extends CI_Controller
         $this->input->set_cookie($port_cookie);
 
         // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-        $port_cookie = array(
+        $nama_cookie = array(
             'name'   => 'bintang',
             'value'  => $nama,
             'expire' => time() + 1,
@@ -177,6 +179,20 @@ class Player extends CI_Controller
         );
 
         // Set the cookie using the set_cookie function
-        $this->input->set_cookie($port_cookie);
+        $this->input->set_cookie($nama_cookie);
+
+        // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+        $token_cookie = array(
+            'name'   => 'matahari',
+            'value'  => $token,
+            'expire' => time() + 1,
+            'path'   => '/',
+            'domain' => '',
+            'secure' => FALSE,
+            'httponly' => FALSE
+        );
+
+        // Set the cookie using the set_cookie function
+        $this->input->set_cookie($token_cookie);
     }
 }

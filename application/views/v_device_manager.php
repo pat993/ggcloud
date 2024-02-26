@@ -112,6 +112,10 @@
               <input type="number" class="form-control validate-number" id="txt_port" name="txt_port" value="<?= $last_port; ?>">
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
+              Port Forward (Mikrotik, ODP, dsb) :
+              <input type="number" class="form-control validate-number" id="txt_port_f" name="txt_port_f" value="<?= $last_port_f; ?>">
+           </div>
+           <div class="input-style has-borders no-icon mb-4 input-style-active">
               Local IP Address:
               <input type="text" class="form-control validate-name" id="txt_ip_local" name="txt_ip_local">
            </div>

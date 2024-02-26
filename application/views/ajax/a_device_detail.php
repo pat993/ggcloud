@@ -15,6 +15,10 @@ foreach ($device as $result) {
          <td><?= $result["port"]; ?></td>
       </tr>
       <tr>
+         <td style="width: 150px; color: #B4B4B8">Port Forward</td>
+         <td><?= $result["port_forward"]; ?></td>
+      </tr>
+      <tr>
          <td style="width: 150px; color: #B4B4B8">Name</td>
          <td><?= $result["name"]; ?></td>
       </tr>
