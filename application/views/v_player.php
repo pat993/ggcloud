@@ -18,6 +18,11 @@
 
     <script>
         $(document).ready(function() {
+            setTimeout(function() {
+                $(".control-wrapper").animate({
+                    height: "toggle"
+                });
+            }, 1000);
             $("#slide-toggle").click(function() {
                 $(".control-wrapper").animate({
                     height: "toggle"

@@ -96,6 +96,10 @@ class Player extends CI_Controller
         }
     }
 
+    function test(){
+        $this->load->view('v_ping');
+    }
+
     function get_client_ip()
     {
         $direct_ip = '';
