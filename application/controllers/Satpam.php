@@ -20,30 +20,78 @@ class Satpam extends CI_Controller
 
    public function index()
    {
-      $end_date = date('Y-m-d H:i:s');
+      $device_data = $this->M_satpam->get_data('assigned');
 
-      $this->M_satpam->razia1($end_date);
-      $this->M_satpam->razia2($end_date);
+      echo json_encode($device_data);
 
-      $firewall_list = $this->M_satpam->get_firewall_list('firewall');
+      $this->M_satpam->razia1();
+      $this->M_satpam->razia2();
 
-      echo json_encode($firewall_list);
-
-      if (count($firewall_list) != 0) {
-         $ssh = new SSH2('103.82.93.205');
-         if (!$ssh->login('root', '@Patraana007')) {
-            exit('Login Failed');
-         } else {
-            foreach ($firewall_list as $firewall_list_r) {
-               // $ssh->exec("sudo ufw deny from " . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "");
-               $ssh->exec("sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'");
-               $ssh->exec("sudo ufw reload");
-
-               $this->M_satpam->update_firewall($firewall_list_r['assign_id']);
-
-               // echo "sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'";
-            }
-         }
+      if (count($device_data) > 0) {
+         $this->edit_configuration($device_data);
       }
+
+
+      // $firewall_list = $this->M_satpam->get_firewall_list('firewall');
+
+      // echo json_encode($firewall_list);
+
+      // if (count($firewall_list) != 0) {
+      //    $ssh = new SSH2('103.82.93.205');
+      //    if (!$ssh->login('root', '@Patraana007')) {
+      //       exit('Login Failed');
+      //    } else {
+      //       foreach ($firewall_list as $firewall_list_r) {
+      //          // $ssh->exec("sudo ufw deny from " . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "");
+      //          $ssh->exec("sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'");
+      //          $ssh->exec("sudo ufw reload");
+
+      //          $this->M_satpam->update_firewall($firewall_list_r['assign_id']);
+
+      //          // echo "sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'";
+      //       }
+      //    }
+      // }
+   }
+
+   public function edit_configuration($device_data)
+   {
+      // Server SSH connection details
+      $server_ip = '103.82.93.205';
+      $server_port = 22;
+      $server_username = 'root';
+      $server_password = '@Patraana007';
+
+      $token_master = 'VACANT_DEVICE';
+
+      // SSH connection
+      $ssh = new SSH2($server_ip, $server_port);
+      if (!$ssh->login($server_username, $server_password)) {
+         exit('Login Failed');
+      }
+
+      // Read current configuration file
+      $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
+
+      foreach ($device_data as $device_data_r) {
+
+         $token = $device_data_r['access_token'];
+         $port = $device_data_r['port'];
+
+         // Configuration to update
+         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
+
+         // Update the token string
+         $new_config = str_replace($search_string, $new_string, $current_config);
+
+         // Write updated configuration back to the file
+         $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
+      }
+
+      $ssh->exec('sudo systemctl reload haproxy');
+
+      // Close SSH connection
+      $ssh->disconnect();
    }
 }

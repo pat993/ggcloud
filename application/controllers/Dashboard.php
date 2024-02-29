@@ -179,26 +179,58 @@ class Dashboard extends CI_Controller
 
    public function add_config($ip, $access_port, $forward_port, $access_token)
    {
-      $ssh = new SSH2('103.82.93.205');
-      if (!$ssh->login('patra', '@Patraana007')) {
+      // $ssh = new SSH2('103.82.93.205');
+      // if (!$ssh->login('patra', '@Patraana007')) {
+      //    exit('Login Failed');
+      // } else {
+      //    // echo 'allowed ip: ' . $allow_ip;
+      //    // echo 'allowed port: ' . $allow_port;
+
+      //    $ssh->exec("sudo sh -c 'echo \" \" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"frontend ws_frontend_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"    bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"    acl valid_token_$access_port urlp(token) -m str $access_token\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"    http-request deny if !valid_token_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"    use_backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"\" >> /etc/haproxy/haproxy.cfg'");
+
+      //    $ssh->exec("sudo sh -c 'echo \"backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
+      //    $ssh->exec("sudo sh -c 'echo \"    server ws_$access_port $ip:$forward_port\" >> /etc/haproxy/haproxy.cfg'");
+
+      //    $ssh->exec("sudo systemctl restart haproxy");
+      // }
+
+      // Server SSH connection details
+      $server_ip = '103.82.93.205';
+      $server_port = 22;
+      $server_username = 'patra';
+      $server_password = '@Patraana007';
+
+      // Configuration to add
+      $config_to_add = <<<CONFIG
+      frontend ws_frontend_$access_port
+         bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt
+         acl valid_token_$access_port urlp(token) -m str $access_token
+         http-request deny if !valid_token_$access_port
+         use_backend ws_server_$access_port
+
+      backend ws_server_$access_port
+         server ws_$access_port $ip:$forward_port
+      CONFIG;
+
+      // SSH connection
+      $ssh = new SSH2($server_ip, $server_port);
+      if (!$ssh->login($server_username, $server_password)) {
          exit('Login Failed');
-      } else {
-         // echo 'allowed ip: ' . $allow_ip;
-         // echo 'allowed port: ' . $allow_port;
-
-         $ssh->exec("sudo sh -c 'echo \" \" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"frontend ws_frontend_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"    bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"    acl valid_token_$access_port urlp(token) -m str $access_token\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"    http-request deny if !valid_token_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"    use_backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"\" >> /etc/haproxy/haproxy.cfg'");
-
-         $ssh->exec("sudo sh -c 'echo \"backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-         $ssh->exec("sudo sh -c 'echo \"    server ws_$access_port $ip:$forward_port\" >> /etc/haproxy/haproxy.cfg'");
-
-         $ssh->exec("sudo systemctl restart haproxy");
       }
+
+      // Append the configuration block to the haproxy.cfg file
+      $ssh->exec('echo "' . addslashes($config_to_add) . '" >> /etc/haproxy/haproxy.cfg');
+
+      $ssh->exec('sudo systemctl reload haproxy');
+
+      // Close SSH connection
+      $ssh->disconnect();
    }
 
 

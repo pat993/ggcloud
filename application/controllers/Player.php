@@ -42,6 +42,7 @@ class Player extends CI_Controller
                 $dev_port = $device_r['port'];
                 $access_token = $device_r['access_token'];
                 $dev_name = $device_r['custom_name'];
+                $data['end_date'] = $device_r['end_date'];
             }
 
             // echo $user_id;
@@ -49,39 +50,39 @@ class Player extends CI_Controller
             // echo $dev_port;
             // echo $allow_ip;
 
-            $where = array(
-                'ip' => $allow_ip,
-                'port' => $dev_port,
-                'assign_id' => $assign_id,
-                'user_id' => $user_id
-            );
+            // $where = array(
+            //     'ip' => $allow_ip,
+            //     'port' => $dev_port,
+            //     'assign_id' => $assign_id,
+            //     'user_id' => $user_id
+            // );
 
-            $firewall_exist = $this->M_player->check_existing('firewall', $where);
+            // $firewall_exist = $this->M_player->check_existing('firewall', $where);
 
-            if (count($firewall_exist) == 0) {
-                $ssh = new SSH2('103.82.93.205');
-                if (!$ssh->login('patra', '@Patraana007')) {
-                    exit('Login Failed');
-                } else {
-                    // echo 'allowed ip: ' . $allow_ip;
-                    // echo 'allowed port: ' . $allow_port;
-                    $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $dev_port . "");
+            // if (count($firewall_exist) == 0) {
+            //     $ssh = new SSH2('103.82.93.205');
+            //     if (!$ssh->login('patra', '@Patraana007')) {
+            //         exit('Login Failed');
+            //     } else {
+            //         // echo 'allowed ip: ' . $allow_ip;
+            //         // echo 'allowed port: ' . $allow_port;
+            //         $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $dev_port . "");
 
-                    $data = array(
-                        'user_id' => $user_id,
-                        'assign_id' => $assign_id,
-                        'ip' => $allow_ip,
-                        'port' => $dev_port
-                    );
+            //         $data = array(
+            //             'user_id' => $user_id,
+            //             'assign_id' => $assign_id,
+            //             'ip' => $allow_ip,
+            //             'port' => $dev_port
+            //         );
 
-                    $this->M_player->add_firewall('firewall', $data);
+            //         $this->M_player->add_firewall('firewall', $data);
 
-                    //exit('Success');
-                }
-            } else {
-                // echo "firewall exist";
-            }
-            $data2['user_id'] = $user_id;
+            //         //exit('Success');
+            //     }
+            // } else {
+            //     // echo "firewall exist";
+            // }
+            $data['user_id'] = $user_id;
 
             $d_ip = 'www.hypercube.my.id';
             $d_port = $dev_port;
@@ -90,13 +91,14 @@ class Player extends CI_Controller
 
             $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
 
-            $this->load->view('v_player', $data2);
+            $this->load->view('v_player', $data);
         } else {
             redirect('dashboard');
         }
     }
 
-    function test(){
+    function test()
+    {
         $this->load->view('v_ping');
     }
 

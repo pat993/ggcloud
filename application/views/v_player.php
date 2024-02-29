@@ -70,17 +70,6 @@
         <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
     </div>
 
-    <!-- <div style="display: none;" class="center2" id="notification">
-        <i style="font-size: 50px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
-
-        <br>
-        <b>Oops</b>, tampaknya terjadi kendala jaringan, silahkan cek koneksi anda dan coba refresh kembali
-        <br>
-        <br>
-        <b>Tips:</b>
-        Untuk jaringan broadband hidupkan dan matikan "Airplane Mode" kemudian refresh kembali
-    </div> -->
-
     <script>
         // Function to show the hidden div after a delay
         function notification() {
@@ -94,6 +83,45 @@
         }
 
         window.onload = notification();
+
+        //countdown script-----------------------------------
+
+        // Get the current date and time
+        var currentDate = new Date();
+
+        // Define date2 string
+        var date2 = '<?= $end_date; ?>';
+
+        // Convert date2 string to a Date object
+        var endDate = new Date(date2);
+
+        // Calculate the difference in milliseconds
+        var difference = endDate - currentDate;
+
+        // Convert milliseconds to seconds
+        var secondsDifference = difference / 1000;
+
+        // Set up a countdown timer
+        var countdown = setInterval(function() {
+            // Update the remaining time
+            secondsDifference--;
+
+            // Log the remaining time
+            console.log("Countdown:", secondsDifference, "seconds remaining");
+
+            // Check if the countdown has ended
+            if (secondsDifference <= 0) {
+                // Using querySelector to select the first element with the class 'device-view'
+                var deviceView = document.querySelector('.device-view');
+
+                // Setting the display property to 'none'
+                deviceView.remove();
+
+                // Refresh the page
+                // clearInterval(countdown);
+                location.reload();
+            }
+        }, 1000); // Update every second
     </script>
 
     <script src="/ggc/bundle.js"></script>
