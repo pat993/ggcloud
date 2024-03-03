@@ -72,7 +72,7 @@ class Device_manager extends CI_Controller
 
    // public function update_config($ip, $port)
    // {
-   //    $ssh = new SSH2('103.82.93.205');
+   //    $ssh = new SSH2('103.189.234.196');
    //    if (!$ssh->login('patra', '@Patraana007')) {
    //       exit('Login Failed');
    //    } else {
@@ -168,7 +168,7 @@ class Device_manager extends CI_Controller
 
       foreach ($dev_data as $dev_data_r) {
          $data['dev_id'] = $dev_data_r['id'];
-         $d_ip = 'www.hypercube.my.id';
+         $d_ip = 'hypercube.my.id';
          $d_port = $dev_data_r['port'];
          $d_name = $dev_data_r['name'];
       }
@@ -184,7 +184,7 @@ class Device_manager extends CI_Controller
       // $firewall_exist = $this->M_player->check_existing('firewall', $where);
 
       // if (count($firewall_exist) == 0) {
-      //    $ssh = new SSH2('103.82.93.205');
+      //    $ssh = new SSH2('103.189.234.196');
       //    if (!$ssh->login('patra', '@Patraana007')) {
       //       exit('Login Failed');
       //    } else {

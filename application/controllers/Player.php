@@ -60,7 +60,7 @@ class Player extends CI_Controller
             // $firewall_exist = $this->M_player->check_existing('firewall', $where);
 
             // if (count($firewall_exist) == 0) {
-            //     $ssh = new SSH2('103.82.93.205');
+            //     $ssh = new SSH2('103.189.234.196');
             //     if (!$ssh->login('patra', '@Patraana007')) {
             //         exit('Login Failed');
             //     } else {
@@ -84,7 +84,7 @@ class Player extends CI_Controller
             // }
             $data['user_id'] = $user_id;
 
-            $d_ip = 'www.hypercube.my.id';
+            $d_ip = 'hypercube.my.id';
             $d_port = $dev_port;
             $d_name = $dev_name;
             $d_token = $access_token;

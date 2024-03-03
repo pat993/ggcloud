@@ -37,7 +37,7 @@ class Satpam extends CI_Controller
       // echo json_encode($firewall_list);
 
       // if (count($firewall_list) != 0) {
-      //    $ssh = new SSH2('103.82.93.205');
+      //    $ssh = new SSH2('103.189.234.196');
       //    if (!$ssh->login('root', '@Patraana007')) {
       //       exit('Login Failed');
       //    } else {
@@ -57,7 +57,7 @@ class Satpam extends CI_Controller
    public function edit_configuration($device_data)
    {
       // Server SSH connection details
-      $server_ip = '103.82.93.205';
+      $server_ip = '103.189.234.196';
       $server_port = 22;
       $server_username = 'root';
       $server_password = '@Patraana007';

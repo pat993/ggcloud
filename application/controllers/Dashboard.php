@@ -179,7 +179,7 @@ class Dashboard extends CI_Controller
 
    public function add_config($ip, $access_port, $forward_port, $access_token)
    {
-      // $ssh = new SSH2('103.82.93.205');
+      // $ssh = new SSH2('103.189.234.196');
       // if (!$ssh->login('patra', '@Patraana007')) {
       //    exit('Login Failed');
       // } else {
@@ -201,7 +201,7 @@ class Dashboard extends CI_Controller
       // }
 
       // Server SSH connection details
-      $server_ip = '103.82.93.205';
+      $server_ip = '103.189.234.196';
       $server_port = 22;
       $server_username = 'patra';
       $server_password = '@Patraana007';
