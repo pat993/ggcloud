@@ -134,10 +134,10 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
-        ifvisible.on("wakeup", function() {
-            // go back updating data
-            window.location.reload();
-        });
+        // ifvisible.on("wakeup", function() {
+        //     // go back updating data
+        //     window.location.reload();
+        // });
     </script>
 
 </body>
