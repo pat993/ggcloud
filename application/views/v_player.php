@@ -134,6 +134,35 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
+        var count = 0; // Initialize counter variable
+        var counterInterval; // Initialize interval variable
+
+        // Function to update the counter
+        function updateCounter() {
+            count++;
+        }
+
+        // Function to display the count result and reset count
+        function displayCountResult() {
+            //alert("Count result: " + count);
+            if (count > 10 * 60) {
+                window.location.reload(true); // Reload the page, forcing the cache to be ignored
+            }
+
+            count = 0;
+        }
+
+        // Update the counter every second
+        function startCounter() {
+            counterInterval = setInterval(updateCounter, 1000);
+        }
+
+        // Stop the counter
+        function stopCounter() {
+            clearInterval(counterInterval);
+        }
+
+
         function clickButton() {
             var btn = document.getElementById("btn_change_video");
             if (btn) {
@@ -147,18 +176,11 @@
             w = document.getElementById("in_max_w").value;
             h = document.getElementById("in_max_h").value;
 
-            ifvisible.on("idle", function() {
-                document.getElementById("in_bitrate").value = "524288";
-                document.getElementById("in_fps").value = "40";
-                document.getElementById("in_max_w").value = "1080";
-                document.getElementById("in_max_h").value = "1080";
-
-                clickButton();
-
-                console.log("awww");
-            });
-
             ifvisible.on("wakeup", function() {
+                stopCounter();
+
+                displayCountResult(); // Display count result and reset count
+
                 document.getElementById("in_bitrate").value = b;
                 document.getElementById("in_fps").value = f;
                 document.getElementById("in_max_w").value = w;
@@ -166,8 +188,25 @@
 
                 clickButton();
 
-                console.log("owww");
+                //console.log("owww");
             });
+
+            ifvisible.on("idle", function() {
+                startCounter();
+
+                document.getElementById("in_bitrate").value = "524288";
+                document.getElementById("in_fps").value = "40";
+                document.getElementById("in_max_w").value = "1080";
+                document.getElementById("in_max_h").value = "1080";
+
+                clickButton();
+
+                //console.log("awww");
+            });
+
+
+            // Start the counter initially
+            startCounter();
         }, 5000); // 5000 milliseconds = 5 seconds
     </script>
 
