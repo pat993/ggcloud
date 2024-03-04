@@ -107,7 +107,7 @@
             secondsDifference--;
 
             // Log the remaining time
-            console.log("Countdown:", secondsDifference, "seconds remaining");
+            // console.log("Countdown:", secondsDifference, "seconds remaining");
 
             // Check if the countdown has ended
             if (secondsDifference <= 0) {
@@ -134,10 +134,41 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
-        // ifvisible.on("wakeup", function() {
-        //     // go back updating data
-        //     window.location.reload();
-        // });
+        function clickButton() {
+            var btn = document.getElementById("btn_change_video");
+            if (btn) {
+                btn.click();
+            }
+        }
+
+        setTimeout(function() {
+            b = document.getElementById("in_bitrate").value;
+            f = document.getElementById("in_fps").value;
+            w = document.getElementById("in_max_w").value;
+            h = document.getElementById("in_max_h").value;
+
+            ifvisible.on("idle", function() {
+                document.getElementById("in_bitrate").value = "524288";
+                document.getElementById("in_fps").value = "40";
+                document.getElementById("in_max_w").value = "1080";
+                document.getElementById("in_max_h").value = "1080";
+
+                clickButton();
+
+                console.log("awww");
+            });
+
+            ifvisible.on("wakeup", function() {
+                document.getElementById("in_bitrate").value = b;
+                document.getElementById("in_fps").value = f;
+                document.getElementById("in_max_w").value = w;
+                document.getElementById("in_max_h").value = h;
+
+                clickButton();
+
+                console.log("owww");
+            });
+        }, 5000); // 5000 milliseconds = 5 seconds
     </script>
 
 </body>
