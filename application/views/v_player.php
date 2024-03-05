@@ -72,15 +72,15 @@
 
     <script>
         // Function to show the hidden div after a delay
-        function notification() {
-            // Get the div element
-            var notification = document.getElementById('notification');
+        // function notification() {
+        //     // Get the div element
+        //     var notification = document.getElementById('notification');
 
-            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
-            setTimeout(function() {
-                notification.style.display = 'block';
-            }, 10000);
-        }
+        //     // Set a timeout to show the div after 10 seconds (10000 milliseconds)
+        //     setTimeout(function() {
+        //         notification.style.display = 'block';
+        //     }, 10000);
+        // }
 
         window.onload = notification();
 
@@ -134,6 +134,28 @@
     <script>
         $('.DraggableDiv').draggableTouch();
 
+        function waitForElm(selector) {
+            return new Promise(resolve => {
+                if (document.querySelector(selector)) {
+                    return resolve(document.querySelector(selector));
+                }
+
+                const observer = new MutationObserver(mutations => {
+                    if (document.querySelector(selector)) {
+                        observer.disconnect();
+                        resolve(document.querySelector(selector));
+                    }
+                });
+
+                // If you get "parameter 1 is not of type 'Node'" error, see https://stackoverflow.com/a/77855838/492336
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
+
+
         var count = 0; // Initialize counter variable
         var counterInterval; // Initialize interval variable
 
@@ -144,8 +166,8 @@
 
         // Function to display the count result and reset count
         function displayCountResult() {
-            //alert("Count result: " + count);
-            if (count > 10 * 60) {
+            // alert("Count result: " + count);
+            if (count > 60) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
@@ -170,11 +192,20 @@
             }
         }
 
-        setTimeout(function() {
-            b = document.getElementById("in_bitrate").value;
-            f = document.getElementById("in_fps").value;
-            w = document.getElementById("in_max_w").value;
-            h = document.getElementById("in_max_h").value;
+        function setNormalStream() {
+            document.getElementById("in_bitrate").value = "4524288";
+            document.getElementById("in_fps").value = "40";
+            document.getElementById("in_max_w").value = "1080";
+            document.getElementById("in_max_h").value = "1080";
+
+            clickButton();
+        }
+
+        waitForElm('.video').then((elm) => {
+            var b = "";
+            var f = "";
+            var w = "";
+            var h = "";
 
             ifvisible.on("wakeup", function() {
                 stopCounter();
@@ -183,16 +214,22 @@
 
                 document.getElementById("in_bitrate").value = b;
                 document.getElementById("in_fps").value = f;
-                document.getElementById("in_max_w").value = w;
-                document.getElementById("in_max_h").value = h;
+
+                b = document.getElementById("in_bitrate").value;
 
                 clickButton();
 
-                //console.log("owww");
+                console.log("owww" + b);
             });
 
             ifvisible.on("idle", function() {
                 startCounter();
+
+                b = document.getElementById("in_bitrate").value;
+                f = document.getElementById("in_fps").value;
+                w = document.getElementById("in_max_w").value;
+                h = document.getElementById("in_max_h").value;
+
 
                 document.getElementById("in_bitrate").value = "524288";
                 document.getElementById("in_fps").value = "40";
@@ -201,13 +238,17 @@
 
                 clickButton();
 
-                //console.log("awww");
+                console.log("awww");
             });
 
 
             // Start the counter initially
             startCounter();
-        }, 5000); // 5000 milliseconds = 5 seconds
+
+            setTimeout(function() {
+                setNormalStream();
+            }, 1000);
+        });
     </script>
 
 </body>
