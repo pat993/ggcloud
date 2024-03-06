@@ -205,8 +205,6 @@
         function setNormalStream() {
             document.getElementById("in_bitrate").value = "2524288";
             document.getElementById("in_fps").value = "40";
-            document.getElementById("in_max_w").value = "1080";
-            document.getElementById("in_max_h").value = "1080";
 
             clickButton();
         }
@@ -227,13 +225,11 @@
                 document.getElementById("in_bitrate").value = b;
                 document.getElementById("in_fps").value = f;
 
-                b = document.getElementById("in_bitrate").value;
-
                 clickButton();
 
                 status = "wakeup";
 
-                console.log("owww" + b);
+                console.log("owww");
             });
 
             ifvisible.on("idle", function() {
@@ -241,14 +237,9 @@
 
                 b = document.getElementById("in_bitrate").value;
                 f = document.getElementById("in_fps").value;
-                w = document.getElementById("in_max_w").value;
-                h = document.getElementById("in_max_h").value;
-
 
                 document.getElementById("in_bitrate").value = "524288";
                 document.getElementById("in_fps").value = "40";
-                document.getElementById("in_max_w").value = "1080";
-                document.getElementById("in_max_h").value = "1080";
 
                 clickButton();
 
@@ -261,9 +252,9 @@
             // Start the counter initially
             startCounter();
 
-            setTimeout(function() {
-                setNormalStream();
-            }, 1000);
+            // setTimeout(function() {
+            //     setNormalStream();
+            // }, 1000);
         });
     </script>
 
