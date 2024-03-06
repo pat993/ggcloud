@@ -177,6 +177,7 @@
         // Function to display the count result and reset count
         function displayCountResult() {
             // alert("Count result: " + count);
+            //console.log(count);
             if (count > 60) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
@@ -218,7 +219,7 @@
             ifvisible.on("wakeup", function() {
                 stopCounter();
 
-                if (status == "idle") {
+                if (status == "blur") {
                     displayCountResult(); // Display count result and reset count
                 }
 
@@ -229,10 +230,10 @@
 
                 status = "wakeup";
 
-                console.log("owww");
+                //console.log("wakeup");
             });
 
-            ifvisible.on("idle", function() {
+            ifvisible.on("blur", function() {
                 startCounter();
 
                 b = document.getElementById("in_bitrate").value;
@@ -243,9 +244,9 @@
 
                 clickButton();
 
-                status = "idle";
+                status = "blur";
 
-                console.log("awww");
+                //console.log("blur");
             });
 
             setTimeout(function() {
