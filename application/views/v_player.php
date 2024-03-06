@@ -114,7 +114,7 @@
             br = document.getElementById("in_bitrate").value;
 
             if (br == "524288" && status == "wakeup") {
-                document.getElementById("in_bitrate").value = "2524288";
+                document.getElementById("in_bitrate").value = "4024288";
 
                 clickButton();
             }
@@ -204,7 +204,7 @@
         }
 
         function setNormalStream() {
-            document.getElementById("in_bitrate").value = "2524288";
+            document.getElementById("in_bitrate").value = "4024288";
             document.getElementById("in_fps").value = "40";
 
             clickButton();
