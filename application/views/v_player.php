@@ -101,6 +101,8 @@
         // Convert milliseconds to seconds
         var secondsDifference = difference / 1000;
 
+        var status = "";
+
         // Set up a countdown timer
         var countdown = setInterval(function() {
             // Update the remaining time
@@ -111,7 +113,7 @@
 
             br = document.getElementById("in_bitrate").value;
 
-            if (br == "524288") {
+            if (br == "524288" && status == "wakeup") {
                 document.getElementById("in_bitrate").value = "2524288";
 
                 clickButton();
@@ -214,7 +216,6 @@
             var f = "";
             var w = "";
             var h = "";
-            var status = "";
 
             ifvisible.on("wakeup", function() {
                 stopCounter();
