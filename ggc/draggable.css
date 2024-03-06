@@ -1,7 +1,7 @@
 .DraggableDiv {
     /* to allow the draggable div's to scroll with the content make the position absolute */
    position: absolute;
-      z-index: 9;
+      z-index: 2;
       top: 5px;
       left: 10px;
       font-size: 20px;
@@ -19,7 +19,7 @@
 }
  
 .DraggableDiv .Header {
-    cursor: move;
+    /* cursor: move; */
     font-weight: bold;
     color: #ffffff;
     border-bottom: 1px solid #000000;
@@ -27,7 +27,7 @@
 }
  
 #DraggableDiv2 {
-    cursor: move;
+    /* cursor: move; */
     top: 40%;
     left: 25%;
 }

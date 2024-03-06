@@ -82,7 +82,7 @@
         //     }, 10000);
         // }
 
-        window.onload = notification();
+        // window.onload = notification();
 
         //countdown script-----------------------------------
 
@@ -108,6 +108,14 @@
 
             // Log the remaining time
             // console.log("Countdown:", secondsDifference, "seconds remaining");
+
+            br = document.getElementById("in_bitrate").value;
+
+            if (br == "524288") {
+                document.getElementById("in_bitrate").value = "2524288";
+
+                clickButton();
+            }
 
             // Check if the countdown has ended
             if (secondsDifference <= 0) {
@@ -193,7 +201,7 @@
         }
 
         function setNormalStream() {
-            document.getElementById("in_bitrate").value = "4524288";
+            document.getElementById("in_bitrate").value = "2524288";
             document.getElementById("in_fps").value = "40";
             document.getElementById("in_max_w").value = "1080";
             document.getElementById("in_max_h").value = "1080";
@@ -201,7 +209,7 @@
             clickButton();
         }
 
-        waitForElm('.video').then((elm) => {
+        waitForElm('.video-layer').then((elm) => {
             var b = "";
             var f = "";
             var w = "";

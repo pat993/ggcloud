@@ -53,17 +53,17 @@ var i=r(53),n=r(54),o=r(55);function s(){return c.TYPED_ARRAY_SUPPORT?2147483647
 function stream_quality(){
     var e = document.getElementById("stream_quality").value;
         if (e == "1") {
-                   document.getElementById("in_bitrate").value = "2524288";
+                   document.getElementById("in_bitrate").value = "1524288";
                    document.getElementById("in_fps").value = "40";
                    document.getElementById("in_max_w").value = "1080";
                    document.getElementById("in_max_h").value = "1080";
                 } else if (e == "2") {
-                   document.getElementById("in_bitrate").value = "4524288";
+                   document.getElementById("in_bitrate").value = "2524288";
                    document.getElementById("in_fps").value = "40";
                    document.getElementById("in_max_w").value = "1080";
                    document.getElementById("in_max_h").value = "1080";
                 } else if (e == "3") {
-                   document.getElementById("in_bitrate").value = "6524288";
+                   document.getElementById("in_bitrate").value = "5524288";
                    document.getElementById("in_fps").value = "40";
                    document.getElementById("in_max_w").value = "1080";
                    document.getElementById("in_max_h").value = "1080";
