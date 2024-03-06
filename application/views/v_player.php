@@ -176,12 +176,12 @@
 
         // Function to display the count result and reset count
         function displayCountResult() {
-            alert("Count result: " + count);
+            // alert("Count result: " + count);
             if (count > 5) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
-            count = 0;
+            count = 1;
         }
 
         // Update the counter every second
@@ -247,10 +247,6 @@
 
                 console.log("awww");
             });
-
-
-            // Start the counter initially
-            startCounter();
 
             setTimeout(function() {
                 setNormalStream();
