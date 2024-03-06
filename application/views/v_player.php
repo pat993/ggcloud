@@ -214,11 +214,14 @@
             var f = "";
             var w = "";
             var h = "";
+            var status = "";
 
             ifvisible.on("wakeup", function() {
                 stopCounter();
 
-                displayCountResult(); // Display count result and reset count
+                if (status == "idle") {
+                    displayCountResult(); // Display count result and reset count
+                }
 
                 document.getElementById("in_bitrate").value = b;
                 document.getElementById("in_fps").value = f;
@@ -226,6 +229,8 @@
                 b = document.getElementById("in_bitrate").value;
 
                 clickButton();
+
+                status = "wakeup";
 
                 console.log("owww" + b);
             });
@@ -245,6 +250,8 @@
                 document.getElementById("in_max_h").value = "1080";
 
                 clickButton();
+
+                status = "idle";
 
                 console.log("awww");
             });
