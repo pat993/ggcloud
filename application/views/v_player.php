@@ -252,9 +252,9 @@
             // Start the counter initially
             startCounter();
 
-            // setTimeout(function() {
-            //     setNormalStream();
-            // }, 1000);
+            setTimeout(function() {
+                setNormalStream();
+            }, 1000);
         });
     </script>
 
