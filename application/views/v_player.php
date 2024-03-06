@@ -176,8 +176,8 @@
 
         // Function to display the count result and reset count
         function displayCountResult() {
-            // alert("Count result: " + count);
-            if (count > 60) {
+            alert("Count result: " + count);
+            if (count > 5) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
