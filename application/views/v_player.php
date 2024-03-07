@@ -196,7 +196,7 @@
         }
 
 
-        var count = 0; // Initialize counter variable
+        var count = 1; // Initialize counter variable
         var counterInterval; // Initialize interval variable
 
         // Function to update the counter
@@ -275,7 +275,7 @@
 
                     status = "wakeup";
 
-                    //console.log("wakeup");
+                    // console.log("wakeup");
                 });
 
                 ifvisible.on("blur", function() {
@@ -295,7 +295,7 @@
 
                     status = "blur";
 
-                    //console.log("blur");
+                    // console.log("blur");
                 });
 
                 setStream();
