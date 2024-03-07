@@ -8,8 +8,8 @@
     <link href="/ggc/main.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/ggc/styles/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/ggc/styles/style.css">
-    <link rel="stylesheet" type="text/css" href="/ggc/styles/loader.css">
     <link rel="stylesheet" type="text/css" href="/ggc/draggable.css">
+    <link rel="stylesheet" type="text/css" href="/ggc/styles/loader.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.0/css/all.min.css" integrity="sha512-ykRBEJhyZ+B/BIJcBuOyUoIxh0OfdICfHPnPfBy7eIiyJv536ojTCsgX8aqrLQ9VJZHGz4tvYyzOM0lkgmQZGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -245,8 +245,10 @@
 
         setTimeout(function() {
             if (conn_status == "connected") {
-                document.getElementsByClassName('inf_loader').style.display = 'none';
+                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
 
+
+                // alert(conn_status);
                 // var element = document.getElementById('inf_loader');
                 // if (element) {
                 //     element.remove();
