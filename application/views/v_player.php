@@ -8,6 +8,7 @@
     <link href="/ggc/main.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/ggc/styles/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="/ggc/styles/style.css">
+    <link rel="stylesheet" type="text/css" href="/ggc/styles/loader.css">
     <link rel="stylesheet" type="text/css" href="/ggc/draggable.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.0/css/all.min.css" integrity="sha512-ykRBEJhyZ+B/BIJcBuOyUoIxh0OfdICfHPnPfBy7eIiyJv536ojTCsgX8aqrLQ9VJZHGz4tvYyzOM0lkgmQZGw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -60,9 +61,38 @@
 
 <body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
 
-    <div id="preloader">
+    <!-- <div id="preloader">
         <div class="spinner-border color-highlight-purple" role="status"></div>
-    </div>
+    </div> -->
+
+    <main class="inf_loader">
+        <svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#5ebd3e" />
+                    <stop offset="33%" stop-color="#ffb900" />
+                    <stop offset="67%" stop-color="#f78200" />
+                    <stop offset="100%" stop-color="#e23838" />
+                </linearGradient>
+                <linearGradient id="grad2" x1="1" y1="0" x2="0" y2="0">
+                    <stop offset="0%" stop-color="#e23838" />
+                    <stop offset="33%" stop-color="#973999" />
+                    <stop offset="67%" stop-color="#009cdf" />
+                    <stop offset="100%" stop-color="#5ebd3e" />
+                </linearGradient>
+            </defs>
+            <g fill="none" stroke-linecap="round" stroke-width="16">
+                <g class="ip__track" stroke="#ddd">
+                    <path d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                    <path d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                </g>
+                <g stroke-dasharray="180 656">
+                    <path class="ip__worm1" stroke="url(#grad1)" stroke-dashoffset="0" d="M8,64s0-56,60-56,60,112,120,112,60-56,60-56" />
+                    <path class="ip__worm2" stroke="url(#grad2)" stroke-dashoffset="358" d="M248,64s0-56-60-56-60,112-120,112S8,64,8,64" />
+                </g>
+            </g>
+        </svg>
+    </main>
 
     <div class="DraggableDiv">
         <button class="btn btn-dark rounded-xl" style="width: 32px; height: 32px; font-size: 9px;" type="button" id="fullscreen-toggle"><i class="fas fa-expand"></i></button>
@@ -108,9 +138,6 @@
             // Update the remaining time
             secondsDifference--;
 
-            // Log the remaining time
-            // console.log("Countdown:", secondsDifference, "seconds remaining");
-
             br = document.getElementById("in_bitrate").value;
 
             if (br == "524288" && status == "wakeup") {
@@ -118,6 +145,9 @@
 
                 clickButton();
             }
+
+            // Log the remaining time
+            // console.log("Countdown:", secondsDifference, "seconds remaining");
 
             // Check if the countdown has ended
             if (secondsDifference <= 0) {
@@ -203,60 +233,72 @@
             }
         }
 
-        function setNormalStream() {
-            document.getElementById("in_bitrate").value = "4024288";
-            document.getElementById("in_fps").value = "40";
+        function setStream() {
+            br = document.getElementById("in_bitrate").value;
 
-            clickButton();
+            if (br == "524288") {
+                document.getElementById("in_bitrate").value = "4024288";
+
+                clickButton();
+            }
         }
 
-        waitForElm('.video-layer').then((elm) => {
-            var b = "";
-            var f = "";
-            var w = "";
-            var h = "";
+        setTimeout(function() {
+            if (conn_status == "connected") {
+                document.getElementsByClassName('inf_loader').style.display = 'none';
 
-            ifvisible.on("wakeup", function() {
-                stopCounter();
+                // var element = document.getElementById('inf_loader');
+                // if (element) {
+                //     element.remove();
+                // } else {
+                //     console.log("Element with id 'inf_loader' not found.");
+                // }
 
-                if (status == "blur") {
-                    displayCountResult(); // Display count result and reset count
-                }
+                var b = "";
+                var f = "";
+                var w = "";
+                var h = "";
 
-                document.getElementById("in_bitrate").value = b;
-                document.getElementById("in_fps").value = f;
+                ifvisible.on("wakeup", function() {
+                    stopCounter();
 
-                clickButton();
+                    if (status == "blur") {
+                        displayCountResult(); // Display count result and reset count
+                    }
 
-                status = "wakeup";
+                    document.getElementById("in_bitrate").value = b;
+                    document.getElementById("in_fps").value = f;
 
-                //console.log("wakeup");
-            });
+                    clickButton();
 
-            ifvisible.on("blur", function() {
-                startCounter();
+                    status = "wakeup";
 
-                c = document.getElementById("in_bitrate").value;
+                    //console.log("wakeup");
+                });
 
-                if (c != "524288") {
-                    b = document.getElementById("in_bitrate").value;
-                    f = document.getElementById("in_fps").value;
-                }
+                ifvisible.on("blur", function() {
+                    startCounter();
 
-                document.getElementById("in_bitrate").value = "524288";
-                document.getElementById("in_fps").value = "40";
+                    c = document.getElementById("in_bitrate").value;
 
-                clickButton();
+                    if (c != "524288") {
+                        b = document.getElementById("in_bitrate").value;
+                        f = document.getElementById("in_fps").value;
+                    }
 
-                status = "blur";
+                    document.getElementById("in_bitrate").value = "524288";
+                    document.getElementById("in_fps").value = "40";
 
-                //console.log("blur");
-            });
+                    clickButton();
 
-            setTimeout(function() {
-                setNormalStream();
-            }, 1000);
-        });
+                    status = "blur";
+
+                    //console.log("blur");
+                });
+
+                setStream();
+            }
+        }, 1000);
     </script>
 
 </body>
