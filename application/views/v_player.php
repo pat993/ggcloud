@@ -236,8 +236,12 @@
             ifvisible.on("blur", function() {
                 startCounter();
 
-                b = document.getElementById("in_bitrate").value;
-                f = document.getElementById("in_fps").value;
+                c = document.getElementById("in_bitrate").value;
+
+                if (c != "524288") {
+                    b = document.getElementById("in_bitrate").value;
+                    f = document.getElementById("in_fps").value;
+                }
 
                 document.getElementById("in_bitrate").value = "524288";
                 document.getElementById("in_fps").value = "40";
