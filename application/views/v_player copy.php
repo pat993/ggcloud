@@ -147,14 +147,12 @@
 
             br = document.getElementById("in_bitrate").value;
 
-            //console.log(br);
+            console.log(br);
 
             if (br == "524288" && status == "wakeup") {
                 document.getElementById("in_bitrate").value = "4024288";
 
-                setTimeout(function() {
-                    clickButton();
-                }, 500);
+                clickButton();
             }
 
             // Log the remaining time
@@ -305,29 +303,44 @@
         });
         //---------------------------------------------------------------------------------
 
-        // Define a function to check the condition and perform actions
-        function checkAndPerformActions() {
-            if (conn_status == "connected") {
-                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                setStream();
+        // Function to wait for the connection status to change to "Connected" with a timeout
+        async function waitForConnection() {
+            let timeoutFlag = false;
 
-                clearInterval(timer); // Stop the loop when condition is met
-            }
-            if (conn_status == "Disconnected") {
-                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                show_notification();
+            // Set a timeout of 5 seconds
+            setTimeout(() => {
+                timeoutFlag = true; // Set the timeout flag to true after 5 seconds
+            }, 5000);
 
-                clearInterval(timer); // Stop the loop when condition is met
+            while (true) {
+                if (conn_status === "Connected") {
+                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    setStream();
+
+                    break; // Exit the loop when the status is "Connected"
+                }
+                if (timeoutFlag) {
+                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    show_notification();
+
+                    break; // Exit the loop if timeout occurs
+                }
+                await new Promise(resolve => setTimeout(resolve, 100)); // Check every 100 milliseconds
             }
         }
 
-        // Set up a timer to run the function repeatedly
-        var timer = setInterval(checkAndPerformActions, 1000); // Run every second (1000 milliseconds)
 
-        // Set up a timer to stop the loop after 20 seconds
         setTimeout(function() {
-            clearInterval(timer); // Stop the loop
-        }, 20000); // 20 seconds
+            if (conn_status == "connected") {
+                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                setStream();
+                
+            } else {
+
+                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                show_notification();
+            }
+        }, 1000);
     </script>
 
 </body>
