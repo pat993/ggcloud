@@ -49,7 +49,7 @@
             width: 200px;
             height: 200px;
             position: fixed;
-            top: 40%;
+            top: 50%;
             left: 50%;
             margin-top: -100px;
             margin-left: -100px;
@@ -100,17 +100,24 @@
         <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
     </div>
 
+    <div style="display: none;" class="center2" id="notification">
+        <i style="font-size: 30px; padding-bottom: 10px" class="fas fa-exclamation-circle"></i>
+
+        <br>
+        <b>Oops</b>, tampaknya terjadi kendala jaringan, silahkan cek koneksi kamu dan refresh kembali.
+        <br>
+        Jika kendala masih terjadi silahkan hubungi Admin.
+    </div>
+
     <script>
         // Function to show the hidden div after a delay
-        // function notification() {
-        //     // Get the div element
-        //     var notification = document.getElementById('notification');
+        function show_notification() {
+            // Get the div element
+            var notification = document.getElementById('notification');
 
-        //     // Set a timeout to show the div after 10 seconds (10000 milliseconds)
-        //     setTimeout(function() {
-        //         notification.style.display = 'block';
-        //     }, 10000);
-        // }
+            // Set a timeout to show the div after 10 seconds (10000 milliseconds)
+            notification.style.display = 'block';
+        }
 
         // window.onload = notification();
 
@@ -172,7 +179,15 @@
 
 
     <script>
-        $('.DraggableDiv').draggableTouch();
+        // Check if the user is using a mobile browser
+        function isMobileBrowser() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+
+        // Alert the user based on their browser type
+        if (isMobileBrowser()) {
+            $('.DraggableDiv').draggableTouch();
+        }
 
         function waitForElm(selector) {
             return new Promise(resolve => {
@@ -299,6 +314,9 @@
                 });
 
                 setStream();
+            } else {
+                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                show_notification();
             }
         }, 1000);
     </script>

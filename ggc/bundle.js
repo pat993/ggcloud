@@ -23,7 +23,7 @@ function getData(cookieName) {
  var langit = getData('langit');
  var bintang = decodeURIComponent(getData('bintang'));
  var matahari = getData('matahari');
- var conn_status = "Disconnected";
+ var conn_status = "";
 
  var langit_matahari = langit + '?token=' + matahari;
 
@@ -54,8 +54,10 @@ var i=r(53),n=r(54),o=r(55);function s(){return c.TYPED_ARRAY_SUPPORT?2147483647
 
 t.prototype.hasConnection=function(){ 
    var isConnected = !(!this.ws || this.ws.readyState !== this.ws.OPEN);
-   if (this.ws.OPEN) {
+   if (isConnected) {
        conn_status = "connected";
+   }else{
+      conn_status = "Disconnected";
    }
    return isConnected
 }
