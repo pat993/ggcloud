@@ -147,7 +147,7 @@
 
             br = document.getElementById("in_bitrate").value;
 
-            //console.log(br);
+            console.log(br);
 
             if (br == "524288" && status == "wakeup") {
                 document.getElementById("in_bitrate").value = "4024288";
@@ -316,6 +316,7 @@
             if (conn_status == "Disconnected") {
                 document.getElementsByClassName('inf_loader')[0].style.display = 'none';
                 show_notification();
+                setStream();
 
                 clearInterval(timer); // Stop the loop when condition is met
             }
