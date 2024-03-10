@@ -136,7 +136,7 @@ body.stream {
     width: 265px;
     bottom: -20px;
     background-color: black;
-    z-index: 9;
+    z-index: 11;
     opacity: 100%;
     /* background-color: var(--control-buttons-bg-color); */
 
