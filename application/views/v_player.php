@@ -205,7 +205,6 @@
         // Alert the user based on their browser type
         if (isMobileBrowser()) {
             $('.DraggableDiv').draggableTouch();
-            $('.ping').draggableTouch();
         }
 
         function waitForElm(selector) {
