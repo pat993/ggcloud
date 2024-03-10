@@ -63,6 +63,7 @@
             right: 10px;
             color: white;
             z-index: 9;
+            font-size: 10px;
         }
     </style>
 </head>
