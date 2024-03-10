@@ -59,7 +59,7 @@
 
         .ping {
             position: absolute;
-            top: 0;
+            bottom: 0;
             right: 10px;
             z-index: 2;
             font-size: 8px;
