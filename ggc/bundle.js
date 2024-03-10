@@ -78,7 +78,7 @@ function stream_quality(){
                    document.getElementById("in_max_w").value = "720";
                    document.getElementById("in_max_h").value = "720";
                 } else if (e == "3") {
-                   document.getElementById("in_bitrate").value = "4524288";
+                   document.getElementById("in_bitrate").value = "5524288";
                    document.getElementById("in_fps").value = "40";
                    document.getElementById("in_max_w").value = "720";
                    document.getElementById("in_max_h").value = "720";

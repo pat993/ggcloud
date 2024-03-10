@@ -56,6 +56,14 @@
             text-align: center;
             color: white;
         }
+
+        .ping {
+            position: absolute;
+            top: 0;
+            right: 10px;
+            color: white;
+            z-index: 99;
+        }
     </style>
 </head>
 
@@ -64,6 +72,10 @@
     <!-- <div id="preloader">
         <div class="spinner-border color-highlight-purple" role="status"></div>
     </div> -->
+
+    <div class="ping">
+
+    </div>
 
     <main class="inf_loader">
         <svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
@@ -139,6 +151,7 @@
         var secondsDifference = difference / 1000;
 
         var status = "";
+        var br = "";
 
         // Set up a countdown timer
         var countdown = setInterval(function() {
@@ -305,25 +318,79 @@
         });
         //---------------------------------------------------------------------------------
 
-        // Define a function to check the condition and perform actions
-        function checkAndPerformActions() {
-            if (conn_status == "connected") {
-                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                setStream();
+        // Function to load an image and measure load time
+        function ping(url, callback) {
+            var startTime = new Date().getTime();
+            var img = new Image();
 
-                clearInterval(timer); // Stop the loop when condition is met
-            }
-            if (conn_status == "Disconnected") {
-                document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                show_notification();
-                setStream();
+            img.onload = function() {
+                var endTime = new Date().getTime();
+                var timeDiff = endTime - startTime;
+                callback(timeDiff);
+            };
 
-                clearInterval(timer); // Stop the loop when condition is met
-            }
+            img.src = url + '?' + new Date().getTime(); // Append a timestamp to bypass caching
+        }
+
+        var url = "https://hypercube.my.id/poweredby.png"; // Updated URL
+
+        var b2 = "";
+
+        // Function to ping every 2 seconds
+        function pingEveryTwoSeconds() {
+            ping(url, function(time) {
+                var pingElement = document.querySelector('.ping');
+                if (pingElement) {
+                    pingElement.innerHTML = '<i class="fas fa-signal"></i> ' + time + 'ms';
+                    if (time > 500) {
+                        pingElement.style.color = 'red';
+
+                        if (document.getElementById("in_bitrate").value != "524288") {
+                            b2 = document.getElementById("in_bitrate").value;
+                        }
+
+                        document.getElementById("in_bitrate").value = "524288";
+                        // document.getElementById("in_fps").value = "40";
+
+                        clickButton();
+                    }
+
+                    if (time < 500) {
+                        pingElement.style.color = '';
+
+                        if (b2 != "") {
+                            document.getElementById("in_bitrate").value = b2;
+                            // document.getElementById("in_fps").value = "40";
+
+                            clickButton();
+                        }
+                    }
+                }
+            });
         }
 
         // Set up a timer to run the function repeatedly
         setTimeout(function() {
+            // Define a function to check the condition and perform actions
+            function checkAndPerformActions() {
+                if (conn_status == "connected") {
+                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    setStream();
+
+                    // Call the function every 2 seconds
+                    setInterval(pingEveryTwoSeconds, 2000);
+
+                    clearInterval(timer); // Stop the loop when condition is met
+                }
+                if (conn_status == "Disconnected") {
+                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    show_notification();
+                    setStream();
+
+                    clearInterval(timer); // Stop the loop when condition is met
+                }
+            }
+
             var timer = setInterval(checkAndPerformActions, 1000); // Run every second (1000 milliseconds)
         }, 1000); // 20 seconds
 
