@@ -62,8 +62,8 @@
             top: 0;
             right: 10px;
             color: white;
-            z-index: 9;
-            font-size: 10px;
+            z-index: 5;
+            opacity: 70%;
         }
     </style>
 </head>
