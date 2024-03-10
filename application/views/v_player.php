@@ -62,11 +62,16 @@
             top: 0;
             right: 10px;
             color: white;
-            z-index: 9;
+<<<<<<< HEAD
+            z-index: 9;`
             background-color: black;
             opacity: 60%;
             border-radius: 20px;
             padding: 2px 1px 2px 1px;
+=======
+            z-index: 5;
+            opacity: 70%;
+>>>>>>> 411a09c785dc046a81b46dd8da21acf64be25402
         }
     </style>
 </head>
