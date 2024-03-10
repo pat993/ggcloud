@@ -59,30 +59,24 @@
 
         .ping {
             position: absolute;
-            top: 5px;
+            top: 0;
             right: 10px;
-            color: white;
             z-index: 2;
-            background-color: black;
-            opacity: 60%;
-            border-radius: 20px;
-            /*padding: 0 2px 0 2px;*/
-            width: 60px;
-            text-align: center;
-            font-size: 9px;
+            font-size: 8px;
+            color: white;
         }
     </style>
 </head>
 
 <body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
 
+    <div class="ping">
+        <i class="fas fa-signal"></i> - ms
+    </div>
+
     <!-- <div id="preloader">
         <div class="spinner-border color-highlight-purple" role="status"></div>
     </div> -->
-
-    <div class="ping">
-
-    </div>
 
     <main class="inf_loader">
         <svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
@@ -116,7 +110,7 @@
     <div class="DraggableDiv">
         <button class="btn btn-dark rounded-xl" style="width: 32px; height: 32px; font-size: 9px;" type="button" id="fullscreen-toggle"><i class="fas fa-expand"></i></button>
         <br>
-        <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i>
+        <button class="btn btn-dark rounded-xl mt-1" style="width: 32px; height: 32px; font-size: 9px" type="button" id="slide-toggle"><i class="fas fa-ellipsis-h"></i></button>
     </div>
 
     <div style="display: none;" class="center2" id="notification">
@@ -357,13 +351,13 @@
 
                         if (document.getElementById("in_bitrate").value != "524288") {
                             b2 = document.getElementById("in_bitrate").value;
-                            h2 = document.getElementById("in_max_w").value;
-                            w2 = document.getElementById("in_max_h").value;
+                            // h2 = document.getElementById("in_max_w").value;
+                            // w2 = document.getElementById("in_max_h").value;
                         }
 
                         document.getElementById("in_bitrate").value = "524288";
-                        document.getElementById("in_max_w").value = "710";
-                        document.getElementById("in_max_h").value = "710";
+                        // document.getElementById("in_max_w").value = "720";
+                        // document.getElementById("in_max_h").value = "720";
                         // document.getElementById("in_fps").value = "40";
 
                         clickButton();
@@ -374,8 +368,8 @@
 
                         if (b2 != "") {
                             document.getElementById("in_bitrate").value = b2;
-                            document.getElementById("in_max_w").value = w2;
-                            document.getElementById("in_max_h").value = h2;
+                            // document.getElementById("in_max_w").value = w2;
+                            // document.getElementById("in_max_h").value = h2;
                             // document.getElementById("in_fps").value = "40";
 
                             clickButton();
