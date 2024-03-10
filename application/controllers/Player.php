@@ -89,6 +89,9 @@ class Player extends CI_Controller
             $d_name = $dev_name;
             $d_token = $access_token;
 
+            // Delay execution for 500 milliseconds
+            usleep(500000);
+
             $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
 
             $this->load->view('v_player', $data);
