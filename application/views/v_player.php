@@ -59,16 +59,17 @@
 
         .ping {
             position: absolute;
-            top: 0;
+            top: 5px;
             right: 10px;
             color: white;
             z-index: 2;
             background-color: black;
             opacity: 60%;
             border-radius: 20px;
-            padding: 0 10px 0 10px;
-            width: 90px;
+            padding: 0 6px 0 6px;
+            width: 80px;
             text-align: center;
+            font-size: 9px;
         }
     </style>
 </head>
