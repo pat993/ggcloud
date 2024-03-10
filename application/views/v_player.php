@@ -63,7 +63,10 @@
             right: 10px;
             color: white;
             z-index: 9;
-            font-size: 10px;
+            background-color: black;
+            opacity: 60%;
+            border-radius: 20px;
+            padding: 2px 1px 2px 1px;
         }
     </style>
 </head>
@@ -205,6 +208,7 @@
         // Alert the user based on their browser type
         if (isMobileBrowser()) {
             $('.DraggableDiv').draggableTouch();
+            $('.ping').draggableTouch();
         }
 
         function waitForElm(selector) {
