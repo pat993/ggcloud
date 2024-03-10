@@ -323,7 +323,9 @@
         }
 
         // Set up a timer to run the function repeatedly
-        var timer = setInterval(checkAndPerformActions, 1000); // Run every second (1000 milliseconds)
+        setTimeout(function() {
+            var timer = setInterval(checkAndPerformActions, 1000); // Run every second (1000 milliseconds)
+        }, 1000); // 20 seconds
 
         // Set up a timer to stop the loop after 20 seconds
         setTimeout(function() {
