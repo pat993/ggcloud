@@ -66,8 +66,8 @@
             background-color: black;
             opacity: 60%;
             border-radius: 20px;
-            padding: 0 6px 0 6px;
-            width: 80px;
+            /*padding: 0 2px 0 2px;*/
+            width: 60px;
             text-align: center;
             font-size: 9px;
         }
@@ -343,6 +343,8 @@
         var url = "https://hypercube.my.id/poweredby.png"; // Updated URL
 
         var b2 = "";
+        var h2 = "";
+        var w2 = "";
 
         // Function to ping every 2 seconds
         function pingEveryTwoSeconds() {
@@ -355,9 +357,13 @@
 
                         if (document.getElementById("in_bitrate").value != "524288") {
                             b2 = document.getElementById("in_bitrate").value;
+                            h2 = document.getElementById("in_max_w").value;
+                            w2 = document.getElementById("in_max_h").value;
                         }
 
                         document.getElementById("in_bitrate").value = "524288";
+                        document.getElementById("in_max_w").value = "710";
+                        document.getElementById("in_max_h").value = "710";
                         // document.getElementById("in_fps").value = "40";
 
                         clickButton();
@@ -368,6 +374,8 @@
 
                         if (b2 != "") {
                             document.getElementById("in_bitrate").value = b2;
+                            document.getElementById("in_max_w").value = w2;
+                            document.getElementById("in_max_h").value = h2;
                             // document.getElementById("in_fps").value = "40";
 
                             clickButton();
@@ -382,6 +390,7 @@
             // Define a function to check the condition and perform actions
             function checkAndPerformActions() {
                 if (conn_status == "connected") {
+                    document.querySelector('.ping').style.display = 'block';
                     document.getElementsByClassName('inf_loader')[0].style.display = 'none';
                     setStream();
 
@@ -391,6 +400,7 @@
                     clearInterval(timer); // Stop the loop when condition is met
                 }
                 if (conn_status == "Disconnected") {
+                    document.querySelector('.ping').style.display = 'none';
                     document.getElementsByClassName('inf_loader')[0].style.display = 'none';
                     show_notification();
                     setStream();
