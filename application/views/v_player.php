@@ -69,12 +69,6 @@
             padding: 0 10px 0 10px;
             width: 90px;
             text-align: center;
-            -webkit-touch-callout: none; /* iOS Safari */
-        -webkit-user-select: none; /* Safari */
-        -khtml-user-select: none; /* Konqueror HTML */
-        -moz-user-select: none; /* Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-        user-select: none; /* Non-prefixed version, supported by most modern browsers */
         }
     </style>
 </head>
