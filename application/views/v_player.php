@@ -62,7 +62,7 @@
             top: 0;
             right: 10px;
             color: white;
-            z-index: 99;
+            z-index: 9;
         }
     </style>
 </head>
