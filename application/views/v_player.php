@@ -407,7 +407,6 @@
 
         // Set up a timer to stop the loop after 20 seconds
         setTimeout(function() {
-            document.querySelector('.ping').style.display = 'none';
             clearInterval(timer); // Stop the loop
         }, 20000); // 20 seconds
     </script>
