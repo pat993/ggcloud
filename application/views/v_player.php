@@ -71,7 +71,7 @@
 <body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
 
     <div class="ping">
-        <i class="fas fa-signal"></i> - ms
+        <i class="fas fa-signal"></i>
     </div>
 
     <!-- <div id="preloader">
@@ -266,14 +266,16 @@
         }
 
         function setStream() {
-            br = document.getElementById("in_bitrate").value;
+            // br = document.getElementById("in_bitrate").value;
 
-            if (br == "524288") {
-                document.getElementById("in_bitrate").value = "3024288";
+            // if (br == "524288") {
+            document.getElementById("in_bitrate").value = "3024288";
 
+            setTimeout(function() {
                 clickButton();
-            }
+            }, 500);
         }
+        // }
 
         //------------------------------------------------------------------------
         var b = "";
@@ -291,7 +293,9 @@
             document.getElementById("in_bitrate").value = b;
             // document.getElementById("in_fps").value = f;
 
-            clickButton();
+            setTimeout(function() {
+                clickButton();
+            }, 500);
 
             status = "wakeup";
 
@@ -311,7 +315,9 @@
             document.getElementById("in_bitrate").value = "524288";
             // document.getElementById("in_fps").value = "40";
 
-            clickButton();
+            setTimeout(function() {
+                clickButton();
+            }, 500);
 
             status = "blur";
 
@@ -344,7 +350,7 @@
             ping(url, function(time) {
                 var pingElement = document.querySelector('.ping');
                 if (pingElement) {
-                    pingElement.innerHTML = '<i class="fas fa-signal"></i> ' + time + 'ms';
+                    pingElement.innerHTML = '<i class="fas fa-signal"></i>';
                     if (time > 500) {
                         pingElement.style.color = 'red';
 
@@ -359,7 +365,9 @@
                         // // document.getElementById("in_max_h").value = "720";
                         // // document.getElementById("in_fps").value = "40";
 
-                        // clickButton();
+                        // setTimeout(function() {
+                        //     clickButton();
+                        // }, 500);
                     }
 
                     if (time < 500) {
@@ -371,7 +379,9 @@
                         //     // document.getElementById("in_max_h").value = h2;
                         //     // document.getElementById("in_fps").value = "40";
 
-                        //     clickButton();
+                        //     setTimeout(function() {
+                        //         clickButton();
+                        //     }, 500);
                         // }
                     }
                 }
@@ -385,8 +395,9 @@
                 if (conn_status == "connected") {
                     document.querySelector('.ping').style.display = 'block';
                     document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                    setStream();
-
+                    // setTimeout(function() {
+                    //     setStream();
+                    // }, 500); // 20 seconds
                     // Call the function every 2 seconds
                     setInterval(pingEveryTwoSeconds, 2000);
 
@@ -396,7 +407,9 @@
                     document.querySelector('.ping').style.display = 'none';
                     document.getElementsByClassName('inf_loader')[0].style.display = 'none';
                     show_notification();
-                    setStream();
+                    // setTimeout(function() {
+                    //     setStream();
+                    // }, 500); // 20 seconds
 
                     clearInterval(timer); // Stop the loop when condition is met
                 }
