@@ -164,7 +164,7 @@
             console.log(br);
 
             if (br == "524288" && status == "wakeup") {
-                document.getElementById("in_bitrate").value = "3024288";
+                document.getElementById("in_bitrate").value = "2524288";
 
                 setTimeout(function() {
                     clickButton();
@@ -269,7 +269,7 @@
             // br = document.getElementById("in_bitrate").value;
 
             // if (br == "524288") {
-            document.getElementById("in_bitrate").value = "3024288";
+            document.getElementById("in_bitrate").value = "2524288";
 
             setTimeout(function() {
                 clickButton();
@@ -361,8 +361,8 @@
                         // }
 
                         // document.getElementById("in_bitrate").value = "524288";
-                        // // document.getElementById("in_max_w").value = "720";
-                        // // document.getElementById("in_max_h").value = "720";
+                        // // document.getElementById("in_max_w").value = "1080";
+                        // // document.getElementById("in_max_h").value = "1080";
                         // // document.getElementById("in_fps").value = "40";
 
                         // setTimeout(function() {
