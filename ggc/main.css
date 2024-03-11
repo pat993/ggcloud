@@ -114,7 +114,7 @@ body.stream {
 
 .touch-layer {
     position: absolute;
-    z-index: 3;
+    z-index: 2;
     height: 100%;
         width: 100%;
         margin: auto;
@@ -201,7 +201,7 @@ body.stream {
     display: none;
     position: absolute;
     /* background-color: var(--controls-bg-color); */
-    z-index: 3;
+    z-index: 2;
     padding: 0 .714rem .714rem .714rem;
 }
 

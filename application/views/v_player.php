@@ -348,31 +348,31 @@
                     if (time > 500) {
                         pingElement.style.color = 'red';
 
-                        if (document.getElementById("in_bitrate").value != "524288") {
-                            b2 = document.getElementById("in_bitrate").value;
-                            // h2 = document.getElementById("in_max_w").value;
-                            // w2 = document.getElementById("in_max_h").value;
-                        }
+                        // if (document.getElementById("in_bitrate").value != "524288") {
+                        //     b2 = document.getElementById("in_bitrate").value;
+                        //     // h2 = document.getElementById("in_max_w").value;
+                        //     // w2 = document.getElementById("in_max_h").value;
+                        // }
 
-                        document.getElementById("in_bitrate").value = "524288";
-                        // document.getElementById("in_max_w").value = "720";
-                        // document.getElementById("in_max_h").value = "720";
-                        // document.getElementById("in_fps").value = "40";
+                        // document.getElementById("in_bitrate").value = "524288";
+                        // // document.getElementById("in_max_w").value = "720";
+                        // // document.getElementById("in_max_h").value = "720";
+                        // // document.getElementById("in_fps").value = "40";
 
-                        clickButton();
+                        // clickButton();
                     }
 
                     if (time < 500) {
                         pingElement.style.color = '';
 
-                        if (b2 != "") {
-                            document.getElementById("in_bitrate").value = b2;
-                            // document.getElementById("in_max_w").value = w2;
-                            // document.getElementById("in_max_h").value = h2;
-                            // document.getElementById("in_fps").value = "40";
+                        // if (b2 != "") {
+                        //     document.getElementById("in_bitrate").value = b2;
+                        //     // document.getElementById("in_max_w").value = w2;
+                        //     // document.getElementById("in_max_h").value = h2;
+                        //     // document.getElementById("in_fps").value = "40";
 
-                            clickButton();
-                        }
+                        //     clickButton();
+                        // }
                     }
                 }
             });
@@ -407,6 +407,7 @@
 
         // Set up a timer to stop the loop after 20 seconds
         setTimeout(function() {
+            document.querySelector('.ping').style.display = 'none';
             clearInterval(timer); // Stop the loop
         }, 20000); // 20 seconds
     </script>
