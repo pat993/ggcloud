@@ -312,7 +312,7 @@
                 // f = document.getElementById("in_fps").value;
             }
 
-            document.getElementById("in_bitrate").value = "524288";
+            document.getElementById("in_bitrate").value = "2524288";
             // document.getElementById("in_fps").value = "40";
 
             setTimeout(function() {
