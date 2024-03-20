@@ -168,7 +168,8 @@ class Device_manager extends CI_Controller
 
       foreach ($dev_data as $dev_data_r) {
          $data['dev_id'] = $dev_data_r['id'];
-         $d_ip = 'hypercube.my.id';
+         #$d_ip = 'hypercube.my.id';
+         $d_ip = '103.178.153.106';
          $d_port = $dev_data_r['port'];
          $d_name = $dev_data_r['name'];
       }

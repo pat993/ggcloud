@@ -84,7 +84,8 @@ class Player extends CI_Controller
             // }
             $data['user_id'] = $user_id;
 
-            $d_ip = 'hypercube.my.id';
+            #$d_ip = 'hypercube.my.id';
+            $d_ip = '103.178.153.106';
             $d_port = $dev_port;
             $d_name = $dev_name;
             $d_token = $access_token;
