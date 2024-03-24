@@ -96,7 +96,7 @@
                     </li>
                 </ul>
                 <span class="nav-item">
-                    <a class="btn-outline-sm" href="login">SIGN IN</a>
+                    <a class="btn-outline-sm" href="https://my.ggcloud.id/login">SIGN IN</a>
                 </span>
             </div>
         </div> <!-- end of container -->
@@ -113,7 +113,7 @@
                         <div class="text-container">
                             <h1>Cloud Emulator Ga Pake Mahal!</h1>
                             <p class="p-large">Jalankan Game dan Aplikasimu 24/7 non-stop tanpa worry dengan harga dan paket yang flexibel</p>
-                            <a class="btn-solid-lg page-scroll" href="register">SIGN UP</a>
+                            <a class="btn-solid-lg page-scroll" href="https://my.ggcloud.id/register">SIGN UP</a>
                         </div> <!-- end of text-container -->
                     </div> <!-- end of col -->
                     <div class="col-lg-6 col-xl-7">
