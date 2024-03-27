@@ -270,6 +270,7 @@
 
             // if (br == "524288") {
             document.getElementById("in_bitrate").value = "2524288";
+            document.getElementById("in_fps").value = "40";
 
             setTimeout(function() {
                 clickButton();
@@ -339,7 +340,7 @@
             img.src = url + '?' + new Date().getTime(); // Append a timestamp to bypass caching
         }
 
-        var url = "https://hypercube.my.id/poweredby.png"; // Updated URL
+        var url = "http://103.178.153.106/poweredby.png"; // Updated URL
 
         var b2 = "";
         var h2 = "";
@@ -395,9 +396,9 @@
                 if (conn_status == "connected") {
                     document.querySelector('.ping').style.display = 'block';
                     document.getElementsByClassName('inf_loader')[0].style.display = 'none';
-                    // setTimeout(function() {
-                    //     setStream();
-                    // }, 500); // 20 seconds
+                    setTimeout(function() {
+                        setStream();
+                    }, 1000);
                     // Call the function every 2 seconds
                     setInterval(pingEveryTwoSeconds, 2000);
 
