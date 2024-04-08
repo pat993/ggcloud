@@ -14,6 +14,15 @@ class M_device_manager extends CI_Model
       return $result;
    }
 
+   function get_data_where($table, $where)
+   {
+      $this->db->select('*, device.id as device_id');
+
+      $result = $this->db->get_where($table, $where)->result_array();
+
+      return $result;
+   }
+
    function get_ajax_data($table, $where)
    {
       $this->db->select('*, device.id as device_id, assigned.status as device_status');

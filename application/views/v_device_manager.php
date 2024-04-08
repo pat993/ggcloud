@@ -63,12 +63,9 @@
                              <div class="dropleft">
                                 <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                   <?php if ($result['status_id'] == 1) { ?>
-                                      <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure</button></a>
-                                      <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure (Local)</button></a>
-                                      <div class="dropdown-divider"></div>
-                                   <?php
-                                    } ?>
+                                   <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure</button></a>
+                                   <!-- <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure (Local)</button></a> -->
+                                   <div class="dropdown-divider"></div>
                                    <button class="dropdown-item" data-menu="menu-device-detail" onclick="a_device_detail(<?= $result['device_id']; ?>)"><i class="fas fa-info-circle"></i> Detail</button>
                                    <button class="dropdown-item" data-menu="menu-device-edit" onclick="a_device_edit(<?= $result['device_id']; ?>)"><i class="fas fa-pen"></i> Edit</button>
                                    <div class="dropdown-divider"></div>
@@ -105,7 +102,7 @@
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
               Remote IP Address:
-              <input type="text" class="form-control validate-name" id="txt_ip" name="txt_ip">
+              <input type="text" class="form-control validate-name" id="txt_ip" name="txt_ip_remote">
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
               Port :
@@ -147,14 +144,12 @@
               <div class="d-flex">
                  <div class="mb-2">
                     <h1><i class="fas fa-tools"></i> Device Edit</h1>
+                    <small style="color: red;">Perhatian: Jika terdapat perubahan, konfigurasi haproxy harus diubah secara manual</small>
                  </div>
               </div>
               <div id="a-device-edit">
                  Loading....
-              </div>
-              <div class="row mt-1">
-                 <div class="col-sm-6">
-                 </div>
+                 <br>
               </div>
            </div>
            <button type="submit" style="width: 100%;" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase ms-auto mb-4"><i class="fas fa-save"></i> Simpan</button>

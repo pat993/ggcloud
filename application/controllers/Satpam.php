@@ -30,39 +30,17 @@ class Satpam extends CI_Controller
       if (count($device_data) > 0) {
          $this->edit_configuration($device_data);
       }
-
-
-      // $firewall_list = $this->M_satpam->get_firewall_list('firewall');
-
-      // echo json_encode($firewall_list);
-
-      // if (count($firewall_list) != 0) {
-      //    $ssh = new SSH2('103.189.234.196');
-      //    if (!$ssh->login('root', '@Patraana007')) {
-      //       exit('Login Failed');
-      //    } else {
-      //       foreach ($firewall_list as $firewall_list_r) {
-      //          // $ssh->exec("sudo ufw deny from " . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "");
-      //          $ssh->exec("sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'");
-      //          $ssh->exec("sudo ufw reload");
-
-      //          $this->M_satpam->update_firewall($firewall_list_r['assign_id']);
-
-      //          // echo "sudo ufw show added | grep '" . $firewall_list_r['ip'] . " to any port " . $firewall_list_r['port'] . "' | awk '{ gsub(\"ufw\",\"ufw delete\",$0); system($0)}'";
-      //       }
-      //    }
-      // }
    }
 
    public function edit_configuration($device_data)
    {
       // Server SSH connection details
-      $server_ip = '103.189.234.196';
+      $server_ip = 'hypercube.my.id';
       $server_port = 22;
       $server_username = 'root';
       $server_password = '@Patraana007';
 
-      $token_master = 'VACANT_DEVICE';
+      $token_master = '0000_AVAILABLEDEVICE';
 
       // SSH connection
       $ssh = new SSH2($server_ip, $server_port);

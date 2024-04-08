@@ -9,7 +9,7 @@ class Device_manager extends CI_Controller
    {
       parent::__construct();
 
-      if ($this->session->userdata('status') != "login") {
+      if ($this->session->userdata('status') != "login" && $this->session->userdata('username') != "admin") {
          redirect(base_url("login"));
       } else {
          $this->load->model('M_device_manager');
@@ -46,7 +46,7 @@ class Device_manager extends CI_Controller
 
    public function add_device()
    {
-      $ip = $this->input->post('txt_ip');
+      $ip = $this->input->post('txt_ip_remote');
       $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
       $port_f = $this->input->post('txt_port_f');
@@ -62,6 +62,8 @@ class Device_manager extends CI_Controller
          'type' => $type
       );
 
+      $token = "0000_AVAILABLEDEVICE";
+      $this->add_config($ip, $port, $port_f, $token);
       $this->M_device_manager->insert_data('device', $data);
       // $this->update_config($ip, $port);
 
@@ -70,26 +72,43 @@ class Device_manager extends CI_Controller
       redirect($_SERVER['HTTP_REFERER']);
    }
 
-   // public function update_config($ip, $port)
-   // {
-   //    $ssh = new SSH2('103.189.234.196');
-   //    if (!$ssh->login('patra', '@Patraana007')) {
-   //       exit('Login Failed');
-   //    } else {
-   //       // echo 'allowed ip: ' . $allow_ip;
-   //       // echo 'allowed port: ' . $allow_port;
+   public function add_config($ip, $access_port, $forward_port, $access_token)
+   {
+      $server_ip = 'hypercube.my.id';
+      $server_port = 22;
+      $server_username = 'root';
+      $server_password = '@Patraana007';
 
-   //       $port1 = $port;
-   //       $port2 = $port - 1000;
+      $admin_token = 'ADMINTOKENAUTHENTICATION_190119_GGCLOUD';
 
-   //       $ssh->exec("sudo sh -c 'echo \" \" >> /etc/stunnel/stunnel.conf'");
-   //       $ssh->exec("sudo sh -c 'echo \"[$ip|$port] \" >> /etc/stunnel/stunnel.conf'");
-   //       $ssh->exec("sudo sh -c 'echo \"accept = $port1 \" >> /etc/stunnel/stunnel.conf'");
-   //       $ssh->exec("sudo sh -c 'echo \"connect = $ip:$port2 \" >> /etc/stunnel/stunnel.conf'");
+      // Configuration to add
+      $config_to_add = <<<CONFIG
+      frontend ws_frontend_$access_port
+         bind *:$access_port ssl crt /etc/letsencrypt/live/hypercube.my.id/haproxy_cert.pem
+         acl valid_token_$access_port urlp(token) -m str $access_token
+         acl valid_token_$access_port-2 urlp(token) -m str $admin_token
+         http-request deny if !valid_token_$access_port !valid_token_$access_port-2
+         use_backend ws_server_$access_port
 
-   //       $ssh->exec("sudo systemctl restart stunnel");
-   //    }
-   // }
+      backend ws_server_$access_port
+         server ws_$access_port $ip:$forward_port
+      CONFIG;
+
+      // SSH connection
+      $ssh = new SSH2($server_ip, $server_port);
+      if (!$ssh->login($server_username, $server_password)) {
+         exit('Login Failed');
+      }
+
+      // Append the configuration block to the haproxy.cfg file
+      $ssh->exec('echo "' . addslashes($config_to_add) . '" >> /etc/haproxy/haproxy.cfg');
+
+      $ssh->exec('sudo systemctl reload haproxy');
+
+      // Close SSH connection
+      $ssh->disconnect();
+   }
+
 
    public function edit_device()
    {
@@ -155,106 +174,161 @@ class Device_manager extends CI_Controller
       $this->load->view('ajax/a_device_edit.php', $data);
    }
 
-   public function configure($id)
+   public function configure($id = Null)
    {
-      $user_id = $this->session->userdata('user_id');
-      $allow_ip = $this->M_player->get_client_ip();
-
       $where = array(
          'id' => $id
       );
 
-      $dev_data = $this->M_device_manager->get_configure_data('device', $where);
+      $device = $this->M_device_manager->get_data_where('device', $where);
 
-      foreach ($dev_data as $dev_data_r) {
-         $data['dev_id'] = $dev_data_r['id'];
-         #$d_ip = 'hypercube.my.id';
-         $d_ip = '103.178.153.106';
-         $d_port = $dev_data_r['port'];
-         $d_name = $dev_data_r['name'];
+      // echo json_encode($port);
+
+      if (!empty($device)) {
+
+         foreach ($device as $device_r) {
+            $dev_port = $device_r['port'];
+            $access_token = 'ADMINTOKENAUTHENTICATION_190119_GGCLOUD';
+            // $dev_name = $device_r['custom_name'];
+         }
+
+         $data['dev_id'] = $id;
+
+         $d_ip = 'hypercube.my.id';
+         $d_port = $dev_port;
+         $d_name = 'ADMIN CONTROL';
+         $d_token = $access_token;
+
+         // Delay execution for 500 milliseconds
+         usleep(500000);
+
+         $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
+
+         $this->load->view('v_player2', $data);
+      } else {
+         $this->unset_cookie();
+
+         redirect('dashboard');
       }
-
-      // $this->set_cookie($d_ip, $d_port, $d_name);
-
-      // $where = array(
-      //    'ip' => $allow_ip,
-      //    'port' => $d_port,
-      //    'user_id' => $user_id
-      // );
-
-      // $firewall_exist = $this->M_player->check_existing('firewall', $where);
-
-      // if (count($firewall_exist) == 0) {
-      //    $ssh = new SSH2('103.189.234.196');
-      //    if (!$ssh->login('patra', '@Patraana007')) {
-      //       exit('Login Failed');
-      //    } else {
-      //       // echo 'allowed ip: ' . $allow_ip;
-      //       // echo 'allowed port: ' . $allow_port;
-      //       $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $d_port . "");
-
-      //       $data = array(
-      //          'user_id' => $user_id,
-      //          'assign_id' => 'NULL',
-      //          'ip' => $allow_ip,
-      //          'port' => $d_port
-      //       );
-
-      //       $this->M_player->add_firewall('firewall', $data);
-
-      //       //exit('Success');
-      //    }
-      // }
-
-
-      $this->load->view('v_player2', $data);
-      // $this->load->view('templates/t_configure', $data);
    }
 
-   // public function set_cookie($ip, $port, $nama)
-   // {
-   //    // Set the cookie parameters for username
-   //    $ip_cookie = array(
-   //       'name'   => 'bumi',
-   //       'value'  => $ip,
-   //       'expire' => time() + 1, // Cookie expiration time (1 hour from now)
-   //       'path'   => '/',
-   //       'domain' => '',
-   //       'secure' => FALSE,
-   //       'httponly' => FALSE
-   //    );
+   public function set_cookie($ip, $port, $nama, $token)
+   {
+      // Set the cookie parameters for username
+      $ip_cookie = array(
+         'name'   => 'bumi',
+         'value'  => $ip,
+         'expire' => time() + 1, // Cookie expiration time (1 hour from now)
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
 
-   //    // Set the cookie using the set_cookie function
-   //    $this->input->set_cookie($ip_cookie);
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($ip_cookie);
 
-   //    // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-   //    $port_cookie = array(
-   //       'name'   => 'langit',
-   //       'value'  => $port,
-   //       'expire' => time() + 1,
-   //       'path'   => '/',
-   //       'domain' => '',
-   //       'secure' => FALSE,
-   //       'httponly' => FALSE
-   //    );
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $port_cookie = array(
+         'name'   => 'langit',
+         'value'  => $port,
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
 
-   //    // Set the cookie using the set_cookie function
-   //    $this->input->set_cookie($port_cookie);
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($port_cookie);
 
-   //    // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-   //    $port_cookie = array(
-   //       'name'   => 'bintang',
-   //       'value'  => $nama,
-   //       'expire' => time() + 1,
-   //       'path'   => '/',
-   //       'domain' => '',
-   //       'secure' => FALSE,
-   //       'httponly' => FALSE
-   //    );
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $nama_cookie = array(
+         'name'   => 'bintang',
+         'value'  => $nama,
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
 
-   //    // Set the cookie using the set_cookie function
-   //    $this->input->set_cookie($port_cookie);
-   // }
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($nama_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $token_cookie = array(
+         'name'   => 'matahari',
+         'value'  => $token,
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($token_cookie);
+   }
+
+   public function unset_cookie()
+   {
+      // Set the cookie parameters for username
+      $ip_cookie = array(
+         'name'   => 'bumi',
+         'value'  => '',
+         'expire' => time() + 1, // Cookie expiration time (1 hour from now)
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($ip_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $port_cookie = array(
+         'name'   => 'langit',
+         'value'  => '',
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($port_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $nama_cookie = array(
+         'name'   => 'bintang',
+         'value'  => '',
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($nama_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $token_cookie = array(
+         'name'   => 'matahari',
+         'value'  => '',
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($token_cookie);
+   }
 
    public function done_configure($id)
    {

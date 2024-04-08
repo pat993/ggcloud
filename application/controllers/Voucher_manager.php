@@ -13,7 +13,7 @@ class Voucher_manager extends CI_Controller
    {
       parent::__construct();
 
-      if ($this->session->userdata('status') != "login") {
+      if ($this->session->userdata('status') != "login" && $this->session->userdata('username') != "admin") {
          redirect(base_url("login"));
       } else {
          $this->load->model('M_voucher_manager');

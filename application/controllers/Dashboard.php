@@ -87,9 +87,9 @@ class Dashboard extends CI_Controller
 
          foreach ($available_device as $available_device_r) {
             $device_id = $available_device_r['id'];
-            $device_ip =  $available_device_r['ip'];
-            $access_port = $available_device_r['port'];
-            $forward_port = $available_device_r['port_forward'];
+            // $device_ip =  $available_device_r['ip'];
+            // $access_port = $available_device_r['port'];
+            // $forward_port = $available_device_r['port_forward'];
          }
 
          if (count($available_device) > 0) {
@@ -158,9 +158,9 @@ class Dashboard extends CI_Controller
                'status_id' => '3'
             );
 
-            $this->M_dashboard->update_data('device', $where3, $data3);
+            $this->update_configuration($available_device, $access_token);
 
-            $this->add_config($device_ip, $access_port, $forward_port, $access_token);
+            $this->M_dashboard->update_data('device', $where3, $data3);
 
             $this->session->set_flashdata('success', "Success");
 
@@ -177,46 +177,13 @@ class Dashboard extends CI_Controller
       }
    }
 
-   public function add_config($ip, $access_port, $forward_port, $access_token)
+   public function update_configuration($device_data, $token)
    {
-      // $ssh = new SSH2('103.189.234.196');
-      // if (!$ssh->login('patra', '@Patraana007')) {
-      //    exit('Login Failed');
-      // } else {
-      //    // echo 'allowed ip: ' . $allow_ip;
-      //    // echo 'allowed port: ' . $allow_port;
-
-      //    $ssh->exec("sudo sh -c 'echo \" \" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"frontend ws_frontend_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"    bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"    acl valid_token_$access_port urlp(token) -m str $access_token\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"    http-request deny if !valid_token_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"    use_backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"\" >> /etc/haproxy/haproxy.cfg'");
-
-      //    $ssh->exec("sudo sh -c 'echo \"backend ws_server_$access_port\" >> /etc/haproxy/haproxy.cfg'");
-      //    $ssh->exec("sudo sh -c 'echo \"    server ws_$access_port $ip:$forward_port\" >> /etc/haproxy/haproxy.cfg'");
-
-      //    $ssh->exec("sudo systemctl restart haproxy");
-      // }
-
       // Server SSH connection details
-      $server_ip = '103.189.234.196';
+      $server_ip = 'hypercube.my.id';
       $server_port = 22;
-      $server_username = 'patra';
+      $server_username = 'root';
       $server_password = '@Patraana007';
-
-      // Configuration to add
-      $config_to_add = <<<CONFIG
-      frontend ws_frontend_$access_port
-         bind *:$access_port ssl crt /home/ssl-cert/certificate_combined.crt
-         acl valid_token_$access_port urlp(token) -m str $access_token
-         http-request deny if !valid_token_$access_port
-         use_backend ws_server_$access_port
-
-      backend ws_server_$access_port
-         server ws_$access_port $ip:$forward_port
-      CONFIG;
 
       // SSH connection
       $ssh = new SSH2($server_ip, $server_port);
@@ -224,15 +191,30 @@ class Dashboard extends CI_Controller
          exit('Login Failed');
       }
 
-      // Append the configuration block to the haproxy.cfg file
-      $ssh->exec('echo "' . addslashes($config_to_add) . '" >> /etc/haproxy/haproxy.cfg');
+      // Read current configuration file
+      $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
+
+      foreach ($device_data as $device_data_r) {
+
+         $token_search = "0000_AVAILABLEDEVICE";
+         $port = $device_data_r['port'];
+
+         // Configuration to update
+         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search . '';
+         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+
+         // Update the token string
+         $new_config = str_replace($search_string, $new_string, $current_config);
+
+         // Write updated configuration back to the file
+         $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
+      }
 
       $ssh->exec('sudo systemctl reload haproxy');
 
       // Close SSH connection
       $ssh->disconnect();
    }
-
 
    public function voucher_extend()
    {

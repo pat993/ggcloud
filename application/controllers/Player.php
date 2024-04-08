@@ -45,47 +45,10 @@ class Player extends CI_Controller
                 $data['end_date'] = $device_r['end_date'];
             }
 
-            // echo $user_id;
-            // echo $dev_ip;
-            // echo $dev_port;
-            // echo $allow_ip;
-
-            // $where = array(
-            //     'ip' => $allow_ip,
-            //     'port' => $dev_port,
-            //     'assign_id' => $assign_id,
-            //     'user_id' => $user_id
-            // );
-
-            // $firewall_exist = $this->M_player->check_existing('firewall', $where);
-
-            // if (count($firewall_exist) == 0) {
-            //     $ssh = new SSH2('103.189.234.196');
-            //     if (!$ssh->login('patra', '@Patraana007')) {
-            //         exit('Login Failed');
-            //     } else {
-            //         // echo 'allowed ip: ' . $allow_ip;
-            //         // echo 'allowed port: ' . $allow_port;
-            //         $ssh->exec("sudo ufw allow from " . $allow_ip . " to any port " . $dev_port . "");
-
-            //         $data = array(
-            //             'user_id' => $user_id,
-            //             'assign_id' => $assign_id,
-            //             'ip' => $allow_ip,
-            //             'port' => $dev_port
-            //         );
-
-            //         $this->M_player->add_firewall('firewall', $data);
-
-            //         //exit('Success');
-            //     }
-            // } else {
-            //     // echo "firewall exist";
-            // }
             $data['user_id'] = $user_id;
 
             #$d_ip = 'hypercube.my.id';
-            $d_ip = '103.178.153.106';
+            $d_ip = 'hypercube.my.id';
             $d_port = $dev_port;
             $d_name = $dev_name;
             $d_token = $access_token;
@@ -99,11 +62,6 @@ class Player extends CI_Controller
         } else {
             redirect('dashboard');
         }
-    }
-
-    function test()
-    {
-        $this->load->view('v_ping');
     }
 
     function get_client_ip()

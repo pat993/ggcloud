@@ -15,7 +15,7 @@
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-    <link rel="icon" type="image/x-icon" href="https://ggcloud.id//images/ggc_play.png">
+    <link rel="icon" type="image/x-icon" href="https://ggcloud.id/images/ggc_play.png">
 
     <script>
         $(document).ready(function() {
@@ -340,7 +340,7 @@
             img.src = url + '?' + new Date().getTime(); // Append a timestamp to bypass caching
         }
 
-        var url = "http://103.178.153.106/poweredby.png"; // Updated URL
+        var url = "https://hypercube.my.id/poweredby.png"; // Updated URL
 
         var b2 = "";
         var h2 = "";
