@@ -240,7 +240,7 @@
         function displayCountResult() {
             // alert("Count result: " + count);
             //console.log(count);
-            if (count > 30) {
+            if (count > 10) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
@@ -351,39 +351,13 @@
             ping(url, function(time) {
                 var pingElement = document.querySelector('.ping');
                 if (pingElement) {
-                    pingElement.innerHTML = '<i class="fas fa-signal"></i>';
+                    pingElement.innerHTML = time + 'ms <i class="fas fa-signal"></i>';
                     if (time > 500) {
                         pingElement.style.color = 'red';
-
-                        // if (document.getElementById("in_bitrate").value != "524288") {
-                        //     b2 = document.getElementById("in_bitrate").value;
-                        //     // h2 = document.getElementById("in_max_w").value;
-                        //     // w2 = document.getElementById("in_max_h").value;
-                        // }
-
-                        // document.getElementById("in_bitrate").value = "524288";
-                        // // document.getElementById("in_max_w").value = "1080";
-                        // // document.getElementById("in_max_h").value = "1080";
-                        // // document.getElementById("in_fps").value = "40";
-
-                        // setTimeout(function() {
-                        //     clickButton();
-                        // }, 500);
                     }
 
                     if (time < 500) {
                         pingElement.style.color = '';
-
-                        // if (b2 != "") {
-                        //     document.getElementById("in_bitrate").value = b2;
-                        //     // document.getElementById("in_max_w").value = w2;
-                        //     // document.getElementById("in_max_h").value = h2;
-                        //     // document.getElementById("in_fps").value = "40";
-
-                        //     setTimeout(function() {
-                        //         clickButton();
-                        //     }, 500);
-                        // }
                     }
                 }
             });
