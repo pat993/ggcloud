@@ -55,17 +55,20 @@ class Satpam extends CI_Controller
 
          $token = $device_data_r['access_token'];
          $port = $device_data_r['port'];
-
-         // Configuration to update
-         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
-
-         // Update the token string
-         $new_config = str_replace($search_string, $new_string, $current_config);
-
-         // Write updated configuration back to the file
-         $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
       }
+
+      // echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+      // echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
+
+      // Configuration to update
+      $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+      $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
+
+      // Update the token string
+      $new_config = str_replace($search_string, $new_string, $current_config);
+
+      // Write updated configuration back to the file
+      $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
 
       $ssh->exec('sudo systemctl reload haproxy');
 

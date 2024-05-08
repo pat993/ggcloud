@@ -198,17 +198,19 @@ class Dashboard extends CI_Controller
 
          $token_search = "0000_AVAILABLEDEVICE";
          $port = $device_data_r['port'];
-
-         // Configuration to update
-         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search . '';
-         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-
-         // Update the token string
-         $new_config = str_replace($search_string, $new_string, $current_config);
-
-         // Write updated configuration back to the file
-         $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
       }
+
+      echo $token_search . ' ' . $token;
+
+      // Configuration to update
+      $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search . '';
+      $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+
+      // Update the token string
+      $new_config = str_replace($search_string, $new_string, $current_config);
+
+      // Write updated configuration back to the file
+      $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
 
       $ssh->exec('sudo systemctl reload haproxy');
 
