@@ -240,7 +240,7 @@
         function displayCountResult() {
             // alert("Count result: " + count);
             //console.log(count);
-            if (count > 10) {
+            if (count > 300) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
@@ -279,6 +279,7 @@
         // }
 
         //------------------------------------------------------------------------
+        //Fungsi turunkan kualitas jika background process
         var b = "";
         var f = "";
         var w = "";
@@ -351,7 +352,7 @@
             ping(url, function(time) {
                 var pingElement = document.querySelector('.ping');
                 if (pingElement) {
-                    pingElement.innerHTML = time + 'ms <i class="fas fa-signal"></i>';
+                    pingElement.innerHTML = '<i class="fas fa-signal"></i>';
                     if (time > 500) {
                         pingElement.style.color = 'red';
                     }
