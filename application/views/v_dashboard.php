@@ -136,13 +136,13 @@ foreach ($device_list as $result) {
                   <td style="width: 150px">
                      <p>Tanggal Mulai</p>
                   </td>
-                  <td><span><?= $result["start_date"]; ?> WIB</span></td>
+                  <td><span><?= date('d-m-Y', strtotime($result["start_date"])); ?></span></td>
                </tr>
                <tr>
                   <td style="width: 150px">
                      <p>Tanggal Selesai</p>
                   </td>
-                  <td><span><?= $result["end_date"]; ?> WIB</span></td>
+                  <td><span><?= date('d-m-Y', strtotime($result["end_date"])); ?></span></td>
                </tr>
                <tr>
                   <td style="width: 150px">
