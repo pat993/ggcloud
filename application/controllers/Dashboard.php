@@ -200,7 +200,7 @@ class Dashboard extends CI_Controller
          $port = $device_data_r['port'];
       }
 
-      echo $token_search . ' ' . $token;
+      // echo $token_search . ' ' . $token;
 
       // Configuration to update
       $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search . '';
