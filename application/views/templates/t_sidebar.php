@@ -7,7 +7,7 @@
 </div>
 
 <!-- Sidebar 1 -->
-<div id="menu-sidebar-left-1" class="menu menu-box-left menu-box-detached menu-sidebar" data-menu-width="310">
+<div id="menu-sidebar-left-1" class="menu menu-box-left menu-sidebar" data-menu-effect="menu-parallax" data-menu-width="310">
    <div class="sidebar-content">
       <div class="bg-blue-purple mx-3 rounded-m shadow-m my-3">
          <div class="d-flex px-2 pb-2 pt-2">
@@ -39,6 +39,7 @@
       </div>
       <div class="card card-style shadow-m">
          <div class="content my-0">
+            <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Menu</h5>
             <!-- <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Navigation</h5> -->
             <div class="list-group list-custom-small list-icon-0">
                <a href="<?= base_url(); ?>dashboard">
@@ -80,17 +81,17 @@
                <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Admin Panel</h5>
                <div class="list-group list-custom-small list-icon-0">
                   <a href="<?= base_url(); ?>device_manager">
-                     <i class="fas font-12 fa-tablet-alt gradient-red rounded-sm color-white"></i>
+                     <!-- <i class="fas font-12 fa-tablet-alt gradient-red rounded-sm color-white"></i> -->
                      <span>Device Manager</span>
                      <i class="fa fa-angle-right"></i>
                   </a>
                   <a href="<?= base_url(); ?>voucher_manager">
-                     <i class="fas font-12 fa-credit-card gradient-magenta rounded-sm color-white"></i>
+                     <!-- <i class="fas font-12 fa-credit-card gradient-magenta rounded-sm color-white"></i> -->
                      <span>Voucher Manager</span>
                      <i class="fa fa-angle-right"></i>
                   </a>
                   <a href="<?= base_url(); ?>user_manager">
-                     <i class="fas font-12 fa-id-card-alt gradient-orange rounded-sm color-white"></i>
+                     <!-- <i class="fas font-12 fa-id-card-alt gradient-orange rounded-sm color-white"></i> -->
                      <span>User Manager</span>
                      <i class="fa fa-angle-right"></i>
                   </a>
@@ -100,8 +101,26 @@
       <?php
       } ?>
 
+      <div class="card card-style">
+         <div class="content my-0">
+            <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">System Setting</h5>
+            <!-- <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Navigation</h5> -->
+            <div class="list-group list-custom-small list-icon-0">
+               <a href="#" data-toggle-theme data-trigger-switch="switch-dark3-mode">
+                  <i class="fa font-12 fa-moon bg-gray-dark rounded-s"></i>
+                  <span>Dark Mode</span>
+                  <div class="custom-control small-switch ios-switch">
+                     <input data-toggle-theme type="checkbox" class="ios-input" id="switch-dark3-mode">
+                     <label class="custom-control-label" for="switch-dark3-mode"></label>
+                  </div>
+                  <i class="fa fa-angle-right"></i>
+               </a>
+            </div>
+         </div>
+      </div>
    </div>
-   <!-- <div class="position-sticky w-100 bottom-0 end-0 pb-1">
+</div>
+<!-- <div class="position-sticky w-100 bottom-0 end-0 pb-1">
       <div class="card card-style mb-3">
          <div class="content my-0 py-">
             <div class="list-group list-custom-small list-icon-0">
@@ -118,4 +137,6 @@
          </div>
       </div>
    </div> -->
+
+
 </div>
