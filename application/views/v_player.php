@@ -40,9 +40,279 @@
     </script>
 
     <style>
-        html,
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            width: 100%;
+            height: 100vh;
+            margin: 0;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            /* Ensure the body is positioned relative for the absolute centering to work */
+        }
+
+        .battery {
+            display: flex;
+            justify-content: space-between;
+            width: 110px;
+            height: 56px;
+            border: 3px solid #ffffff;
+            border-radius: 4px;
+            padding: 2px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            /* Center the element */
+            animation: fade-battery 2.5s linear infinite running;
+        }
+
+        .battery::after {
+            position: absolute;
+            top: 8px;
+            right: -14px;
+            content: "";
+            width: 8px;
+            height: 26px;
+            border: 3px solid #ffffff;
+            border-left: 3px solid #ffffff;
+            border-top-left-radius: 0px;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            border-bottom-left-radius: 0px;
+            animation: fade-after 2.5s linear infinite running;
+        }
+
+        .battery .bar {
+            display: flex;
+            width: 19%;
             height: 100%;
+            background: #ffffff;
+            border-radius: 1px;
+            opacity: 0;
+        }
+
+        .battery .bar:nth-child(1) {
+            animation: fade-1 2.5s linear infinite running;
+        }
+
+        .battery .bar:nth-child(2) {
+            animation: fade-2 2.5s linear infinite running;
+        }
+
+        .battery .bar:nth-child(3) {
+            animation: fade-3 2.5s linear infinite running;
+        }
+
+        .battery .bar:nth-child(4) {
+            animation: fade-4 2.5s linear infinite running;
+        }
+
+        .battery .bar:nth-child(5) {
+            animation: fade-5 2.5s linear infinite running;
+        }
+
+        @keyframes fade-1 {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-2 {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 1;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-3 {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0;
+            }
+
+            60% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-4 {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0;
+            }
+
+            60% {
+                opacity: 0;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-5 {
+            0% {
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 0;
+            }
+
+            40% {
+                opacity: 0;
+            }
+
+            60% {
+                opacity: 0;
+            }
+
+            80% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-battery {
+            0% {
+                border-color: #ffffff;
+            }
+
+            20% {
+                border-color: #ffffff;
+            }
+
+            40% {
+                border-color: #ffffff;
+            }
+
+            60% {
+                border-color: #ffffff;
+            }
+
+            80% {
+                border-color: #ffffff;
+            }
+
+            90% {
+                border-color: #ffffff;
+            }
+
+            100% {
+                border-color: #ffffff;
+            }
+        }
+
+        @keyframes fade-after {
+            0% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            20% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            40% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            60% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            80% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            90% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
+
+            100% {
+                border-color: #ffffff;
+                border-left: 3px solid #fafbfc;
+            }
         }
 
         .center2 {
@@ -78,7 +348,15 @@
         <div class="spinner-border color-highlight-purple" role="status"></div>
     </div> -->
 
-    <main class="inf_loader">
+    <div class="battery">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+    </div>
+
+    <!-- <main class="inf_loader">
         <svg class="ip" viewBox="0 0 256 128" width="256px" height="128px" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="0">
@@ -105,7 +383,7 @@
                 </g>
             </g>
         </svg>
-    </main>
+    </main> -->
 
     <div class="DraggableDiv">
         <button class="btn btn-dark rounded-xl" style="width: 32px; height: 32px; font-size: 9px;" type="button" id="fullscreen-toggle"><i class="fas fa-expand"></i></button>
@@ -303,7 +581,7 @@
 
             status = "wakeup";
 
-            // console.log("wakeup");
+            console.log("exit iddle mode");
         });
 
         ifvisible.on("blur", function() {
@@ -374,7 +652,7 @@
             function checkAndPerformActions() {
                 if (conn_status == "connected") {
                     document.querySelector('.ping').style.display = 'block';
-                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    document.getElementsByClassName('battery')[0].style.display = 'none';
                     setTimeout(function() {
                         setStream();
                     }, 1000);
@@ -385,7 +663,7 @@
                 }
                 if (conn_status == "Disconnected") {
                     document.querySelector('.ping').style.display = 'none';
-                    document.getElementsByClassName('inf_loader')[0].style.display = 'none';
+                    document.getElementsByClassName('battery')[0].style.display = 'none';
                     show_notification();
                     // setTimeout(function() {
                     //     setStream();
