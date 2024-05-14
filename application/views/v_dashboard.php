@@ -126,34 +126,32 @@ foreach ($device_list as $result) {
                   <td style="width: 150px;">
                      <p>Nama Perangkat</p>
                   </td>
-                  <td style="position: relative;"><?= $result["custom_name"]; ?>
-                     <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"> <i class="fa fa-angle-right"></i>
-                     </button>
+                  <td style="position: relative;"><span><?= $result["custom_name"]; ?>
+                        <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"> <i class="fa fa-angle-right"></i>
+                        </button>
+                     </span>
                   </td>
                </tr>
                <tr>
                   <td style="width: 150px">
                      <p>Tanggal Mulai</p>
                   </td>
-                  <td><?= $result["start_date"]; ?> WIB</td>
+                  <td><span><?= $result["start_date"]; ?> WIB</span></td>
                </tr>
                <tr>
                   <td style="width: 150px">
-                     <p>Tanggal Akhir</p>
+                     <p>Tanggal Selesai</p>
                   </td>
-                  <td><?= $result["end_date"]; ?> WIB</td>
+                  <td><span><?= $result["end_date"]; ?> WIB</span></td>
                </tr>
                <tr>
                   <td style="width: 150px">
                      <p>Masa Aktif</p>
                   </td>
-                  <td><?= $jam; ?> Jam</td>
+                  <td><span><?= $jam; ?> Jam</span></td>
                </tr>
             </table>
             <hr>
-            <div style="font-size: 10px; border-bottom: 0" class="opacity-60 ms-2 mt-2">
-               <i class="fas fa-info-circle"></i> Lakukan penambahan durasi perangkat sebelum masa aktif berakhir untuk menghindari penghapusan data
-            </div>
 
             <form action="<?= base_url() ?>dashboard/voucher_extend/" method="POST">
                <input type="hidden" value="<?= $result["id"]; ?>" name="txt_assign_id">
@@ -164,6 +162,9 @@ foreach ($device_list as $result) {
                   <input style="background-color: #F8F8F8; border-radius: 10px" class="text-center" type="text" name="txt_voucher_ext" placeholder="Input kode voucher disini" autocomplete="off" required>
                </div>
                <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-0 mt-2"><i class="far fa-check-circle"></i></button>
+               <div style="font-size: 10px; border-bottom: 0" class="opacity-60 ms-2 mt-2">
+                  <i class="fas fa-info-circle"></i> Lakukan penambahan durasi perangkat sebelum masa aktif berakhir untuk menghindari penghapusan data
+               </div>
             </form>
          </div>
       </div>
