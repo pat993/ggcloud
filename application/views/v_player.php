@@ -46,7 +46,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             width: 100%;
             height: 100%;
             margin: 0;
@@ -552,6 +553,7 @@
 
             setTimeout(function() {
                 clickButton();
+                console.log('Initialized');
             }, 1000);
         }
         // }
