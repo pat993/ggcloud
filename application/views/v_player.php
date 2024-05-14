@@ -293,6 +293,8 @@
             }
 
             document.getElementById("in_bitrate").value = b;
+            document.getElementById("in_max_w").value = "1080";
+            document.getElementById("in_max_h").value = "1080";
             // document.getElementById("in_fps").value = f;
 
             setTimeout(function() {
@@ -314,7 +316,9 @@
                 // f = document.getElementById("in_fps").value;
             }
 
-            document.getElementById("in_bitrate").value = "0";
+            document.getElementById("in_bitrate").value = "524288";
+            document.getElementById("in_max_w").value = "480";
+            document.getElementById("in_max_h").value = "480";
             // document.getElementById("in_fps").value = "40";
 
             setTimeout(function() {
