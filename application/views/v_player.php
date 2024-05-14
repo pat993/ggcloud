@@ -240,7 +240,7 @@
         function displayCountResult() {
             // alert("Count result: " + count);
             //console.log(count);
-            if (count > 300) {
+            if (count > 30) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
