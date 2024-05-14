@@ -76,7 +76,7 @@
             <div class="splide__slide">
                <div data-card-height="180" class="card mx-3 rounded-m shadow-l">
                   <div class="text-center card-center">
-                     <a href='/pricing' class="text-center color-white font-40"><i class="fas fa-plus"></i></a>
+                     <a href='<?= base_url(); ?>pricing' class="text-center color-white font-40"><i class="fas fa-plus"></i></a>
                   </div>
                   <div class="card-overlay bg-black opacity-100"></div>
                </div>

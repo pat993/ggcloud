@@ -53,7 +53,7 @@
                   <span>Purchase History</span>
                   <i class="fa fa-angle-right"></i>
                </a> -->
-               <a href="pricing">
+               <a href="<?= base_url(); ?>pricing">
                   <!-- <i class="fas fa-hdd"></i> -->
                   <span>Beli Paket</span>
                   <i class="fa fa-angle-right"></i>
