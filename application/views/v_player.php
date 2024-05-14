@@ -274,7 +274,7 @@
 
             setTimeout(function() {
                 clickButton();
-            }, 500);
+            }, 1000);
         }
         // }
 
