@@ -519,7 +519,7 @@
         function displayCountResult() {
             // alert("Count result: " + count);
             //console.log(count);
-            if (count > 30) {
+            if (count > 180) {
                 window.location.reload(true); // Reload the page, forcing the cache to be ignored
             }
 
