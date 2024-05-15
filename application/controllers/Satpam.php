@@ -22,7 +22,7 @@ class Satpam extends CI_Controller
    {
       $device_data = $this->M_satpam->get_data('assigned');
 
-      echo json_encode($device_data);
+      // echo json_encode($device_data);
 
       $this->M_satpam->razia1();
       $this->M_satpam->razia2();
@@ -57,8 +57,8 @@ class Satpam extends CI_Controller
          $port = $device_data_r['port'];
       }
 
-      // echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-      // echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
+      echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
+      echo '-> acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
 
       // Configuration to update
       $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
