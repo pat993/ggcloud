@@ -1,6 +1,8 @@
-<div style="max-width: 600px; margin: auto" class="page-content pb-0">
+<div style="max-width: 600px; margin: auto" class="page-content pb-0 shadow-s">
 
-   <div data-card-height="cover" class="card">
+   <div data-card-height="cover" style="min-height: 700px;" class="card">
+      <img style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; opacity: 50%" src="/images/banner-home.png" alt="">
+
       <div class="card-center">
          <div class="ps-5 pe-5">
             <div style="padding-bottom: 20px" class="text-center">
