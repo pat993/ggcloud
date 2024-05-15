@@ -27,7 +27,7 @@
                            <span>Your Profile</span>
                            <i class="fa fa-angle-right"></i>
                         </a> -->
-                        <a href="signout" class="mb-n1">
+                        <a href="<?= base_url() ?>signout" class="mb-n1">
                            <span>Sign Out</span>
                            <i class="fa fa-angle-right"></i>
                         </a>
