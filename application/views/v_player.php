@@ -519,8 +519,10 @@
         function displayCountResult() {
             // alert("Count result: " + count);
             //console.log(count);
-            if (count > 180) {
-                window.location.reload(true); // Reload the page, forcing the cache to be ignored
+            if (count > 30) {
+                setTimeout(function() {
+                    window.location.reload(true);
+                }, 1000);
             }
 
             count = 1;
