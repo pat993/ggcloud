@@ -58,7 +58,7 @@ class Satpam extends CI_Controller
       }
 
       echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-      echo '-> acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
+      echo '-> acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '\n';
 
       // Configuration to update
       $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
