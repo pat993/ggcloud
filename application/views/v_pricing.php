@@ -1,5 +1,5 @@
 <div class="page-content header-clear-medium">
-    <div style="max-width: 600px; margin: auto" class="content mb-0" id="tab-group-listing">
+    <div style="max-width: 800px; margin: auto" class="content mb-0" id="tab-group-listing">
         <div class="card card-style">
             <div class="tab-controls" data-highlight="color-highlight-purple">
                 <a href="#" class="no-effect font-15 font-600 py-2 border-0" data-active data-bs-toggle="collapse" data-bs-target="#tab-1">

@@ -1,5 +1,5 @@
 <!--start of page content, add your stuff here-->
-<div style="max-width: 600px; margin: auto" class="page-content header-clear-medium">
+<div style="max-width: 800px; margin: auto" class="page-content header-clear-medium">
 
    <div style="background-color: #FD8A8A; color: white; margin: 5px; padding: 5px 15px 5px 15px; border-radius: 10px; margin-bottom: 15px;">
       Perhatian : untuk saat ini player belum support audio

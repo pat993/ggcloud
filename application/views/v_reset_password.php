@@ -1,4 +1,4 @@
-<div style="max-width: 600px; margin: auto" class="page-content pb-0">
+<div style="max-width: 800px; margin: auto" class="page-content pb-0">
 
    <div data-card-height="cover" class="card">
       <div class="card-top notch-clear">

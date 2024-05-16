@@ -1,7 +1,7 @@
-<div style="max-width: 600px; margin: auto" class="page-content pb-0 shadow-s">
+<div style="max-width: 800px; margin: auto" class="page-content pb-0 shadow-s">
 
    <div data-card-height="cover" style="min-height: 700px;" class="card">
-      <img style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; opacity: 50%; width: 100%" src="/images/banner-home.png" alt="">
+      <img style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%" src="/images/banner-home.png" alt="">
 
       <div class="card-center">
          <div class="ps-5 pe-5">
@@ -38,7 +38,7 @@
                   <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                   Login with Google
                </a> -->
-
+               <br>
                <div class="text-center mt-2">
                   <a href="#" onclick="window.location.href='/register';return true;" class="font-12">Create Account</a>
                </div>
