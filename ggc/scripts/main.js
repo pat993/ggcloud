@@ -1,7 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Control panel toggle
-    const slideToggle = document.getElementById('slide-toggle');
-    const controlWrapper = document.querySelector('.control-wrapper');
+        $(document).ready(function() {
+            setTimeout(function() {
+                $(".control-wrapper").animate({
+                    height: "toggle"
+                });
+            }, 1000);
+            $("#slide-toggle").click(function() {
+                $(".control-wrapper").animate({
+                    height: "toggle"
+                });
+                // Check if the setting-box is currently visible
+                if ($('.more-box').is(':visible')) {
+                    $('#input_show_more').trigger('click');
+                }
+            });
+            $("#fullscreen-toggle").click(function() {
+                document.body.requestFullscreen();
+            });
+        });
     
     slideToggle.addEventListener('click', function() {
         controlWrapper.style.display = controlWrapper.style.display === 'none' ? 'block' : 'none';

@@ -96,7 +96,7 @@ html, body {
 }
 
 .center2 {
-    width: 250px;
+    width: 100%;
     height: 250px;
     position: fixed;
     top: 50%;
@@ -111,7 +111,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 20px;
+    padding: 40px;
     box-sizing: border-box;
     z-index: 99;
 }
