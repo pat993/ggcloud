@@ -37,7 +37,7 @@
 
                <button style="width: 100%" type="submit" name="signup" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad">Submit</button>
 
-               <div class="text-center mb-5 mt-2">
+               <div class="text-center mb-5 mt-4">
                   <a href="#" onclick="window.location.href='/login';return true;" class="font-12">Already Registered? Sign in Here</a>
                </div>
             </form>
