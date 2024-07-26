@@ -204,7 +204,7 @@ class Device_manager extends CI_Controller
 
          $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
 
-         $this->load->view('v_player2', $data);
+         $this->load->view('v_player_configure', $data);
       } else {
          $this->unset_cookie();
 

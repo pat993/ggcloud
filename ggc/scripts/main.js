@@ -64,29 +64,74 @@ function setStream(br) {
     }, 1000);
 }
 
+let bitrate;
+let blurStartTime = null; // To keep track of the time when the page was blurred
+const blurThreshold = 60000; // 1 minute in milliseconds
+
 // Visibility change handlers
 ifvisible.on("blur", function() {
     setStream("524288");
+
+    // Record the time when the page is blurred
+    blurStartTime = Date.now();
 });
 
 ifvisible.on("wakeup", function() {
-    setStream("2524288");
+    if (blurStartTime) {
+        const blurDuration = Date.now() - blurStartTime;
+        
+        // Check if the blur duration was more than 1 minute
+        if (blurDuration >= blurThreshold) {
+            // Remove elements with the class name 'device-view'
+            removeDeviceViewElements();
+            
+            // Refresh the page
+            location.reload();
+        } else {
+            // Set stream based on bitrate if blur duration was less than 1 minute
+            if (bitrate) {
+                setStream(bitrate);
+            } else {
+                setStream("2524288");
+            }
+        }
+        
+        // Reset blurStartTime after processing wakeup event
+        blurStartTime = null;
+    }
 });
+
+function setStream(value) {
+    // Your logic to set the stream goes here
+    console.log(`Stream set to: ${value}`);
+}
+
+function removeDeviceViewElements() {
+    // Select all elements with the class 'device-view'
+    const deviceViewElements = document.querySelectorAll('.device-view');
+    deviceViewElements.forEach(element => {
+        element.remove();
+        console.log("Device view element removed from the DOM.");
+    });
+}
 
 function stream_quality() {
     var e = document.getElementById("stream_quality").value;
     if (e == "1") {
+        bitrate = "1524288"
         document.getElementById("in_bitrate").value = "1524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
-        document.getElementById("in_bitrate").value = "2524288";
+        bitrate = "3524288"
+        document.getElementById("in_bitrate").value = "3524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
-        document.getElementById("in_bitrate").value = "5524288";
+        bitrate = "10524288"
+        document.getElementById("in_bitrate").value = "10524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
