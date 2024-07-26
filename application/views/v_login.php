@@ -1,12 +1,12 @@
-<div style="max-width: 800px; margin: auto" class="page-content pb-0 shadow-s">
+<div style="max-width: 800px; margin: auto" class="page-content pb-0">
 
    <div data-card-height="cover" style="min-height: 700px;" class="card">
-      <img style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%" src="/images/banner-home.png" alt="">
+      <!-- <img style="position: absolute; left: 50%; transform: translateX(-50%); bottom: 0; width: 40%" src="/images/popo.png" alt=""> -->
 
       <div class="card-center">
          <div class="ps-5 pe-5">
-            <div style="padding-bottom: 20px" class="text-center">
-               <img class="text-center" src="images/ggcloud.png" style="width: 60px; height: auto;" alt="">
+            <div style="padding-bottom: 10px" class="text-center">
+               <img class="text-center" src="images/popo.png" style="width: 200px; height: auto;" alt="">
             </div>
             <h1 class="text-center font-200 font-40 mb-4">Account Sign In</h1>
             <!-- <p class="text-center font-12">Sign in to continue</p> -->

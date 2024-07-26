@@ -12,7 +12,7 @@
       <div class="bg-blue-purple mx-3 rounded-m shadow-m my-3">
          <div class="d-flex px-2 pb-2 pt-2">
             <div class="align-self-center">
-               <a href="#"><img style="background-color: white;" src="<?= base_url(); ?>images/user.png" width="40" class="rounded-xl" alt="img"></a>
+               <a href="#"><img style="background-color: white;" src="<?= base_url(); ?>images/popo2.jpeg" width="40" class="rounded-xl" alt="img"></a>
             </div>
             <div class="ps-2 align-self-center">
                <h5 class="ps-1 mb-1 text-white t-1 line-height-xs font-17"><?= $this->session->userdata('username'); ?></h5>
