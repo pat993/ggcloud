@@ -36,16 +36,18 @@
         <div class="content mb-2">
            <div class="row mb-3">
               <div class="col-sm-4 ml-5">
-                 <h1 style="font-size: 38px;">
-                    VOUCHER MANAGER
+                 <h1>
+                    Voucher Manager
                  </h1>
-                 <div class="ps-1 opacity-80">Voucher management dashboard</div>
               </div>
               <div class="col-sm-4">
               </div>
               <div class="col-sm-4">
-                 <a href="#" data-menu="menu-create-voucher" class="btn btn-m btn-full mb-3 text-uppercase font-900 shadow-s bg-green-dark">Generate Voucher</a>
+                 <a href="#" data-menu="menu-create-voucher" style="display: flex; align-items: center; justify-content: center; padding: 4px 8px; text-decoration: none; border-radius: 20px; transition: background-color 0.3s ease; font-size: 16px; color: white; background-color: #28a745; width: 100%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-transform: uppercase; font-weight: 900; margin-bottom: 1rem; border: 2px solid transparent;" class="btn btn-m btn-full b mb-3 text-uppercase font-900 shadow-s bg-green-dark">
+                    <i class="fa fa-plus" style="margin-right: 8px;"></i> Buat Voucher
+                 </a>
               </div>
+              <hr>
            </div>
            <div class="row">
               <div class="col-sm-4">

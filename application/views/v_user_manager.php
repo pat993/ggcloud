@@ -4,11 +4,11 @@
         <div class="content mb-2">
            <div class="row mb-3">
               <div class="col-sm-6">
-                 <h1 style="font-size: 40px;">
-                    USER MANAGER
+                 <h1>
+                    User Manager
                  </h1>
-                 <div class="ps-1 opacity-80">User management dashboard</div>
               </div>
+              <hr>
            </div>
 
            <div class="row">
