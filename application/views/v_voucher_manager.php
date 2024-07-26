@@ -60,7 +60,7 @@
                     <h1 class="text-center"><?= $voucher_used_count; ?></h1>
                  </div>
               </div>
-              <div class="col-sm-4" >
+              <div class="col-sm-4">
                  <div class="card bg-light mb-1 rounded" style="width: 100%;">
                     <b class="text-center rounded-top" style="background-color: #176B87; color: white">Voucher Tersedia</b>
                     <h1 style="color: green" class="text-center"><?= $device_count ?></h1>
@@ -68,42 +68,41 @@
               </div>
            </div>
 
-           <table class="table border" id="tb_device">
-              <thead>
-                 <tr class="bg-fade-night-dark">
-                    <th scope="col" class="color-white">#</th>
-                    <th scope="col" class="color-white">Kode Voucher</th>
-                    <th scope="col" class="color-white">Status</th>
-                    <th scope="col" class="color-white">Paket</th>
-                    <th scope="col" class="color-white">Email Penerima</th>
-                    <th scope="col" class="color-white">Action</th>
-                 </tr>
-              </thead>
-              <tbody>
-                 <?php
-                  foreach ($voucher_list as $result) {
-                  ?>
-                    <tr>
-                       <th scope="row"><?= $result["id"]; ?></th>
-                       <td><?= $result["kode_voucher"]; ?></td>
-                       <th scope="row"><?= $result["voucher_status"]; ?></th>
-                       <td><?= $result["keterangan"]; ?></td>
-                       <th scope="row"><?= $result["email_tujuan"]; ?></td>
-                       <td>
-                          <div class="dropleft">
-                             <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
-                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <button class="dropdown-item" data-menu="menu-voucher-detail" onclick="a_voucher_detail(<?= $result['voucher_id']; ?>)"><i class="fas fa-info-circle"></i> Detail</button>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="<?= base_url() ?>voucher_manager/delete_voucher/<?= $result["voucher_id"]; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fas fa-trash"></i> Delete</a>
-                             </div>
-                          </div>
-                       </td>
+           <div class="table-responsive">
+              <table class="table border" id="tb_device">
+                 <thead>
+                    <tr class="bg-fade-night-dark">
+                       <th scope="col" class="color-white">#</th>
+                       <th scope="col" class="color-white">Kode Voucher</th>
+                       <th scope="col" class="color-white">Status</th>
+                       <th scope="col" class="color-white">Paket</th>
+                       <th scope="col" class="color-white">Email Penerima</th>
+                       <th scope="col" class="color-white">Action</th>
                     </tr>
-                 <?php
-                  } ?>
-              </tbody>
-           </table>
+                 </thead>
+                 <tbody>
+                    <?php foreach ($voucher_list as $result) { ?>
+                       <tr>
+                          <th scope="row" data-label="#"><?= $result["id"]; ?></th>
+                          <td data-label="Kode Voucher"><?= $result["kode_voucher"]; ?></td>
+                          <th scope="row" data-label="Status"><?= $result["voucher_status"]; ?></th>
+                          <td data-label="Paket"><?= $result["keterangan"]; ?></td>
+                          <th scope="row" data-label="Email Penerima"><?= $result["email_tujuan"]; ?></th>
+                          <td data-label="Action">
+                             <div class="dropleft">
+                                <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                   <button class="dropdown-item" data-menu="menu-voucher-detail" onclick="a_voucher_detail(<?= $result['voucher_id']; ?>)"><i class="fas fa-info-circle"></i> Detail</button>
+                                   <div class="dropdown-divider"></div>
+                                   <a class="dropdown-item" href="<?= base_url() ?>voucher_manager/delete_voucher/<?= $result["voucher_id"]; ?>" onclick="return confirm('Are you sure you want to delete this item?')"><i class="fas fa-trash"></i> Delete</a>
+                                </div>
+                             </div>
+                          </td>
+                       </tr>
+                    <?php } ?>
+                 </tbody>
+              </table>
+           </div>
         </div>
      </div>
   </div>

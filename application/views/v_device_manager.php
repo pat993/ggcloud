@@ -35,7 +35,7 @@
                  </div>
               </div>
            </div>
-           <div style="overflow: scroll">
+           <div class="table-responsive">
               <table class="table border" id="tb_device">
                  <thead>
                     <tr class="bg-fade-night-dark">
@@ -49,22 +49,19 @@
                     </tr>
                  </thead>
                  <tbody>
-                    <?php
-                     foreach ($device as $result) {
-                     ?>
+                    <?php foreach ($device as $result) { ?>
                        <tr>
-                          <th scope="row"></th>
-                          <td><?= $result["ip"]; ?></td>
-                          <td><?= $result["port"]; ?></th>
-                          <td><?= $result["name"]; ?></td>
-                          <td><?= $result["type"]; ?></td>
-                          <td><?= $result["status_txt"]; ?></td>
-                          <td>
+                          <td data-label="#"><?= $result["device_id"]; ?></td>
+                          <td data-label="IP"><?= $result["ip"]; ?></td>
+                          <td data-label="Port"><?= $result["port"]; ?></td>
+                          <td data-label="Device Name"><?= $result["name"]; ?></td>
+                          <td data-label="Type"><?= $result["type"]; ?></td>
+                          <td data-label="Status"><?= $result["status_txt"]; ?></td>
+                          <td data-label="Action">
                              <div class="dropleft">
                                 <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                    <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure</button></a>
-                                   <!-- <a href="<?= base_url() ?>device_manager/configure/<?= $result['device_id'] ?>" target="_blank"><button class="dropdown-item"><i class="fas fa-arrow-alt-circle-right"></i> Configure (Local)</button></a> -->
                                    <div class="dropdown-divider"></div>
                                    <button class="dropdown-item" data-menu="menu-device-detail" onclick="a_device_detail(<?= $result['device_id']; ?>)"><i class="fas fa-info-circle"></i> Detail</button>
                                    <button class="dropdown-item" data-menu="menu-device-edit" onclick="a_device_edit(<?= $result['device_id']; ?>)"><i class="fas fa-pen"></i> Edit</button>
@@ -74,8 +71,7 @@
                              </div>
                           </td>
                        </tr>
-                    <?php
-                     } ?>
+                    <?php } ?>
                  </tbody>
               </table>
            </div>
