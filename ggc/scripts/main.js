@@ -101,17 +101,12 @@ ifvisible.on("wakeup", function() {
     }
 });
 
-function setStream(value) {
-    // Your logic to set the stream goes here
-    console.log(`Stream set to: ${value}`);
-}
-
 function removeDeviceViewElements() {
     // Select all elements with the class 'device-view'
     const deviceViewElements = document.querySelectorAll('.device-view');
     deviceViewElements.forEach(element => {
         element.remove();
-        console.log("Device view element removed from the DOM.");
+        // console.log("Device view element removed from the DOM.");
     });
 }
 
