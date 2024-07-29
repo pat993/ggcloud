@@ -144,9 +144,8 @@ html, body {
 }
 
 .center2 {
-    width: 100%;
-    max-width: 300px; /* Restrict the maximum width to make it responsive */
-    height: 500px;
+    width: auto;
+    height: auto;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -182,14 +181,14 @@ html, body {
 .refresh-button {
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #007bff;
+    background-color: #000000;
     color: white;
-    border: none;
-    border-radius: 5px;
+    border: 2px solid white;
+    border-radius: 20px;
     cursor: pointer;
     font-size: 13px;
 }
 
 .refresh-button:hover {
-    background-color: #0056b3;
+    background-color: #242424;
 }

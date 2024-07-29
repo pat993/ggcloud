@@ -126,7 +126,7 @@ function stream_quality() {
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
         bitrate = "10524288"
-        document.getElementById("in_bitrate").value = "10524288";
+        document.getElementById("in_bitrate").value = "8524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
