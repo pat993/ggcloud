@@ -144,7 +144,7 @@ html, body {
 }
 
 .center2 {
-    width: auto;
+    width: 90%;
     height: auto;
     position: fixed;
     top: 50%;
@@ -164,8 +164,8 @@ html, body {
 }
 
 .center2 i {
-    font-size: 60px;
-    margin-bottom: 20px;
+    font-size: 30px;
+    margin-bottom: 10px;
 }
 
 .center2 b {
@@ -179,7 +179,7 @@ html, body {
 }
 
 .refresh-button {
-    margin-top: 20px;
+    margin-top: 10px;
     padding: 10px 20px;
     background-color: #000000;
     color: white;
