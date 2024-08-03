@@ -76,15 +76,15 @@ class Device_manager extends CI_Controller
    {
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
-      $server_username = 'root';
-      $server_password = '@Patraana007';
+      $server_username = 'patra';
+      $server_password = '@Nadhira250420';
 
       $admin_token = 'ADMINTOKENAUTHENTICATION_190119_GGCLOUD';
 
       // Configuration to add
       $config_to_add = <<<CONFIG
       frontend ws_frontend_$access_port
-         bind *:$access_port ssl crt /etc/letsencrypt/live/hypercube.my.id/haproxy_cert.pem
+         bind *:$access_port ssl crt /etc/letsencrypt/live/hypercube.my.id/combination.pem
          acl valid_token_$access_port urlp(token) -m str $access_token
          acl valid_token_$access_port-2 urlp(token) -m str $admin_token
          http-request deny if !valid_token_$access_port !valid_token_$access_port-2

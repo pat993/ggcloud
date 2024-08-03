@@ -90,6 +90,11 @@
                      <span>Voucher Manager</span>
                      <i class="fa fa-angle-right"></i>
                   </a>
+                  <a href="<?= base_url(); ?>compensation_manager">
+                     <!-- <i class="fas font-12 fa-id-card-alt gradient-orange rounded-sm color-white"></i> -->
+                     <span>Compensation</span>
+                     <i class="fa fa-angle-right"></i>
+                  </a>
                   <a href="<?= base_url(); ?>user_manager">
                      <!-- <i class="fas font-12 fa-id-card-alt gradient-orange rounded-sm color-white"></i> -->
                      <span>User Manager</span>

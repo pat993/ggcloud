@@ -37,8 +37,8 @@ class Satpam extends CI_Controller
       // Server SSH connection details
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
-      $server_username = 'root';
-      $server_password = '@Patraana007';
+      $server_username = 'patra';
+      $server_password = '@Nadhira250420';
 
       $token_master = '0000_AVAILABLEDEVICE';
 

@@ -33,11 +33,11 @@
                ?>
 
                <button style="width: 100%" type="submit" name="signin" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad mt-1">LOGIN</button>
-               <!-- <div class="text-center">or</div>
-               <a class="btn btn-full rounded-s btn-outline-dark" href="<?= $auth_url; ?>" role="button" style="text-transform:none">
-                  <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+               <div class="text-center">or</div>
+               <a class="btn btn-full rounded-s btn-light" href="<?= $auth_url; ?>" role="button" style="text-transform:none">
+                  <img width="20px" style="margin-bottom:3px; margin-right:5px" alt="Google sign-in" src="/images/google.png" />
                   Login with Google
-               </a> -->
+               </a>
                <br>
                <div class="text-center mt-2">
                   <a href="#" onclick="window.location.href='/register';return true;" class="font-12">Create Account</a> |

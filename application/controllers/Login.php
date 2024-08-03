@@ -28,7 +28,7 @@ class Login extends CI_Controller
 
       $google_client->setClientSecret('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'); //Define your Client Secret Key
 
-      // $google_client->setRedirectUri('https://8000-pat993-ggcloud-c6xxrtwvwv2.ws-us104.gitpod.io/login'); //Define your Redirect Uri
+      //$google_client->setRedirectUri('https://8000-pat993-ggcloud-zzlg64zmgps.ws-us115.gitpod.io/login'); //Define your Redirect Uri
       $google_client->setRedirectUri('https://ggcloud.id/login'); //Define your Redirect Uri
 
       $google_client->addScope('email');
@@ -50,12 +50,6 @@ class Login extends CI_Controller
             $current_datetime = date('Y-m-d H:i:s');
 
             if ($this->M_login->cek_email($data['email'])) {
-               //update data
-               // $user_data = array(
-               //    'email_address' => $data['email'],
-               // );
-
-               // $email = $data['email'];
 
                $where = array(
                   'email' => $data['email']
@@ -124,12 +118,17 @@ class Login extends CI_Controller
          $password_cek = '';
 
          $username = $this->input->post('username');
+         $email = $this->input->post('username');
          $password = $this->input->post('password');
-         $where = array(
+         $w_username = array(
             'username' => $username,
-            'status' => 'aktif'
          );
-         $cek = $this->M_login->cek_login("user", $where);
+
+         $w_email = array(
+            'email' => $email,
+         );
+
+         $cek = $this->M_login->cek_login("user", $w_username, $w_email);
 
          foreach ($cek as $cek_p) {
             $username = $cek_p['username'];
