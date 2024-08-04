@@ -68,7 +68,7 @@ class Satpam extends CI_Controller
       $new_config = str_replace($search_string, $new_string, $current_config);
 
       // Write updated configuration back to the file
-      $ssh->exec('echo "' . addslashes($new_config) . '" > /etc/haproxy/haproxy.cfg');
+      $ssh->exec('echo "' . addslashes($new_config) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
 
       $ssh->exec('sudo systemctl reload haproxy');
 
