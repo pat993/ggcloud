@@ -104,7 +104,7 @@ class Voucher_manager extends CI_Controller
 
       // SMTP configuration
       $mail->isSMTP();
-      $mail->Host     = 'mail.ggcloud.id'; //sesuaikan sesuai nama domain hosting/server yang digunakan
+      $mail->Host     = '103.55.39.38'; //sesuaikan sesuai nama domain hosting/server yang digunakan
       $mail->SMTPAuth = true;
       $mail->Username = 'noreply@ggcloud.id'; // user email
       $mail->Password = '@Patra007'; // password email
