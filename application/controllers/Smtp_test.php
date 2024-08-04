@@ -33,7 +33,7 @@ class Smtp_test extends CI_Controller
 
         // Pengaturan email
         $mail->setFrom('noreply@ggcloud.id', 'GGCLOUD');
-        $mail->addAddress('test@example.com'); // Ganti dengan email tujuan yang valid
+        $mail->addAddress('patra.brave@gmail.com'); // Ganti dengan email tujuan yang valid
         $mail->Subject = 'Test Email';
         $mail->isHTML(true);
         $mail->Body = '<h1>This is a test email</h1><p>If you see this email, SMTP is working.</p>';
