@@ -1,6 +1,5 @@
 <?php
 
-use function PHPUnit\Framework\isEmpty;
 use phpseclib\Net\SSH2;
 
 defined('BASEPATH') or exit('No direct script access allowed');
@@ -52,24 +51,22 @@ class Satpam extends CI_Controller
       $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
 
       foreach ($device_data as $device_data_r) {
-
          $token = $device_data_r['access_token'];
          $port = $device_data_r['port'];
+
+         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token;
+         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master;
+
+         // Update the token string
+         $current_config = str_replace($search_string, $new_string, $current_config);
       }
 
-      echo 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-      echo '-> acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '\n';
-
-      // Configuration to update
-      $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-      $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master . '';
-
-      // Update the token string
-      $new_config = str_replace($search_string, $new_string, $current_config);
-
       // Write updated configuration back to the file
-      $ssh->exec('echo "' . addslashes($new_config) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
+      $temp_file = '/tmp/haproxy.cfg';
+      $ssh->exec('echo "' . addslashes($current_config) . '" > ' . $temp_file);
+      $ssh->exec('sudo mv ' . $temp_file . ' /etc/haproxy/haproxy.cfg');
 
+      // Reload HAProxy to apply changes
       $ssh->exec('sudo systemctl reload haproxy');
 
       // Close SSH connection

@@ -18,7 +18,6 @@ class Dashboard extends CI_Controller
 
    public function index()
    {
-
       $user_id = $this->session->userdata('user_id');
 
       $where = array(
@@ -41,7 +40,7 @@ class Dashboard extends CI_Controller
       $assign_id = $this->input->post('txt_assign_id');
       $user_id = $this->session->userdata('user_id');
 
-      if (preg_match("^[a-zA-Z0-9_\\-]+$^", $device_name)) {
+      if (preg_match("/^[a-zA-Z0-9_\-]+$/", $device_name)) {
          $data = array(
             'custom_name' => $device_name
          );
@@ -68,8 +67,6 @@ class Dashboard extends CI_Controller
          'jenis_voucher' => 'Baru',
       );
 
-      //cek validitas voucher dan ambil data
-
       $data_voucher = $this->M_dashboard->cek_voucher('voucher', $where);
 
       if (count($data_voucher) > 0) {
@@ -79,39 +76,22 @@ class Dashboard extends CI_Controller
             $durasi = $data_voucher_r['durasi'];
          }
 
-         //hitung durasi
          $enddate_calc = $this->M_dashboard->date_calc($durasi);
-
-         //ambil device yang available
          $available_device = $this->M_dashboard->cek_available('device');
 
-         foreach ($available_device as $available_device_r) {
-            $device_id = $available_device_r['id'];
-            // $device_ip =  $available_device_r['ip'];
-            // $access_port = $available_device_r['port'];
-            // $forward_port = $available_device_r['port_forward'];
-         }
-
          if (count($available_device) > 0) {
-            //ambil variabel user id dari session
             $user_id = $this->session->userdata('user_id');
-
-            //generate device identifier
             $device_identifier = $this->M_dashboard->randomString(32);
-
-            //generate device token
             $access_token = $this->M_dashboard->randomString(32);
 
-            //proses assign
             $data = array(
                'user_id' => $user_id,
-               'device_id' => $device_id,
+               'device_id' => $available_device[0]['id'],
                'device_identifier' => $device_identifier,
                'access_token' => $access_token,
                'end_date' => $enddate_calc
             );
 
-            //update assign
             $this->M_dashboard->insert_data('assigned', $data);
 
             $data2 = array(
@@ -122,45 +102,21 @@ class Dashboard extends CI_Controller
                'jenis_pembayaran' => 'Shopee'
             );
 
-            //update purchase
             $this->M_dashboard->insert_data('purchase', $data2);
 
+            $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
 
-            //ambil assign_id
-
-            $where = array(
-               'device_identifier' => $device_identifier
-            );
-
-            $assign_id = $this->M_dashboard->get_assign_id('assigned', $where);
-
-            foreach ($assign_id as $assign_id_r) {
-               $assign_id_p = $assign_id_r['id'];
-            }
-
-            $where2 = array(
-               'id' => $voucher_id
-            );
-
-            $data2 = array(
+            $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
                'voucher_status' => 'Digunakan',
-               'assign_id' => $assign_id_p,
+               'assign_id' => $assign_id,
                'tanggal_digunakan' => date('Y-m-d h:i:s')
-            );
-
-            $this->M_dashboard->update_data('voucher', $where2, $data2);
-
-            $where3 = array(
-               'id' => $device_id
-            );
-
-            $data3 = array(
-               'status_id' => '3'
-            );
+            ));
 
             $this->update_configuration($available_device, $access_token);
 
-            $this->M_dashboard->update_data('device', $where3, $data3);
+            $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
+               'status_id' => '3'
+            ));
 
             $this->session->set_flashdata('success', "Success");
 
@@ -179,42 +135,36 @@ class Dashboard extends CI_Controller
 
    public function update_configuration($device_data, $token)
    {
-      // Server SSH connection details
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
       $server_username = 'patra';
       $server_password = '@Nadhira250420';
 
-      // SSH connection
       $ssh = new SSH2($server_ip, $server_port);
       if (!$ssh->login($server_username, $server_password)) {
          exit('Login Failed');
       }
 
-      // Read current configuration file
       $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
 
       foreach ($device_data as $device_data_r) {
-
-         $token_search = "0000_AVAILABLEDEVICE";
          $port = $device_data_r['port'];
+         $token_search = "0000_AVAILABLEDEVICE";
+         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search;
+         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token;
+
+         // Update the token string
+         $current_config = str_replace($search_string, $new_string, $current_config);
       }
 
-      // echo $token_search . ' ' . $token;
-
-      // Configuration to update
-      $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search . '';
-      $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token . '';
-
-      // Update the token string
-      $new_config = str_replace($search_string, $new_string, $current_config);
-
-      // Write updated configuration back to the file
-      $ssh->exec('echo "' . addslashes($new_config) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
-
+      $temp_file = '/tmp/haproxy.cfg';
+      // Write updated configuration to a temporary file
+      $ssh->exec('echo -e "' . addslashes($current_config) . '" > ' . $temp_file);
+      // Move the temporary file to the actual configuration file location
+      $ssh->exec('sudo mv ' . $temp_file . ' /etc/haproxy/haproxy.cfg');
+      // Reload HAProxy to apply the changes
       $ssh->exec('sudo systemctl reload haproxy');
 
-      // Close SSH connection
       $ssh->disconnect();
    }
 
@@ -239,8 +189,6 @@ class Dashboard extends CI_Controller
          'jenis_paket' => $jenis_paket
       );
 
-      //cek validitas voucher dan ambil data
-
       $data_voucher = $this->M_dashboard->cek_voucher('voucher', $where);
 
       if (count($data_voucher) > 0) {
@@ -250,60 +198,33 @@ class Dashboard extends CI_Controller
             $durasi = $data_voucher_r['durasi'];
          }
 
-         //ambil variabel user id dari session
          $user_id = $this->session->userdata('user_id');
 
          $where = array(
             'id' => $assign_id,
          );
 
-         //ambil data existing
          $existing_data = $this->M_dashboard->get_existing('assigned', $where);
 
          if (count($existing_data) > 0) {
-
-            foreach ($existing_data as $existing_data_r) {
-               $end_date = $existing_data_r['end_date'];
-            }
-
-            //hitung durasi
+            $end_date = $existing_data[0]['end_date'];
             $enddate_calc = $this->M_dashboard->date_calc2($durasi, $end_date);
 
-            //proses assign
-            $data = array(
-               'end_date' => $enddate_calc
-            );
+            $this->M_dashboard->update_data('assigned', $where, array('end_date' => $enddate_calc));
 
-            $where = array(
-               'id' => $assign_id
-            );
-
-            //update assign
-            $this->M_dashboard->update_data('assigned', $where, $data);
-
-            $data2 = array(
+            $this->M_dashboard->insert_data('purchase', array(
                'package_id' => $paket_id,
                'user_id' => $user_id,
                'purchase_date' => date('Y-m-d H:i:s'),
                'status' => 'Berhasil',
                'Jenis_pembayaran' => 'Shopee'
-            );
+            ));
 
-            //update purchase
-            $this->M_dashboard->insert_data('purchase', $data2);
-
-            $where2 = array(
-               'id' => $voucher_id
-            );
-
-            $data2 = array(
+            $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
                'voucher_status' => 'Digunakan',
                'assign_id' => $assign_id,
                'tanggal_digunakan' => date('Y-m-d h:i:s')
-            );
-
-            //update status digunakan voucher
-            $this->M_dashboard->update_data('voucher', $where2, $data2);
+            ));
 
             $this->session->set_flashdata('success', "Perpanjang Perangkat Berhasil");
 
