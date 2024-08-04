@@ -206,14 +206,16 @@ class Forget extends CI_Controller
 
         // SMTP configuration
         $mail->isSMTP();
-        $mail->Host     = 'mail.ggcloud.id'; //sesuaikan sesuai nama domain hosting/server yang digunakan
+        $mail->Host     = 'iix1533.idcloudhost.com'; // Gunakan IP address server SMTP
         $mail->SMTPAuth = true;
-        $mail->Username = 'noreply@ggcloud.id'; // user email
-        $mail->Password = '@Patra007'; // password email
-        $mail->SMTPSecure = 'ssl';
-        $mail->SMTPAutoTLS = false;
-        $mail->Port     = 465;
-        $mail->SMTPDebug = 1;
+        $mail->Username = 'noreply@ggcloud.id'; // User email
+        $mail->Password = '@Patra007'; // Password email
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Atau 'ssl' jika menggunakan port 465
+        $mail->Port     = 587; // Port untuk TLS. Gunakan 465 jika SSL.
+
+        // Aktifkan debugging
+        //$mail->SMTPDebug = 2; // 2: Debug output verbose
+        //$mail->Debugoutput = 'html'; // Output debugging dalam format HTML
 
 
         $mail->Timeout = 60; // timeout pengiriman (dalam detik)

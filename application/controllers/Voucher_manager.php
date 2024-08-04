@@ -104,18 +104,16 @@ class Voucher_manager extends CI_Controller
 
       // SMTP configuration
       $mail->isSMTP();
-      $mail->Host     = '127.0.0.1'; //sesuaikan sesuai nama domain hosting/server yang digunakan
+      $mail->Host     = 'iix1533.idcloudhost.com'; // Gunakan IP address server SMTP
       $mail->SMTPAuth = true;
-      $mail->Username = 'noreply@ggcloud.id'; // user email
-      $mail->Password = '@Patra007'; // password email
-      $mail->SMTPSecure = 'ssl';
-      $mail->SMTPAutoTLS = false;
-      $mail->Port     = 465;
-      $mail->Timeout = 60; // timeout pengiriman (dalam detik)
-      $mail->SMTPKeepAlive = true;
-      $mail->SMTPDebug = 2; // Set level debugging
-      $mail->Debugoutput = 'html'; // Output debugging dalam format HTML
-      //$mail->SMTPDebug = 1;
+      $mail->Username = 'noreply@ggcloud.id'; // User email
+      $mail->Password = '@Patra007'; // Password email
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Atau 'ssl' jika menggunakan port 465
+      $mail->Port     = 587; // Port untuk TLS. Gunakan 465 jika SSL.
+
+      // Aktifkan debugging
+      //$mail->SMTPDebug = 2; // 2: Debug output verbose
+      //$mail->Debugoutput = 'html'; // Output debugging dalam format HTML
 
 
       $mail->Timeout = 60; // timeout pengiriman (dalam detik)
@@ -207,53 +205,5 @@ class Voucher_manager extends CI_Controller
       $this->session->set_flashdata('success', "Berhasil Hapus Data");
 
       redirect($_SERVER['HTTP_REFERER']);
-   }
-
-   public function send_email()
-   {
-      // PHPMailer object
-      $response = false;
-      $mail = new PHPMailer();
-
-
-      // SMTP configuration
-      $mail->isSMTP();
-      $mail->Host     = 'ggcloud.id'; //sesuaikan sesuai nama domain hosting/server yang digunakan
-      $mail->SMTPAuth = true;
-      $mail->Username = 'noreply@ggcloud.id'; // user email
-      $mail->Password = '@Patra007'; // password email
-      $mail->SMTPSecure = 'ssl';
-      $mail->SMTPAutoTLS = false;
-      $mail->Port     = 465;
-      $mail->SMTPDebug = 2;
-
-
-      $mail->Timeout = 60; // timeout pengiriman (dalam detik)
-      $mail->SMTPKeepAlive = true;
-
-      $mail->setFrom('noreply@ggcloud.id', 'GGCLOUD'); // user email
-      $mail->addReplyTo('noreply@ggcloud.id', ''); //user email
-
-      // Add a recipient
-      $mail->addAddress('patra.brave@gmail.com'); //email tujuan pengiriman email
-
-      // Email subject
-      $mail->Subject = 'Your Voucher Code is Here!'; //subject email
-
-      // Set email format to HTML
-      $mail->isHTML(true);
-
-      // Email body content
-      $mailContent = "<h1>Thanks For Purchasing</h1>
-                        <p>Laporan email SMTP Codeigniter.</p>"; // isi email
-      $mail->Body = $mailContent;
-
-      // Send email
-      if (!$mail->send()) {
-         echo 'Message could not be sent.';
-         echo 'Mailer Error: ' . $mail->ErrorInfo;
-      } else {
-         echo 'Message has been sent';
-      }
    }
 }
