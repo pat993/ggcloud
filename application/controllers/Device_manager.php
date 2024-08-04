@@ -101,7 +101,7 @@ class Device_manager extends CI_Controller
       }
 
       // Append the configuration block to the haproxy.cfg file
-      $ssh->exec('echo "' . addslashes($config_to_add) . '" >> /etc/haproxy/haproxy.cfg');
+      $ssh->exec('echo "' . addslashes($config_to_add) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
 
       $ssh->exec('sudo systemctl reload haproxy');
 
