@@ -60,74 +60,107 @@ class Dashboard extends CI_Controller
 
    public function voucher_claim()
    {
-      $voucher_code = $this->input->post('txt_voucher_code');
+      $err_count = $this->session->userdata('err_count_v');
 
-      $where = array(
-         'kode_voucher' => $voucher_code,
-         'jenis_voucher' => 'Baru',
-      );
+      if ($err_count == 1) {
+         //recaptca
+         $response = $this->input->post('g-recaptcha-response');
+         $error = "";
+         $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
+         $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
+         $verify = json_decode(file_get_contents($url));
+         $auth = $verify->success;
+      } else {
+         $auth = 1;
+      }
 
-      $data_voucher = $this->M_dashboard->cek_voucher('voucher', $where);
+      if ($auth == 1) {
 
-      if (count($data_voucher) > 0) {
-         foreach ($data_voucher as $data_voucher_r) {
-            $voucher_id = $data_voucher_r['voucher_id'];
-            $paket_id = $data_voucher_r['paket_id'];
-            $durasi = $data_voucher_r['durasi'];
-         }
+         $voucher_code = $this->input->post('txt_voucher_code');
 
-         $enddate_calc = $this->M_dashboard->date_calc($durasi);
-         $available_device = $this->M_dashboard->cek_available('device');
+         $where = array(
+            'kode_voucher' => $voucher_code,
+            'jenis_voucher' => 'Baru',
+         );
 
-         if (count($available_device) > 0) {
-            $user_id = $this->session->userdata('user_id');
-            $device_identifier = $this->M_dashboard->randomString(32);
-            $access_token = $this->M_dashboard->randomString(32);
+         $data_voucher = $this->M_dashboard->cek_voucher('voucher', $where);
 
-            $data = array(
-               'user_id' => $user_id,
-               'device_id' => $available_device[0]['id'],
-               'device_identifier' => $device_identifier,
-               'access_token' => $access_token,
-               'end_date' => $enddate_calc
-            );
+         if (count($data_voucher) > 0) {
+            foreach ($data_voucher as $data_voucher_r) {
+               $voucher_id = $data_voucher_r['voucher_id'];
+               $paket_id = $data_voucher_r['paket_id'];
+               $durasi = $data_voucher_r['durasi'];
+            }
 
-            $this->M_dashboard->insert_data('assigned', $data);
+            $enddate_calc = $this->M_dashboard->date_calc($durasi);
+            $available_device = $this->M_dashboard->cek_available('device');
 
-            $data2 = array(
-               'package_id' => $paket_id,
-               'user_id' => $user_id,
-               'purchase_date' => date('Y-m-d H:i:s'),
-               'status' => 'Berhasil',
-               'jenis_pembayaran' => 'Shopee'
-            );
+            if (count($available_device) > 0) {
+               $user_id = $this->session->userdata('user_id');
+               $device_identifier = $this->M_dashboard->randomString(32);
+               $access_token = $this->M_dashboard->randomString(32);
 
-            $this->M_dashboard->insert_data('purchase', $data2);
+               $data = array(
+                  'user_id' => $user_id,
+                  'device_id' => $available_device[0]['id'],
+                  'device_identifier' => $device_identifier,
+                  'access_token' => $access_token,
+                  'end_date' => $enddate_calc
+               );
 
-            $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
+               $this->M_dashboard->insert_data('assigned', $data);
 
-            $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
-               'voucher_status' => 'Digunakan',
-               'assign_id' => $assign_id,
-               'tanggal_digunakan' => date('Y-m-d h:i:s')
-            ));
+               $data2 = array(
+                  'package_id' => $paket_id,
+                  'user_id' => $user_id,
+                  'purchase_date' => date('Y-m-d H:i:s'),
+                  'status' => 'Berhasil',
+                  'jenis_pembayaran' => 'Shopee'
+               );
 
-            $this->update_configuration($available_device, $access_token);
+               $this->M_dashboard->insert_data('purchase', $data2);
 
-            $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
-               'status_id' => '3'
-            ));
+               $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
 
-            $this->session->set_flashdata('success', "Success");
+               $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
+                  'voucher_status' => 'Digunakan',
+                  'assign_id' => $assign_id,
+                  'tanggal_digunakan' => date('Y-m-d h:i:s')
+               ));
 
-            redirect($_SERVER['HTTP_REFERER']);
+               $this->update_configuration($available_device, $access_token);
+
+               $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
+                  'status_id' => '3'
+               ));
+
+               $this->session->set_flashdata('success', "Success");
+
+               $data_session = array(
+                  'err_count_v' => 0
+               );
+
+               $this->session->set_userdata($data_session);
+
+               redirect($_SERVER['HTTP_REFERER']);
+            } else {
+               $this->session->set_flashdata('error', "Error 101: Mohon Hubungi Admin");
+
+               redirect($_SERVER['HTTP_REFERER']);
+            }
          } else {
-            $this->session->set_flashdata('error', "Error 101: Mohon Hubungi Admin");
+            $this->session->set_flashdata('error', "Voucher tidak valid!");
+
+            $data_session = array(
+               'err_count_v' => 1
+            );
+
+            $this->session->set_userdata($data_session);
 
             redirect($_SERVER['HTTP_REFERER']);
          }
       } else {
-         $this->session->set_flashdata('error', "Voucher tidak valid!");
+         $this->session->set_flashdata('error', "Captcha error");
 
          redirect($_SERVER['HTTP_REFERER']);
       }

@@ -98,6 +98,15 @@
             <input style="border-radius: 10px; background-color: #F8F8F8" class="text-center" type="text" name="txt_voucher_code" autocomplete="off" placeholder="Input kode voucher disini" required>
             <!-- <label for="txt_voucher-code" class="color-theme opacity-20 text-uppercase font-700 font-10 mt-1">Voucher Code</label> -->
          </div>
+         <?php
+         if (null !== $this->session->userdata('err_count_v')) {
+         ?>
+
+            <div class="g-recaptcha " data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
+
+         <?php
+         }
+         ?>
          <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-4 mt-4"><i class="far fa-check-circle"></i></button>
       </form>
    </div>
