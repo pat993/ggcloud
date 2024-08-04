@@ -92,6 +92,7 @@ class Device_manager extends CI_Controller
 
       backend ws_server_$access_port
          server ws_$access_port $ip:$forward_port
+         
       CONFIG;
 
       // SSH connection
