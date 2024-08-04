@@ -20,7 +20,7 @@ class Smtp_test extends CI_Controller
 
         // SMTP configuration
         $mail->isSMTP();
-        $mail->Host     = '103.55.39.38'; // Gunakan IP address server SMTP
+        $mail->Host     = 'iix1533.idcloudhost.com'; // Gunakan IP address server SMTP
         $mail->SMTPAuth = true;
         $mail->Username = 'noreply@ggcloud.id'; // User email
         $mail->Password = '@Patra007'; // Password email
