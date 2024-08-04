@@ -111,6 +111,10 @@ class Voucher_manager extends CI_Controller
       $mail->SMTPSecure = 'ssl';
       $mail->SMTPAutoTLS = false;
       $mail->Port     = 465;
+      $mail->Timeout = 60; // timeout pengiriman (dalam detik)
+      $mail->SMTPKeepAlive = true;
+      $mail->SMTPDebug = 2; // Set level debugging
+      $mail->Debugoutput = 'html'; // Output debugging dalam format HTML
       //$mail->SMTPDebug = 1;
 
 
