@@ -42,7 +42,7 @@ class Player extends CI_Controller
                 $dev_port = $device_r['port'];
                 $access_token = $device_r['access_token'];
                 $dev_name = $device_r['custom_name'];
-                $data['end_date'] = $device_r['end_date'];
+                $end_date = $device_r['end_date'];
             }
 
             $data['user_id'] = $user_id;
@@ -52,11 +52,12 @@ class Player extends CI_Controller
             $d_port = $dev_port;
             $d_name = $dev_name;
             $d_token = $access_token;
+            $d_end_date = $end_date;
 
             // Delay execution for 500 milliseconds
             usleep(500000);
 
-            $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
+            $this->set_cookie($d_ip, $d_port, $d_name, $d_token, $d_end_date);
 
             $this->load->view('v_player', $data);
         } else {
@@ -64,48 +65,7 @@ class Player extends CI_Controller
         }
     }
 
-    function get_client_ip()
-    {
-        $direct_ip = '';
-        // Gets the default ip sent by the user
-        if (!empty($_SERVER['REMOTE_ADDR'])) {
-            $direct_ip = $_SERVER['REMOTE_ADDR'];
-        }
-        // Gets the proxy ip sent by the user
-        $proxy_ip     = '';
-        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $proxy_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } else if (!empty($_SERVER['HTTP_X_FORWARDED'])) {
-            $proxy_ip = $_SERVER['HTTP_X_FORWARDED'];
-        } else if (!empty($_SERVER['HTTP_FORWARDED_FOR'])) {
-            $proxy_ip = $_SERVER['HTTP_FORWARDED_FOR'];
-        } else if (!empty($_SERVER['HTTP_FORWARDED'])) {
-            $proxy_ip = $_SERVER['HTTP_FORWARDED'];
-        } else if (!empty($_SERVER['HTTP_VIA'])) {
-            $proxy_ip = $_SERVER['HTTP_VIA'];
-        } else if (!empty($_SERVER['HTTP_X_COMING_FROM'])) {
-            $proxy_ip = $_SERVER['HTTP_X_COMING_FROM'];
-        } else if (!empty($_SERVER['HTTP_COMING_FROM'])) {
-            $proxy_ip = $_SERVER['HTTP_COMING_FROM'];
-        }
-        // Returns the true IP if it has been found, else FALSE
-        if (empty($proxy_ip)) {
-            // True IP without proxy
-            return $direct_ip;
-        } else {
-            $is_ip = preg_match('|^([0-9]{1,3}\.){3,3}[0-9]{1,3}|', $proxy_ip, $regs);
-            if ($is_ip && (count($regs) > 0)) {
-                // True IP behind a proxy
-                return $regs[0];
-            } else {
-                // Can't define IP: there is a proxy but we don't have
-                // information about the true IP
-                return $direct_ip;
-            }
-        }
-    }
-
-    public function set_cookie($ip, $port, $nama, $token)
+    public function set_cookie($ip, $port, $nama, $token, $end_date)
     {
         // Set the cookie parameters for username
         $ip_cookie = array(
@@ -153,6 +113,20 @@ class Player extends CI_Controller
         $token_cookie = array(
             'name'   => 'matahari',
             'value'  => $token,
+            'expire' => time() + 1,
+            'path'   => '/',
+            'domain' => '',
+            'secure' => FALSE,
+            'httponly' => FALSE
+        );
+
+        // Set the cookie using the set_cookie function
+        $this->input->set_cookie($token_cookie);
+
+        // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+        $token_cookie = array(
+            'name'   => 'bulan',
+            'value'  => $end_date,
             'expire' => time() + 1,
             'path'   => '/',
             'domain' => '',
