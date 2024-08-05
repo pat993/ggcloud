@@ -12,7 +12,7 @@
    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>styles/dataTables.bootstrap4.min.css">
    <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>fonts/css/fontawesome-all.min.css">
-   <!-- <link rel="manifest" href="<?= base_url(); ?>_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js"> -->
+   <link rel="manifest" href="<?= base_url(); ?>scripts/_manifest.json" data-pwa-version="set_in_manifest_and_pwa_js">
    <!-- <link rel="apple-touch-icon" sizes="180x180" href="<?= base_url(); ?>app/icons/icon-192x192.png"> -->
 
    <link rel="icon" type="image/x-icon" href="<?= base_url(); ?>/images/ggcloud.png">
