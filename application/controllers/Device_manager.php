@@ -199,11 +199,12 @@ class Device_manager extends CI_Controller
          $d_port = $dev_port;
          $d_name = 'ADMIN CONTROL';
          $d_token = $access_token;
+         $d_end_date = '2024-08-07 06:52:05';
 
          // Delay execution for 500 milliseconds
          usleep(500000);
 
-         $this->set_cookie($d_ip, $d_port, $d_name, $d_token);
+         $this->set_cookie($d_ip, $d_port, $d_name, $d_token, $d_end_date);
 
          $this->load->view('v_player_configure', $data);
       } else {
@@ -213,7 +214,7 @@ class Device_manager extends CI_Controller
       }
    }
 
-   public function set_cookie($ip, $port, $nama, $token)
+   public function set_cookie($ip, $port, $nama, $token, $end_date)
    {
       // Set the cookie parameters for username
       $ip_cookie = array(
@@ -261,6 +262,20 @@ class Device_manager extends CI_Controller
       $token_cookie = array(
          'name'   => 'matahari',
          'value'  => $token,
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($token_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $token_cookie = array(
+         'name'   => 'bulan',
+         'value'  => $end_date,
          'expire' => time() + 1,
          'path'   => '/',
          'domain' => '',
