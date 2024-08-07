@@ -52,7 +52,7 @@ class Player extends CI_Controller
             $d_port = $dev_port;
             $d_name = $dev_name;
             $d_token = $access_token;
-            $d_end_date = $end_date;
+            $d_end_date = '2024-08-07 06:52:05';
 
             // Delay execution for 500 milliseconds
             usleep(500000);

@@ -199,7 +199,7 @@ class Device_manager extends CI_Controller
          $d_port = $dev_port;
          $d_name = 'ADMIN CONTROL';
          $d_token = $access_token;
-         $d_end_date = '2024-08-07 06:52:05';
+         $d_end_date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +1 day'));
 
          // Delay execution for 500 milliseconds
          usleep(500000);
@@ -334,6 +334,20 @@ class Device_manager extends CI_Controller
       // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
       $token_cookie = array(
          'name'   => 'matahari',
+         'value'  => '',
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($token_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $token_cookie = array(
+         'name'   => 'bulan',
          'value'  => '',
          'expire' => time() + 1,
          'path'   => '/',
