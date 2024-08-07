@@ -20,7 +20,7 @@ class Device_manager extends CI_Controller
 
    public function index()
    {
-      $this->razia();
+      // $this->razia();
       $user_id = $this->session->userdata('user_id');
 
       $data['last_port'] = '';

@@ -16,14 +16,14 @@ class M_satpam extends CI_Model
    }
    function razia1()
    {
-      $sql = "UPDATE device INNER JOIN assigned on device.id = assigned.device_id SET status_id = '1' WHERE end_date <= NOW()";
+      $sql = "UPDATE device INNER JOIN assigned on device.id = assigned.device_id SET status_id = '1' WHERE end_date <= NOW() AND status='active'";
 
       $this->db->query($sql);
    }
 
    function razia2()
    {
-      $sql = "UPDATE assigned SET status = 'expired' WHERE end_date <= NOW()";
+      $sql = "UPDATE assigned SET status = 'expired' WHERE end_date <= NOW() AND status='active'";
 
       $this->db->query($sql);
    }
