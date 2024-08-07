@@ -14,11 +14,13 @@ class Device_manager extends CI_Controller
       } else {
          $this->load->model('M_device_manager');
          $this->load->model('M_player');
+         $this->load->model('M_satpam');
       }
    }
 
    public function index()
    {
+      $this->razia();
       $user_id = $this->session->userdata('user_id');
 
       $data['last_port'] = '';
@@ -373,5 +375,61 @@ class Device_manager extends CI_Controller
       $this->M_device_manager->update_data('device', $data, $where);
 
       echo 'Berhasil Konfigurasi';
+   }
+
+   public function razia()
+   {
+      $device_data = $this->M_satpam->get_data('assigned');
+
+      // echo json_encode($device_data);
+
+      $this->M_satpam->razia1();
+      $this->M_satpam->razia2();
+
+      if (count($device_data) > 0) {
+         $this->edit_configuration($device_data);
+      }
+   }
+
+   public function edit_configuration($device_data)
+   {
+      // Server SSH connection details
+      $server_ip = 'hypercube.my.id';
+      $server_port = 22;
+      $server_username = 'patra';
+      $server_password = '@Nadhira250420';
+
+      $token_master = '0000_AVAILABLEDEVICE';
+
+      // SSH connection
+      $ssh = new SSH2($server_ip, $server_port);
+      if (!$ssh->login($server_username, $server_password)) {
+         exit('Login Failed');
+      }
+
+      // Read current configuration file
+      $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
+
+      foreach ($device_data as $device_data_r) {
+         $token = $device_data_r['access_token'];
+         $port = $device_data_r['port'];
+
+         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token;
+         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_master;
+
+         // Update the token string
+         $current_config = str_replace($search_string, $new_string, $current_config);
+      }
+
+      // Write updated configuration back to the file
+      $temp_file = '/tmp/haproxy.cfg';
+      $ssh->exec('echo "' . addslashes($current_config) . '" > ' . $temp_file);
+      $ssh->exec('sudo mv ' . $temp_file . ' /etc/haproxy/haproxy.cfg');
+
+      // Reload HAProxy to apply changes
+      $ssh->exec('sudo systemctl reload haproxy');
+
+      // Close SSH connection
+      $ssh->disconnect();
    }
 }
