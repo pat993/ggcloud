@@ -17,19 +17,26 @@
             <div class="col-sm-4">
                <div class="card bg-light mb-1 rounded" style="width: 100%">
                   <b class="text-center rounded-top" style="background-color: #7286D3; color: white">Perangkat Aktif</b>
-                  <h1 class="text-center">1</h1>
+                  <h1 class="text-center"><?= count($assigned); ?></h1>
                </div>
             </div>
             <div class="col-sm-4">
                <div class="card bg-light mb-1 rounded" style="width: 100%">
                   <b class="text-center rounded-top" style="background-color: #7286D3; color: white">Kompensasi Digunakan</b>
-                  <h1 class="text-center">1</h1>
+                  <h1 class="text-center"><?= count($kompensasi); ?></h1>
                </div>
             </div>
             <div class="col-sm-4">
                <div class="card bg-light mb-1 rounded" style="width: 100%">
                   <b class="text-center rounded-top" style="background-color: #7286D3; color: white">Total Durasi Kompensasi</b>
-                  <h1 style="color: green" class="text-center">1</h1>
+                  <h1 style="color: green" class="text-center">
+                     <?php
+                     $durasi_kompensasi = 0;
+                     foreach ($kompensasi as $kompensasi_p) {
+                        $durasi_kompensasi = $durasi_kompensasi + $kompensasi_p['durasi'];
+                     }
+                     echo $durasi_kompensasi;
+                     ?> Jam</h1>
                </div>
             </div>
          </div>

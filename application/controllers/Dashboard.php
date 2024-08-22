@@ -108,39 +108,41 @@ class Dashboard extends CI_Controller
                   'end_date' => $enddate_calc
                );
 
-               $this->M_dashboard->insert_data('assigned', $data);
+               if ($this->update_configuration($available_device, $access_token) ==  true) {
+                  $this->M_dashboard->insert_data('assigned', $data);
 
-               $data2 = array(
-                  'package_id' => $paket_id,
-                  'user_id' => $user_id,
-                  'purchase_date' => date('Y-m-d H:i:s'),
-                  'status' => 'Berhasil',
-                  'jenis_pembayaran' => 'Shopee'
-               );
+                  $data2 = array(
+                     'package_id' => $paket_id,
+                     'user_id' => $user_id,
+                     'purchase_date' => date('Y-m-d H:i:s'),
+                     'status' => 'Berhasil',
+                     'jenis_pembayaran' => 'Shopee'
+                  );
 
-               $this->M_dashboard->insert_data('purchase', $data2);
+                  $this->M_dashboard->insert_data('purchase', $data2);
 
-               $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
+                  $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
 
-               $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
-                  'voucher_status' => 'Digunakan',
-                  'assign_id' => $assign_id,
-                  'tanggal_digunakan' => date('Y-m-d h:i:s')
-               ));
+                  $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
+                     'voucher_status' => 'Digunakan',
+                     'assign_id' => $assign_id,
+                     'tanggal_digunakan' => date('Y-m-d h:i:s')
+                  ));
 
-               $this->update_configuration($available_device, $access_token);
+                  $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
+                     'status_id' => '3'
+                  ));
 
-               $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
-                  'status_id' => '3'
-               ));
+                  $this->session->set_flashdata('success', "Success");
 
-               $this->session->set_flashdata('success', "Success");
+                  $data_session = array(
+                     'err_count_v' => 0
+                  );
 
-               $data_session = array(
-                  'err_count_v' => 0
-               );
-
-               $this->session->set_userdata($data_session);
+                  $this->session->set_userdata($data_session);
+               } else {
+                  $this->session->set_flashdata('error', "Error 102: Tidak dapat terhubung ke server");
+               }
 
                redirect($_SERVER['HTTP_REFERER']);
             } else {
@@ -175,30 +177,34 @@ class Dashboard extends CI_Controller
 
       $ssh = new SSH2($server_ip, $server_port);
       if (!$ssh->login($server_username, $server_password)) {
-         exit('Login Failed');
+         #exit('Login Failed');
+         return false;
+      } else {
+
+         $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
+
+         foreach ($device_data as $device_data_r) {
+            $port = $device_data_r['port'];
+            $token_search = "0000_AVAILABLEDEVICE";
+            $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search;
+            $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token;
+
+            // Update the token string
+            $current_config = str_replace($search_string, $new_string, $current_config);
+         }
+
+         $temp_file = '/tmp/haproxy.cfg';
+         // Write updated configuration to a temporary file
+         $ssh->exec('echo -e "' . addslashes($current_config) . '" > ' . $temp_file);
+         // Move the temporary file to the actual configuration file location
+         $ssh->exec('sudo mv ' . $temp_file . ' /etc/haproxy/haproxy.cfg');
+         // Reload HAProxy to apply the changes
+         $ssh->exec('sudo systemctl reload haproxy');
+
+         $ssh->disconnect();
+
+         return true;
       }
-
-      $current_config = $ssh->exec('cat /etc/haproxy/haproxy.cfg');
-
-      foreach ($device_data as $device_data_r) {
-         $port = $device_data_r['port'];
-         $token_search = "0000_AVAILABLEDEVICE";
-         $search_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token_search;
-         $new_string = 'acl valid_token_' . $port . ' urlp(token) -m str ' . $token;
-
-         // Update the token string
-         $current_config = str_replace($search_string, $new_string, $current_config);
-      }
-
-      $temp_file = '/tmp/haproxy.cfg';
-      // Write updated configuration to a temporary file
-      $ssh->exec('echo -e "' . addslashes($current_config) . '" > ' . $temp_file);
-      // Move the temporary file to the actual configuration file location
-      $ssh->exec('sudo mv ' . $temp_file . ' /etc/haproxy/haproxy.cfg');
-      // Reload HAProxy to apply the changes
-      $ssh->exec('sudo systemctl reload haproxy');
-
-      $ssh->disconnect();
    }
 
    public function voucher_extend()

@@ -18,8 +18,9 @@ class Compensation_manager extends CI_Controller
    {
       $data['user_id'] = $this->session->userdata('user_id');
 
-      $data['assigned'] = $this->M_comp_manager->get_data('assigned');
+      $data['assigned'] = $this->M_comp_manager->get_assigned('assigned');
 
+      $data['kompensasi'] = $this->M_comp_manager->get_data('kompensasi');
 
       $this->load->view('templates/t_header');
       $this->load->view('templates/t_sidebar');
@@ -51,6 +52,27 @@ class Compensation_manager extends CI_Controller
       $durasi = $this->input->post('txt_durasi');
       $keterangan = $this->input->post('txt_keterangan');
       $assign_id = $this->input->post('txt_assign_id');
+
+      $data = array(
+         'durasi' => $durasi,
+         'keterangan' => $keterangan,
+         'assign_id' => $assign_id
+      );
+
+      $this->M_comp_manager->insert_data('kompensasi', $data);
+      // $this->update_config($ip, $port);
+
+      $this->session->set_flashdata('success', "Berhasil Input Data");
+
+      redirect($_SERVER['HTTP_REFERER']);
+   }
+
+   public function add_batch_compensation()
+   {
+      $durasi = $this->input->post('txt_durasi_b');
+      $keterangan = $this->input->post('txt_keterangan_b');
+
+      $assign_id = $this->M_comp_manager->get_assigned_id('assigned');
 
       $data = array(
          'durasi' => $durasi,

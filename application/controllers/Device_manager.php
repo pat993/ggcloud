@@ -65,11 +65,14 @@ class Device_manager extends CI_Controller
       );
 
       $token = "0000_AVAILABLEDEVICE";
-      $this->add_config($ip, $port, $port_f, $token);
-      $this->M_device_manager->insert_data('device', $data);
-      // $this->update_config($ip, $port);
+      if ($this->add_config($ip, $port, $port_f, $token) == true) {
+         $this->M_device_manager->insert_data('device', $data);
+         // $this->update_config($ip, $port);
 
-      $this->session->set_flashdata('success', "Berhasil Input Data");
+         $this->session->set_flashdata('success', "Berhasil Input Data");
+      } else {
+         $this->session->set_flashdata('error', "Tidak dapat terhubung ke server");
+      }
 
       redirect($_SERVER['HTTP_REFERER']);
    }
@@ -100,16 +103,18 @@ class Device_manager extends CI_Controller
       // SSH connection
       $ssh = new SSH2($server_ip, $server_port);
       if (!$ssh->login($server_username, $server_password)) {
-         exit('Login Failed');
-      }
-
-      // Append the configuration block to the haproxy.cfg file
-      $ssh->exec('echo "' . addslashes($config_to_add) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
+         #exit('Login Failed');
+         return false;
+      } else
+         // Append the configuration block to the haproxy.cfg file
+         $ssh->exec('echo "' . addslashes($config_to_add) . '" | sudo tee -a /etc/haproxy/haproxy.cfg');
 
       $ssh->exec('sudo systemctl reload haproxy');
 
       // Close SSH connection
       $ssh->disconnect();
+
+      return true;
    }
 
 
