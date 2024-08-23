@@ -73,6 +73,7 @@ class Voucher_manager extends CI_Controller
       $paket_id = $this->input->post('txt_paket_id');
       $tipe = $this->input->post('txt_tipe');
       $jenis = $this->input->post('txt_jenis');
+      $ext_ecommerce = $this->input->post('txt_ext_ecommerce');
       $order_id = $this->input->post('txt_order_id');
       $email = $this->input->post('txt_email');
       $expired = $this->input->post('txt_expired');
@@ -84,6 +85,7 @@ class Voucher_manager extends CI_Controller
          'paket_id' => $paket_id,
          'jenis_voucher' => $tipe,
          'jenis_paket' => $jenis,
+         'jenis_ecommerce' => $ext_ecommerce,
          'order_id' => $order_id,
          'email_tujuan' => $email,
          'tanggal_expired' => $expired

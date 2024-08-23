@@ -7,7 +7,7 @@
             </div>
             <div class="col-sm-4"></div>
             <div class="col-sm-4">
-               <a href="#" data-menu="menu-create-account" style="display: flex; align-items: center; justify-content: center; padding: 4px 8px; text-decoration: none; border-radius: 20px; transition: background-color 0.3s ease; font-size: 16px; color: white; background-color: #28a745; width: 100%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-transform: uppercase; font-weight: 900; margin-bottom: 1rem; border: 2px solid transparent;" class="btn btn-m btn-full b mb-3 text-uppercase font-900 shadow-s bg-green-dark">
+               <a href="#" data-menu="menu-kompensasi-batch" style="display: flex; align-items: center; justify-content: center; padding: 4px 8px; text-decoration: none; border-radius: 20px; transition: background-color 0.3s ease; font-size: 16px; color: white; background-color: #28a745; width: 100%; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); text-transform: uppercase; font-weight: 900; margin-bottom: 1rem; border: 2px solid transparent;" class="btn btn-m btn-full b mb-3 text-uppercase font-900 shadow-s bg-green-dark">
                   <i class="fa fa-plus" style="margin-right: 8px;"></i> Batch Kompensasi
                </a>
             </div>
@@ -68,8 +68,9 @@
                            <div class="dropleft">
                               <button class="btn btn-light btn-xs" data-toggle="dropdown"><i class="fas fa-ellipsis-v"></i></button>
                               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                 <button class="dropdown-item" data-menu="menu-kompensasi-tambah" onclick='get_data_add(<?= $assigned_p["id_assign"]; ?>)'><i class="fas fa-pen"></i> Tambah Kompensasi</button>
-                                 <button class="dropdown-item" data-menu="menu-kompensasi-history" onclick='get_data_history(<?= $assigned_p["id_assign"]; ?>)'><i class="fas fa-pen"></i> History Kompensasi</button>
+                                 <button class="dropdown-item" data-menu="menu-kompensasi-tambah" onclick='get_data_add(<?= $assigned_p["id_assign"]; ?>)'><i class="fas fa-plus"></i> Tambah Kompensasi</button>
+                                 <div class="dropdown-divider"></div>
+                                 <button class="dropdown-item" data-menu="menu-kompensasi-history" onclick='get_data_history(<?= $assigned_p["id_assign"]; ?>)'><i class="fas fa-history"></i> History Kompensasi</button>
                               </div>
                            </div>
                         </td>
@@ -80,6 +81,27 @@
                </tbody>
             </table>
          </div>
+      </div>
+   </div>
+</div>
+
+<div id="menu-kompensasi-batch" class="menu menu-box-top menu-box-detached rounded-m" style="max-width: 900px; margin: auto">
+   <div class="content">
+      <div class="d-flex ms-3 me-3 mb-3">
+         <form method="POST" action="<?= base_url() ?>compensation_manager/add_batch_compensation/">
+            <h1>Batch Kompensasi</h1>
+      </div>
+      <div class="ms-3 me-3 mb-4">
+         <div class="input-style has-borders no-icon mb-4 input-style-active">
+            Durasi Kompensasi (Jam):
+            <input type="number" class="form-control validate-name" id="txt_durasi_b" name="txt_durasi_b" required>
+         </div>
+         <div class="input-style has-borders no-icon mb-4 input-style-active">
+            Keterangan Kompensasi:
+            <input type="text" class="form-control validate-name" id="txt_keterangan_b" name="txt_keterangan_b" required>
+         </div>
+         <button type="submit" style="width: 100%;" class="btn btn-full btn-m rounded-m bg-blue-dark font-700 text-uppercase mt-4"><i class="fas fa-save"></i> Simpan</button>
+         </form>
       </div>
    </div>
 </div>

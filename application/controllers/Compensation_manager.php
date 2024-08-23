@@ -11,6 +11,7 @@ class Compensation_manager extends CI_Controller
          redirect(base_url("login"));
       } else {
          $this->load->model('M_comp_manager');
+         $this->load->model('M_dashboard');
       }
    }
 
@@ -53,6 +54,28 @@ class Compensation_manager extends CI_Controller
       $keterangan = $this->input->post('txt_keterangan');
       $assign_id = $this->input->post('txt_assign_id');
 
+      $where = array(
+         'id' => $assign_id
+      );
+
+      $end_date = $this->M_comp_manager->get_data('assigned', $where);
+
+      foreach ($end_date as $end_date_r) {
+         $end_date_p = $end_date_r['end_date_kompensasi'];
+      }
+
+      $end_date_kompensasi = $this->M_dashboard->date_calc_jam($end_date_p, $durasi);
+
+      $data = array(
+         'end_date_kompensasi' => $end_date_kompensasi
+      );
+
+      $where = array(
+         'id' => $assign_id
+      );
+
+      $this->M_comp_manager->update_data('assigned', $where, $data);
+
       $data = array(
          'durasi' => $durasi,
          'keterangan' => $keterangan,
@@ -72,16 +95,53 @@ class Compensation_manager extends CI_Controller
       $durasi = $this->input->post('txt_durasi_b');
       $keterangan = $this->input->post('txt_keterangan_b');
 
-      $assign_id = $this->M_comp_manager->get_assigned_id('assigned');
-
-      $data = array(
-         'durasi' => $durasi,
-         'keterangan' => $keterangan,
-         'assign_id' => $assign_id
+      $where = array(
+         'status' => 'active'
       );
 
-      $this->M_comp_manager->insert_data('kompensasi', $data);
-      // $this->update_config($ip, $port);
+      $assign_list = $this->M_comp_manager->get_assigned_id('assigned', $where);
+
+      foreach ($assign_list as $assign_list_r) {
+         $where = array(
+            'id' => $assign_list_r['id']
+         );
+   
+         $end_date = $this->M_comp_manager->get_data('assigned', $where);
+   
+         foreach ($end_date as $end_date_r) {
+            $end_date_p = $end_date_r['end_date_kompensasi'];
+         }
+   
+         $end_date_kompensasi = $this->M_dashboard->date_calc_jam($end_date_p, $durasi);
+   
+         $data = array(
+            'end_date_kompensasi' => $end_date_kompensasi
+         );
+   
+         $where = array(
+            'id' => $assign_list_r['id']
+         );
+   
+         $this->M_comp_manager->update_data('assigned', $where, $data);
+
+         $data = array(
+            'end_date_kompensasi' => $end_date_kompensasi
+         );
+
+         $where = array(
+            'id' => $assign_list_r['id']
+         );
+
+         $this->M_comp_manager->update_data('assigned', $where, $data);
+
+         $data = array(
+            'durasi' => $durasi,
+            'keterangan' => $keterangan,
+            'assign_id' => $assign_list_r['id']
+         );
+
+         $this->M_comp_manager->insert_data('kompensasi', $data);
+      }
 
       $this->session->set_flashdata('success', "Berhasil Input Data");
 

@@ -128,7 +128,7 @@
      <div class="content">
         <div class="d-flex ms-3 me-3 mb-3">
            <div>
-              <h1><i class="fas fa-ticket"></i> Generate Voucher</h1>
+              <h1>Generate Voucher</h1>
            </div>
         </div>
         <div class="ms-3 me-3 mb-5">
@@ -161,6 +161,15 @@
                     Paket :
                     <select class="form-select" name="txt_paket_id" required>
                        <option selected disabled>-- Pilih Salah Satu --</option>
+                    </select>
+                 </div>
+              </div>
+
+              <div class="input-style has-borders no-icon mb-4 input-style-active">
+                 <div id="div-daftar-paket">
+                    External e-Commerce :
+                    <select class="form-select" name="txt_ext_ecommerce" required>
+                       <option value="Shopee">Shopee</option>
                     </select>
                  </div>
               </div>

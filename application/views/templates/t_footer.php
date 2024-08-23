@@ -165,6 +165,19 @@
             }).draw();
          });
 
+         $(function() {
+            var t = $('#tb_device2').DataTable({
+               order: [
+                  [0, 'asc'] // Order by the first column, which is the only column
+               ],
+               "pageLength": 10
+            });
+
+            // No need to add numbering, so the event listener is removed
+         });
+
+
+
          function get_daftar_paket() {
             var a = document.getElementById("div-daftar-paket");
             a.innerHTML = "Loading....";

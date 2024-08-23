@@ -88,8 +88,11 @@ class Dashboard extends CI_Controller
          if (count($data_voucher) > 0) {
             foreach ($data_voucher as $data_voucher_r) {
                $voucher_id = $data_voucher_r['voucher_id'];
+               $jenis_paket = $data_voucher_r['jenis_paket'];
                $paket_id = $data_voucher_r['paket_id'];
                $durasi = $data_voucher_r['durasi'];
+               $harga = $data_voucher_r['harga'];
+               $jenis_transaksi = $data_voucher_r['jenis_ecommerce'];
             }
 
             $enddate_calc = $this->M_dashboard->date_calc($durasi);
@@ -100,15 +103,28 @@ class Dashboard extends CI_Controller
                $device_identifier = $this->M_dashboard->randomString(32);
                $access_token = $this->M_dashboard->randomString(32);
 
-               $data = array(
-                  'user_id' => $user_id,
-                  'device_id' => $available_device[0]['id'],
-                  'device_identifier' => $device_identifier,
-                  'access_token' => $access_token,
-                  'end_date' => $enddate_calc
-               );
-
                if ($this->update_configuration($available_device, $access_token) ==  true) {
+                  $data = array(
+                     'user_id' => $user_id,
+                     'jenis_id' => $jenis_paket,
+                     'paket_id' => $paket_id,
+                     'harga' => $harga,
+                     'jenis_transaksi' => $jenis_transaksi,
+                     'status' => 'Lunas'
+                  );
+
+                  //insert to invoice
+                  $this->M_dashboard->insert_data('invoice', $data);
+
+                  $data = array(
+                     'user_id' => $user_id,
+                     'device_id' => $available_device[0]['id'],
+                     'device_identifier' => $device_identifier,
+                     'access_token' => $access_token,
+                     'end_date' => $enddate_calc,
+                     'end_date_kompensasi' => $enddate_calc
+                  );
+
                   $this->M_dashboard->insert_data('assigned', $data);
 
                   $data2 = array(

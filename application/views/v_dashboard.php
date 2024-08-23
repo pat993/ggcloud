@@ -159,7 +159,12 @@ foreach ($device_list as $result) {
                   <td style="width: 150px">
                      <p>Masa Aktif</p>
                   </td>
-                  <td><span><?= $jam; ?> Jam</span></td>
+                  <td><span><?= $result['masa_aktif']; ?> Jam</span>
+                     <?php if ($result['kompensasi'] != 0) { ?>
+                        <span style="border:1px solid green; padding: 1px 5px 1px 5px; color: green; border-radius: 20px"> + <?= $result['kompensasi']; ?> Jam</span>
+                     <?php
+                     } ?>
+                  </td>
                </tr>
             </table>
             <hr>

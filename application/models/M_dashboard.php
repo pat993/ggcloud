@@ -3,11 +3,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_dashboard extends CI_Model
 {
-   function get_data($table, $where)
+   function get_data($table)
    {
-      $this->db->where('end_date>=CURRENT_TIMESTAMP()');
+      // Subquery to get kompensasi_total
+      $this->db->select('assign_id, SUM(durasi) AS durasi');
+      $this->db->from('kompensasi');
+      $this->db->group_by('assign_id');
+      $subquery = $this->db->get_compiled_select();
 
-      $result = $this->db->get_where($table, $where)->result_array();
+      // Main query
+      $this->db->select('assigned.id as id, user_id, device_id, device_identifier, access_token, custom_name, start_date, end_date, assigned.status as status, IFNULL(kompensasi_total.durasi, 0) AS kompensasi, assigned.id AS id_assign, (TIMESTAMPDIFF(HOUR, NOW(), assigned.end_date) + IFNULL(kompensasi_total.durasi, 0)) AS masa_aktif');
+      $this->db->from($table);
+      $this->db->join('user', 'user.id = assigned.user_id');
+      $this->db->join("($subquery) AS kompensasi_total", 'assigned.id = kompensasi_total.assign_id', 'left');
+      $this->db->where('assigned.status', 'active');
+      $this->db->where('assigned.end_date_kompensasi >=', 'NOW()', false); // Ensure proper handling of NOW() in where clause
+      $this->db->order_by('assigned.end_date', 'DESC');
+
+      $result = $this->db->get()->result_array();
 
       return $result;
    }
@@ -33,7 +46,7 @@ class M_dashboard extends CI_Model
 
    function cek_voucher($table, $where)
    {
-      $this->db->select('voucher.id, paket_id, durasi, voucher.id as voucher_id, jenis_voucher');
+      $this->db->select('voucher.id, paket_id, durasi, voucher.id as voucher_id, jenis_voucher, jenis_paket, harga, jenis_ecommerce');
       $this->db->join('package', 'voucher.paket_id = package.id', 'left');
       $this->db->where($where);
       $this->db->where('voucher_status', 'Belum Digunakan');
@@ -98,6 +111,9 @@ class M_dashboard extends CI_Model
 
    function date_calc($jumlah)
    {
+      // Set timezone ke WIB (Asia/Jakarta)
+      date_default_timezone_set('Asia/Jakarta');
+
       $currentDate = date('Y-m-d H:i:s');
       $jumlah_jam = $jumlah * 24;
       return date('Y-m-d H:i:s', strtotime('+' . $jumlah_jam . ' ' . 'hour', strtotime($currentDate)));
@@ -107,5 +123,13 @@ class M_dashboard extends CI_Model
    {
       $jumlah_jam = $jumlah * 24;
       return date('Y-m-d H:i:s', strtotime('+' . $jumlah_jam . ' ' . 'hour', strtotime($date)));
+   }
+
+   function date_calc_jam($tanggal, $jumlah_jam)
+   {
+      // Set timezone ke WIB (Asia/Jakarta)
+      date_default_timezone_set('Asia/Jakarta');
+
+      return date('Y-m-d H:i:s', strtotime('+' . $jumlah_jam . ' ' . 'hour', strtotime($tanggal)));
    }
 }

@@ -12,7 +12,7 @@ class M_comp_manager extends CI_Model
       $subquery = $this->db->get_compiled_select();
 
       // Main query
-      $this->db->select('user.username, assigned.custom_name, assigned.end_date, IFNULL(kompensasi_total.durasi, 0) AS durasi, assigned.id AS id_assign, (TIMESTAMPDIFF(HOUR, NOW(), assigned.end_date) + durasi) AS masa_aktif');
+      $this->db->select('user.username, assigned.custom_name, assigned.end_date, IFNULL(kompensasi_total.durasi, 0) AS durasi, assigned.id AS id_assign, (TIMESTAMPDIFF(HOUR, NOW(), assigned.end_date) + IFNULL(kompensasi_total.durasi, 0)) AS masa_aktif');
       $this->db->from($table);
       $this->db->join('user', 'user.id = assigned.user_id');
       $this->db->join("($subquery) AS kompensasi_total", 'assigned.id = kompensasi_total.assign_id', 'left');
@@ -64,5 +64,12 @@ class M_comp_manager extends CI_Model
    {
       $this->db->where($where);
       $this->db->delete($table);
+   }
+
+   function update_data($table, $where, $data)
+   {
+      $this->db->where($where);
+
+      $this->db->update($table, $data);
    }
 }
