@@ -142,6 +142,23 @@
       })
    })
 
+   $(function() {
+      var t = $('#tb_device2').DataTable({
+         order: [
+            [0, 'desc'] // Order by the first column, which is the only column
+         ],
+         "pageLength": 10,
+         "dom": '<"top"f>rt<"bottom"ip><"clear">', // Custom layout to show only the search box on top
+         "paging": true, // Ensure pagination is enabled
+         "info": false, // Disable table information (e.g., "Showing 1 to 10 of 50 entries")
+         "lengthChange": false // Hide the dropdown to select the number of entries to show
+      });
+
+      // Hide the "Show entries" dropdown
+      $('#tb_device2').DataTable().settings()[0].oFeatures.bPaginate = false;
+   });
+
+
 
    <?php if (isset($user_id)) {
       if ($user_id == '1') { ?>
@@ -164,19 +181,6 @@
                });
             }).draw();
          });
-
-         $(function() {
-            var t = $('#tb_device2').DataTable({
-               order: [
-                  [0, 'asc'] // Order by the first column, which is the only column
-               ],
-               "pageLength": 10
-            });
-
-            // No need to add numbering, so the event listener is removed
-         });
-
-
 
          function get_daftar_paket() {
             var a = document.getElementById("div-daftar-paket");
