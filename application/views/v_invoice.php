@@ -52,7 +52,7 @@
                                             <div class="d-flex">
                                                 <div class="mt-1">
                                                     <p class="color-highlight font-600 mb-n1"><?= $invoice_data_p['tipe']; ?></p>
-                                                    <h1><?= $invoice_data_p['nama_paket']; ?></h1>
+                                                    <h2><?= $invoice_data_p['nama_paket']; ?></h2>
                                                 </div>
                                             </div>
 
