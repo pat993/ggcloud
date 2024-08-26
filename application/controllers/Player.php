@@ -42,7 +42,7 @@ class Player extends CI_Controller
                 $dev_port = $device_r['port'];
                 $access_token = $device_r['access_token'];
                 $dev_name = $device_r['custom_name'];
-                $end_date = $device_r['end_date'];
+                $end_date = $device_r['end_date_kompensasi'];
             }
 
             $data['user_id'] = $user_id;
