@@ -66,7 +66,7 @@ function setStream(br) {
 
 let bitrate;
 let blurStartTime = null; // To keep track of the time when the page was blurred
-const blurThreshold = 60000; // 1 minute in milliseconds
+const blurThreshold = 6000000; // 1 minute in milliseconds
 
 // Visibility change handlers
 ifvisible.on("blur", function() {
