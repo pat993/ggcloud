@@ -17,6 +17,23 @@ class Player extends CI_Controller
         }
     }
 
+    public function data()
+    {
+        $user_id = $this->session->userdata('user_id');
+        // $allow_ip = $this->M_player->get_client_ip();
+        //$allow_port = $id;
+
+        // echo $allow_ip;
+
+        $where = array(
+            'user_id' => $user_id,
+        );
+
+        $device = $this->M_player->get_device('assigned', $where);
+
+        echo json_encode($device);
+    }
+
     public function go($id = Null)
     {
         $user_id = $this->session->userdata('user_id');
