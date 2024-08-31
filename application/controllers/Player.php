@@ -57,12 +57,14 @@ class Player extends CI_Controller
                 $assign_id = $device_r['assign_id'];
                 // $dev_ip = $device_r['ip'];
                 $dev_port = $device_r['port'];
+                $audio_port = $device_r['port_audio'];
                 $access_token = $device_r['access_token'];
                 $dev_name = $device_r['custom_name'];
                 $end_date = $device_r['end_date_kompensasi'];
             }
 
             $data['user_id'] = $user_id;
+            $data['audio_port'] = $audio_port;
 
             #$d_ip = 'hypercube.my.id';
             $d_ip = 'hypercube.my.id';
@@ -153,5 +155,10 @@ class Player extends CI_Controller
 
         // Set the cookie using the set_cookie function
         $this->input->set_cookie($token_cookie);
+    }
+
+    public function audio_test()
+    {
+        $this->load->view('v_audio_player');
     }
 }

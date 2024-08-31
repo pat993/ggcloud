@@ -196,11 +196,13 @@ class Device_manager extends CI_Controller
 
          foreach ($device as $device_r) {
             $dev_port = $device_r['port'];
+            $audio_port = $device_r['port_audio'];
             $access_token = 'ADMINTOKENAUTHENTICATION_190119_GGCLOUD';
             // $dev_name = $device_r['custom_name'];
          }
 
          $data['dev_id'] = $id;
+         $data['audio_port'] = $audio_port;
 
          $d_ip = 'hypercube.my.id';
          $d_port = $dev_port;
