@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audio Streaming</title>
 </head>
+
 <body>
     <script>
         let audioContext = new(window.AudioContext || window.webkitAudioContext)({
-            sampleRate: 16000
+            sampleRate: 10000
         });
         let gainNode = audioContext.createGain();
         let scriptNode;
-        let channels = 2;
-        let sampleRate = 16000;
+        let channels = 1;
+        let sampleRate = 10000;
         let targetLatency = 50;
 
         gainNode.connect(audioContext.destination);
@@ -119,4 +121,5 @@
         };
     </script>
 </body>
+
 </html>
