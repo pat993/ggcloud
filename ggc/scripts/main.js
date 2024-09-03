@@ -219,7 +219,7 @@ class AudioStream {
 }
 
 // Initialize the AudioStream after both classes are defined
-let stream1 = new AudioStream('wss://hypercube.my.id:9103');
+let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
 // Visibility change handlers
 let bitrate;
