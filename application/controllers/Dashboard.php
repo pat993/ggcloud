@@ -263,9 +263,16 @@ class Dashboard extends CI_Controller
 
          if (count($existing_data) > 0) {
             $end_date = $existing_data[0]['end_date'];
+            $end_date_kompensasi = $existing_data[0]['end_date_kompensasi'];
             $enddate_calc = $this->M_dashboard->date_calc2($durasi, $end_date);
+            $enddate_k_calc = $this->M_dashboard->date_calc2($durasi, $end_date_kompensasi);
 
-            $this->M_dashboard->update_data('assigned', $where, array('end_date' => $enddate_calc));
+            $data = array(
+               'end_date' => $enddate_calc,
+               'end_date_kompensasi' => $enddate_k_calc
+            );
+
+            $this->M_dashboard->update_data('assigned', $where, $data);
 
             $this->M_dashboard->insert_data('purchase', array(
                'package_id' => $paket_id,

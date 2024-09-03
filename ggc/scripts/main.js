@@ -64,43 +64,6 @@ function setStream(br) {
     }, 1000);
 }
 
-let bitrate;
-let blurStartTime = null; // To keep track of the time when the page was blurred
-const blurThreshold = 6000000; // 1 minute in milliseconds
-
-// Visibility change handlers
-ifvisible.on("blur", function() {
-    setStream("524288");
-
-    // Record the time when the page is blurred
-    blurStartTime = Date.now();
-});
-
-ifvisible.on("wakeup", function() {
-    if (blurStartTime) {
-        const blurDuration = Date.now() - blurStartTime;
-        
-        // Check if the blur duration was more than 1 minute
-        if (blurDuration >= blurThreshold) {
-            // Remove elements with the class name 'device-view'
-            removeDeviceViewElements();
-            
-            // Refresh the page
-            location.reload();
-        } else {
-            // Set stream based on bitrate if blur duration was less than 1 minute
-            if (bitrate) {
-                setStream(bitrate);
-            } else {
-                setStream("2524288");
-            }
-        }
-        
-        // Reset blurStartTime after processing wakeup event
-        blurStartTime = null;
-    }
-});
-
 function removeDeviceViewElements() {
     // Select all elements with the class 'device-view'
     const deviceViewElements = document.querySelectorAll('.device-view');
@@ -132,3 +95,176 @@ function stream_quality() {
         document.getElementById("in_max_h").value = "1080";
     }
 }
+
+// Define CircularBuffer class first
+class CircularBuffer {
+    constructor(size) {
+        this.buffer = new Float32Array(size);
+        this.size = size;
+        this.writePointer = 0;
+        this.readPointer = 0;
+    }
+
+    write(data) {
+        for (let i = 0; i < data.length; i++) {
+            this.buffer[this.writePointer] = data[i];
+            this.writePointer = (this.writePointer + 1) % this.size;
+        }
+    }
+
+    read(size) {
+        const output = new Float32Array(size);
+        for (let i = 0; i < size; i++) {
+            output[i] = this.buffer[this.readPointer];
+            this.readPointer = (this.readPointer + 1) % this.size;
+        }
+        return output;
+    }
+
+    available() {
+        return (this.writePointer - this.readPointer + this.size) % this.size;
+    }
+}
+
+// Define AudioStream class
+class AudioStream {
+    constructor(wsUrl, sampleRate = 10000, targetLatency = 100) {
+        this.wsUrl = wsUrl;
+        this.sampleRate = sampleRate;
+        this.targetLatency = targetLatency;
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate });
+        this.gainNode = this.audioContext.createGain();
+        this.channels = 1;
+        this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
+        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4); // 4x buffer for safety
+        this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
+        this.isMuted = false; // Track if audio is muted
+        this.initAudio();
+        this.setupWebSocket();
+    }
+
+    initAudio() {
+        this.scriptNode = this.audioContext.createScriptProcessor(this.bufferSize, this.channels, this.channels);
+        this.scriptNode.onaudioprocess = this.processAudio.bind(this);
+        this.scriptNode.connect(this.gainNode);
+        this.gainNode.connect(this.audioContext.destination);
+    }
+
+    setupWebSocket() {
+        this.ws = new WebSocket(this.wsUrl);
+        this.ws.binaryType = 'arraybuffer';
+
+        this.ws.onmessage = async (event) => {
+            if (this.isMuted) return; // Skip processing if muted
+
+            const arrayBuffer = event.data;
+            const int16Array = new Int16Array(arrayBuffer);
+            const floatArray = new Float32Array(int16Array.length);
+            for (let i = 0; i < int16Array.length; i++) {
+                floatArray[i] = int16Array[i] / 32768.0;
+            }
+            this.circularBuffer.write(floatArray);
+        };
+
+        this.ws.onopen = () => console.log('WebSocket connected');
+        this.ws.onclose = () => {
+            console.log('WebSocket disconnected');
+            this.muteAudio(true); // Mute audio on WebSocket close
+        };
+        this.ws.onerror = (error) => console.error('WebSocket error:', error);
+    }
+
+    processAudio(audioProcessingEvent) {
+        const outputBuffer = audioProcessingEvent.outputBuffer;
+        const channelData = [];
+        for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+            channelData.push(outputBuffer.getChannelData(channel));
+        }
+
+        const availableSamples = this.circularBuffer.available() / this.channels;
+        if (availableSamples >= outputBuffer.length) {
+            const data = this.circularBuffer.read(outputBuffer.length * this.channels);
+            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+                for (let sample = 0; sample < outputBuffer.length; sample++) {
+                    channelData[channel][sample] = data[sample * this.channels + channel];
+                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
+                }
+            }
+        } else {
+            console.warn('Buffer underrun');
+            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+                for (let sample = 0; sample < outputBuffer.length; sample++) {
+                    channelData[channel][sample] = this.lastSampleData[sample * this.channels + channel];
+                }
+            }
+        }
+    }
+
+    muteAudio(mute) {
+        this.isMuted = mute;
+        this.gainNode.gain.value = mute ? 0 : 1; // Set gain to 0 to mute, 1 to unmute
+    }
+
+    closeWebSocket() {
+        if (this.ws) {
+            this.ws.close();
+        }
+    }
+
+    reconnectWebSocket() {
+        if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
+            this.setupWebSocket();
+        }
+    }
+}
+
+// Initialize the AudioStream after both classes are defined
+let stream1 = new AudioStream('wss://hypercube.my.id:9103');
+
+// Visibility change handlers
+let bitrate;
+let blurStartTime = null; // To keep track of the time when the page was blurred
+const blurThreshold = 60000; // 1 minute in milliseconds
+
+ifvisible.on("blur", function() {
+    setStream("524288");
+
+    // Record the time when the page is blurred
+    blurStartTime = Date.now();
+
+    // Close the WebSocket connection and mute audio when the page is blurred
+    if (stream1) {
+        stream1.closeWebSocket();
+        stream1.muteAudio(true); // Mute audio on blur
+    }
+});
+
+ifvisible.on("wakeup", function() {
+    if (blurStartTime) {
+        const blurDuration = Date.now() - blurStartTime;
+
+        // Check if the blur duration was more than 1 minute
+        if (blurDuration >= blurThreshold) {
+            // Remove elements with the class name 'device-view'
+            removeDeviceViewElements();
+
+            // Refresh the page
+            location.reload();
+        } else {
+            // Reconnect the WebSocket and unmute audio if needed
+            if (stream1) {
+                stream1.reconnectWebSocket();
+                stream1.muteAudio(false); // Unmute audio on wakeup
+            }
+
+            if (bitrate) {
+                setStream(bitrate);
+            } else {
+                setStream("2524288");
+            }
+        }
+
+        // Reset blurStartTime after processing wakeup event
+        blurStartTime = null;
+    }
+});
