@@ -27,10 +27,12 @@
     <div class="DraggableDiv">
         <button class="btn btn-dark rounded-xl" id="fullscreen-toggle"><i class="fas fa-expand" style="font-size: 10px;"></i></button>
         <button class="btn btn-dark rounded-xl mt-1" id="slide-toggle"><i class="fas fa-ellipsis-h" style="font-size: 10px;"></i></button>
+        <button class="btn btn-dark rounded-xl mt-1" id="audio-toggle"><i class="fas fa-volume-up" style="font-size: 10px;"></i></button>
+
     </div>
 
     <script>
-        let audio_port = <?= $audio_port; ?>
+        let audio_port = <?= $audio_port; ?>;
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -39,6 +41,7 @@
     <script src="/ggc/scripts/custom.js"></script>
     <script src="/ggc/draggable.js"></script>
     <script src="/ggc/scripts/ifvisible.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="/ggc/scripts/main.js"></script>
 
 </body>
