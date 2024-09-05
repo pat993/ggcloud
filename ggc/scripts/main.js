@@ -48,6 +48,8 @@ function stream_quality() {
     }
 }
 
+let visible_status = true;
+
 class CircularBuffer {
     constructor(size) {
         this.buffer = new Float32Array(size);
@@ -137,7 +139,7 @@ class AudioStream {
             this.muteAudio(true); 
             this.stopPing(); 
             this.updateLatencyDisplay('Disconnected'); // Show disconnected status
-            if (!this.isMuted) { // Only reconnect if not muted
+            if (visible_status == true) { // Only reconnect if not muted
                 setTimeout(() => this.reconnectWebSocket(), 1000); 
             }
         };
@@ -249,6 +251,7 @@ let blurStartTime = null;
 const blurThreshold = 60000;
 
 ifvisible.on("blur", function() {
+    visible_status = false;
     setStream("524288");
     blurStartTime = Date.now();
 
@@ -259,6 +262,7 @@ ifvisible.on("blur", function() {
 });
 
 ifvisible.on("wakeup", function() {
+    visible_status = true;
     if (blurStartTime) {
         const blurDuration = Date.now() - blurStartTime;
 
