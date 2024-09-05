@@ -136,7 +136,7 @@ class AudioStream {
             console.log('WebSocket disconnected');
             this.muteAudio(true); 
             this.stopPing(); 
-            this.updateLatencyDisplay('Disconnected');
+            this.updateLatencyDisplay('Disconnected'); // Show disconnected status
             if (!this.isMuted) { // Only reconnect if not muted
                 setTimeout(() => this.reconnectWebSocket(), 1000); 
             }
@@ -197,9 +197,9 @@ class AudioStream {
     }
 
     reconnectWebSocket() {
-        this.updateLatencyDisplay('Reconnecting');
+        this.updateLatencyDisplay('Reconnecting'); // Update status to Reconnecting
         if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
-            this.setupWebSocket();
+            this.setupWebSocket(); // Reinitialize WebSocket connection
         }
     }
 
@@ -229,17 +229,17 @@ class AudioStream {
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
                 }
             } else {
-                // Retry after a short delay if the element is not yet available
-                setTimeout(updateDisplay, 100);
+                setTimeout(updateDisplay, 100); // Retry after a short delay if the element is not yet available
             }
         };
-        
+    
         updateDisplay();
     }
 }
 
 // Initialize the AudioStream after both classes are defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
+
 
 let isMuted = false; // Define isMuted in the global scope
 
