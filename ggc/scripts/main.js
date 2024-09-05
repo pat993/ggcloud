@@ -48,7 +48,6 @@ function stream_quality() {
     }
 }
 
-// Define CircularBuffer class
 class CircularBuffer {
     constructor(size) {
         this.buffer = new Float32Array(size);
@@ -78,7 +77,6 @@ class CircularBuffer {
     }
 }
 
-// Define AudioStream class
 class AudioStream {
     constructor(wsUrl, sampleRate = 10000, targetLatency = 100) {
         this.wsUrl = wsUrl;
@@ -88,9 +86,13 @@ class AudioStream {
         this.gainNode = this.audioContext.createGain();
         this.channels = 1;
         this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
-        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4); // 4x buffer for safety
+        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4); 
         this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
-        this.isMuted = false; // Track if audio is muted
+        this.isMuted = false; 
+        this.pingInterval = null; 
+        this.pingStartTime = null;
+        this.latencyDisplay = document.getElementById('latency-display');
+        this.lastPingTime = null;
         this.initAudio();
         this.setupWebSocket();
     }
@@ -109,21 +111,40 @@ class AudioStream {
         this.ws.onmessage = async (event) => {
             if (this.isMuted) return;
 
-            const arrayBuffer = event.data;
-            const int16Array = new Int16Array(arrayBuffer);
-            const floatArray = new Float32Array(int16Array.length);
-            for (let i = 0; i < int16Array.length; i++) {
-                floatArray[i] = int16Array[i] / 32768.0;
+            if (event.data === 'pong') {
+                const pingTime = Date.now() - this.pingStartTime;
+                this.lastPingTime = pingTime;
+                this.updateLatencyDisplay();
+            } else {
+                const arrayBuffer = event.data;
+                const int16Array = new Int16Array(arrayBuffer);
+                const floatArray = new Float32Array(int16Array.length);
+                for (let i = 0; i < int16Array.length; i++) {
+                    floatArray[i] = int16Array[i] / 32768.0;
+                }
+                this.circularBuffer.write(floatArray);
             }
-            this.circularBuffer.write(floatArray);
         };
 
-        this.ws.onopen = () => console.log('WebSocket connected');
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.muteAudio(false); 
+            this.startPing(); 
+        };
+
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.muteAudio(true);
+            this.muteAudio(true); 
+            this.stopPing(); 
+            this.updateLatencyDisplay('Disconnected');
+            if (!this.isMuted) { // Only reconnect if not muted
+                setTimeout(() => this.reconnectWebSocket(), 1000); 
+            }
         };
-        this.ws.onerror = (error) => console.error('WebSocket error:', error);
+
+        this.ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
     }
 
     processAudio(audioProcessingEvent) {
@@ -132,9 +153,9 @@ class AudioStream {
         for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
             channelData.push(outputBuffer.getChannelData(channel));
         }
-    
+
         const availableSamples = this.circularBuffer.available() / this.channels;
-    
+
         if (availableSamples >= outputBuffer.length) {
             const data = this.circularBuffer.read(outputBuffer.length * this.channels);
             for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
@@ -176,9 +197,44 @@ class AudioStream {
     }
 
     reconnectWebSocket() {
+        this.updateLatencyDisplay('Reconnecting');
         if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
             this.setupWebSocket();
         }
+    }
+
+    startPing() {
+        this.pingInterval = setInterval(() => {
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.pingStartTime = Date.now();
+                this.ws.send('ping');
+            }
+        }, 3000);
+    }
+
+    stopPing() {
+        if (this.pingInterval) {
+            clearInterval(this.pingInterval);
+            this.pingInterval = null;
+        }
+    }
+
+    updateLatencyDisplay(status = null) {
+        const updateDisplay = () => {
+            const latencyDisplay = document.getElementById('latency-display');
+            if (latencyDisplay) {
+                if (status) {
+                    latencyDisplay.innerHTML = status; // Use innerHTML to handle HTML content
+                } else if (this.lastPingTime !== null) {
+                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
+                }
+            } else {
+                // Retry after a short delay if the element is not yet available
+                setTimeout(updateDisplay, 100);
+            }
+        };
+        
+        updateDisplay();
     }
 }
 
