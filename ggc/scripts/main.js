@@ -1,84 +1,3 @@
-let isMuted = false; // Define isMuted in the global scope
-
-// Visibility change handlers
-let bitrate;
-let blurStartTime = null;
-const blurThreshold = 60000;
-
-ifvisible.on("blur", function() {
-    visible_status = false;
-    setStream("524288");
-    blurStartTime = Date.now();
-
-    if (stream1) {
-        stream1.closeWebSocket();
-        stream1.muteAudio(true);
-    }
-});
-
-ifvisible.on("wakeup", function() {
-    visible_status = true;
-    if (blurStartTime) {
-        const blurDuration = Date.now() - blurStartTime;
-
-        if (blurDuration >= blurThreshold) {
-            removeDeviceViewElements();
-            location.reload();
-        } else {
-            if (stream1) {
-                stream1.reconnectWebSocket();
-                stream1.muteAudio(false);
-            }
-
-            if (bitrate) {
-                setStream(bitrate);
-            } else {
-                setStream("2524288");
-            }
-        }
-
-        blurStartTime = null;
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
-        $(".control-wrapper").animate({ height: "toggle" });
-    }, 1000);
-    
-    $("#slide-toggle").click(function() {
-        $(".control-wrapper").animate({ height: "toggle" });
-        
-        if ($('.more-box').is(':visible')) {
-            $('#input_show_more').trigger('click');
-        }
-    });
-
-    $("#fullscreen-toggle").click(function() {
-        if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen();
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            }
-        }
-    });
-
-    $("#audio-toggle").click(function() {
-        isMuted = !isMuted;
-        stream1.muteAudio(isMuted);
-
-        // Toggle FontAwesome icons
-        const icon = $(this).find('i');
-        if (isMuted) {
-            icon.removeClass('fa-volume-up').addClass('fa-volume-mute'); // Change to mute icon
-        } else {
-            icon.removeClass('fa-volume-mute').addClass('fa-volume-up'); // Change to unmute icon
-        }
-    });
-});
-
-
 // Mobile browser detection
 function isMobileBrowser() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -86,24 +5,6 @@ function isMobileBrowser() {
 
 if (isMobileBrowser()) {
     $('.DraggableDiv').draggableTouch();
-}
-
-// Stream quality control
-function setStream(br) {
-    document.getElementById("in_bitrate").value = br;
-    setTimeout(function() {
-        const changeVideoBtn = document.getElementById("btn_change_video");
-        if (changeVideoBtn) {
-            changeVideoBtn.click();
-        }
-    }, 1000);
-}
-
-function removeDeviceViewElements() {
-    const deviceViewElements = document.querySelectorAll('.device-view');
-    deviceViewElements.forEach(element => {
-        element.remove();
-    });
 }
 
 function stream_quality() {
@@ -322,3 +223,101 @@ class AudioStream {
 
 // Initialize the AudioStream after both classes are defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
+
+let isMuted = false; // Define isMuted in the global scope
+
+// Visibility change handlers
+let bitrate;
+let blurStartTime = null;
+const blurThreshold = 600000;
+
+ifvisible.on("blur", function() {
+    visible_status = false;
+    setStream("524288");
+    blurStartTime = Date.now();
+
+    if (stream1) {
+        stream1.closeWebSocket();
+        stream1.muteAudio(true);
+    }
+});
+
+ifvisible.on("wakeup", function() {
+    visible_status = true;
+    if (blurStartTime) {
+        const blurDuration = Date.now() - blurStartTime;
+
+        if (blurDuration >= blurThreshold) {
+            removeDeviceViewElements();
+            location.reload();
+        } else {
+            if (stream1) {
+                stream1.reconnectWebSocket();
+                stream1.muteAudio(false);
+            }
+
+            if (bitrate) {
+                setStream(bitrate);
+            } else {
+                setStream("2524288");
+            }
+        }
+
+        blurStartTime = null;
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+        $(".control-wrapper").animate({ height: "toggle" });
+    }, 1000);
+    
+    $("#slide-toggle").click(function() {
+        $(".control-wrapper").animate({ height: "toggle" });
+        
+        if ($('.more-box').is(':visible')) {
+            $('#input_show_more').trigger('click');
+        }
+    });
+
+    $("#fullscreen-toggle").click(function() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+    });
+
+    $("#audio-toggle").click(function() {
+        isMuted = !isMuted;
+        stream1.muteAudio(isMuted);
+
+        // Toggle FontAwesome icons
+        const icon = $(this).find('i');
+        if (isMuted) {
+            icon.removeClass('fa-volume-up').addClass('fa-volume-mute'); // Change to mute icon
+        } else {
+            icon.removeClass('fa-volume-mute').addClass('fa-volume-up'); // Change to unmute icon
+        }
+    });
+});
+
+// Stream quality control
+function setStream(br) {
+    document.getElementById("in_bitrate").value = br;
+    setTimeout(function() {
+        const changeVideoBtn = document.getElementById("btn_change_video");
+        if (changeVideoBtn) {
+            changeVideoBtn.click();
+        }
+    }, 1000);
+}
+
+function removeDeviceViewElements() {
+    const deviceViewElements = document.querySelectorAll('.device-view');
+    deviceViewElements.forEach(element => {
+        element.remove();
+    });
+}
