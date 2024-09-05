@@ -1,9 +1,9 @@
 <!--start of page content, add your stuff here-->
 <div style="max-width: 800px; margin: auto" class="page-content header-clear-medium">
 
-   <div style="background-color: #FD8A8A; color: white; margin: 5px; padding: 5px 15px 5px 15px; border-radius: 10px; margin-bottom: 15px;">
+   <!-- <div style="background-color: #FD8A8A; color: white; margin: 5px; padding: 5px 15px 5px 15px; border-radius: 10px; margin-bottom: 15px;">
       Perhatian : untuk saat ini player belum support audio
-   </div>
+   </div> -->
 
    <div class="card card-style preload-img mb-2" data-src="images/banner-ggc_min.png" data-card-height="150">
       <div class="card-center ms-3">
