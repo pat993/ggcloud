@@ -125,7 +125,7 @@
   </div>
 
   <div id="menu-create-voucher" class="menu menu-box-top menu-box-detached rounded-m" style="max-width: 900px; margin: auto">
-     <div class="content" style="overflow: auto; height: 90%">
+     <div class="content" style="overflow: auto; max-height: 90vh">
         <div class="d-flex ms-3 me-3 mb-3">
            <div>
               <h1>Generate Voucher</h1>
