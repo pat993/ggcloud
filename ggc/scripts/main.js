@@ -224,12 +224,30 @@ class AudioStream {
 // Initialize the AudioStream after both classes are defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
+// Stream quality control
+function setStream(br) {
+    document.getElementById("in_bitrate").value = br;
+    setTimeout(function() {
+        const changeVideoBtn = document.getElementById("btn_change_video");
+        if (changeVideoBtn) {
+            changeVideoBtn.click();
+        }
+    }, 1000);
+}
+
+function removeDeviceViewElements() {
+    const deviceViewElements = document.querySelectorAll('.device-view');
+    deviceViewElements.forEach(element => {
+        element.remove();
+    });
+}
+
 let isMuted = false; // Define isMuted in the global scope
 
 // Visibility change handlers
 let bitrate;
 let blurStartTime = null;
-const blurThreshold = 600000;
+const blurThreshold = 60000;
 
 ifvisible.on("blur", function() {
     visible_status = false;
@@ -303,21 +321,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-// Stream quality control
-function setStream(br) {
-    document.getElementById("in_bitrate").value = br;
-    setTimeout(function() {
-        const changeVideoBtn = document.getElementById("btn_change_video");
-        if (changeVideoBtn) {
-            changeVideoBtn.click();
-        }
-    }, 1000);
-}
-
-function removeDeviceViewElements() {
-    const deviceViewElements = document.querySelectorAll('.device-view');
-    deviceViewElements.forEach(element => {
-        element.remove();
-    });
-}
