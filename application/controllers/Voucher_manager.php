@@ -67,6 +67,11 @@ class Voucher_manager extends CI_Controller
       $this->load->view('ajax/a_daftar_paket.php', $data);
    }
 
+   function formatRupiah($nominal)
+   {
+      return number_format($nominal, 0, ',', '.');
+   }
+
    public function add_voucher()
    {
       $kode_voucher = $this->input->post('txt_kode_voucher');
@@ -138,35 +143,37 @@ class Voucher_manager extends CI_Controller
       // Email body content
       $mailContent = "
       <div style='background-color: #EEF1FF; padding: 15px 0 15px 0'>
-         <div style='max-width: 500px;  padding: 10px 10px 20px 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
-            <div style='text-align: center; margin-top: 15px'>
-               <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
-            </div>
-            <div style='padding: 10px; border-radius: 10px'>
-               <h3 style='margin-bottom: 2px'>Terima Kasih 🧡</h3>
-               Gunakan kode voucher di bawah untuk menambahkan perangkat kamu <br>
-               Jenis Paket : " . $info_paket[0]['keterangan'] . "
-               <div style='background-color:  #f2f2f2; border-radius: 20px; font-size: 20px; padding: 10px; margin: 20px 0 20px 0; text-align: center; color: green'>
-                  " . $kode_voucher . "
-               </div>
-               <small><i>Voucher Expiration : " . $expired_konversi . "</i></small>
-               <br>
-               <br>
-               <div style='background-color: #f2f2f2;  margin-top: 5px; padding: 5px'>
-                  <strong>Detail Pembelian :</strong><br>
-               </div>
-               <div style='border: 1px solid #f2f2f2; padding : 5px'>
-                  Tangal Pembelian : " . date("d F Y") . "<br>
-                  Order ID : " . $order_id . "<br>
-                  Subtotal : " . $info_paket[0]['harga'] . " IDR<br>
-               </div>
+        <div style='max-width: 500px;  padding: 10px 10px 20px 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
+           <div style='text-align: center; margin-top: 15px'>
+              <img src='https://dl.dropboxusercontent.com/scl/fi/95ukw80o56g8fd2d1nhiz/ggcloud.png?rlkey=ar7pyu5rgc1g8gz3q1ndxn94j&st=j2cpr87x&dl=0' width='70px' ></a>
+           </div>
+           <div style='padding: 10px; border-radius: 10px'>
+              <h3 style='margin-bottom: 2px'>Terima Kasih 🧡</h3>
+              Gunakan kode voucher di bawah untuk menambahkan perangkat kamu <br>
+              Jenis Paket : " . $info_paket[0]['keterangan'] . "
+              <div style='background-color:  #f2f2f2; border-radius: 20px; font-size: 20px; padding: 10px; margin: 20px 0 20px 0; text-align: center; color: green'>
+                 " . $kode_voucher . "
+              </div>
+              <small><i>Voucher Expiration : " . $expired_konversi . "</i></small>
+              <br>
+              <br>
+              <div style='background-color: #f2f2f2;  margin-top: 5px; padding: 5px'>
+                 <strong>Detail Pembelian :</strong><br>
+              </div>
+              <div style='border: 1px solid #f2f2f2; padding : 5px'>
+                 Tangal Pembelian : " . date("d F Y") . "<br>
+                 Order ID : " . $order_id . "<br>
+                 Subtotal : " . $this->formatRupiah($info_paket[0]['harga']) . " IDR<br>
+              </div>
 
-               <br>
-               <br>
-               <small><b>Penting!</b> Segera lakukan klaim voucher pada akun kamu sebelum tanggal expired!</small>
-            </div>
-         </div>
-      </div>";
+              <br>
+              <small><b>Penting!</b> Segera lakukan klaim voucher pada akun kamu sebelum tanggal expired!</small>
+              <br>
+              <br>
+              <a style='font-size: 9px; color: #cfcfcf; float: right'>© " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
+           </div>
+        </div>
+     </div>";
 
       $mail->Body = $mailContent;
 
