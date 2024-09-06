@@ -1,3 +1,12 @@
+<?php
+
+function formatRupiah($nominal)
+{
+    return number_format($nominal, 0, ',', '.');
+}
+
+?>
+
 <div style="max-width: 800px; margin: auto" class="page-content pb-0 header-clear-medium">
     <div class="content mb-2">
 
@@ -77,15 +86,15 @@
                                                     <h5 class="font-500"><?= $invoice_data_p['nama_paket']; ?></h5>
                                                 </div>
                                                 <div class="ms-auto">
-                                                    <h5>IDR <?= $invoice_data_p['harga']; ?> </h5>
+                                                    <h5><?= formatRupiah($invoice_data_p['harga']); ?> IDR</h5>
                                                 </div>
                                             </div>
                                             <div class="d-flex mb-2">
                                                 <div>
-                                                    <h5 class="opacity-50 font-500">PPNPN</h5>
+                                                    <h5 class="opacity-50 font-500">PPNPN*</h5>
                                                 </div>
                                                 <div class="ms-auto">
-                                                    <h5>IDR 0 </h5>
+                                                    <h5>0 IDR</h5>
                                                 </div>
                                             </div>
                                             <div class="d-flex mb-3">
@@ -93,7 +102,7 @@
                                                     <h4 class="font-700">Grand Total</h4>
                                                 </div>
                                                 <div class="ms-auto">
-                                                    <h3>IDR <?= $invoice_data_p['harga']; ?> </h3>
+                                                    <h3><?= formatRupiah($invoice_data_p['harga']); ?> IDR</h3>
                                                 </div>
                                             </div>
 

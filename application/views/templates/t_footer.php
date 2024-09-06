@@ -144,14 +144,19 @@
 
    $(function() {
       var t = $('#tb_device2').DataTable({
-         order: [
-            [0, 'desc'] // Order by the first column, which is the only column
-         ],
          "pageLength": 10,
-         "dom": '<"top"f>rt<"bottom"ip><"clear">', // Custom layout to show only the search box on top
-         "paging": true, // Ensure pagination is enabled
-         "info": false, // Disable table information (e.g., "Showing 1 to 10 of 50 entries")
-         "lengthChange": false // Hide the dropdown to select the number of entries to show
+         "dom": '<"top"f>rt<"bottom"ip><"clear">',
+         "paging": true,
+         "info": false,
+         "lengthChange": false,
+         "order": [
+            [0, 'desc']
+         ], // Mengatur urutan kolom pertama dalam urutan menurun
+         "columnDefs": [{
+               "type": "num",
+               "targets": 0
+            } // Mengatur kolom pertama sebagai angka
+         ]
       });
 
       // Hide the "Show entries" dropdown
