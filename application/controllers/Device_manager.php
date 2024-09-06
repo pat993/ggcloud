@@ -38,6 +38,8 @@ class Device_manager extends CI_Controller
       foreach ($last_port as $last_port_r) {
          $data['last_port'] = $last_port_r['port'] + 1;
          $data['last_port_f'] = $last_port_r['port_forward'] + 1;
+         $data['last_port_a'] = $last_port_r['port_audio'] + 1;
+         $data['last_port_a_f'] = $last_port_r['port_audio_f'] + 1;
       }
 
       $this->load->view('templates/t_header');
@@ -52,6 +54,8 @@ class Device_manager extends CI_Controller
       $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
       $port_f = $this->input->post('txt_port_f');
+      $port_a = $this->input->post('txt_port_a');
+      $port_a_f = $this->input->post('txt_port_a_f');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
 
@@ -60,12 +64,14 @@ class Device_manager extends CI_Controller
          'ip_local' => $ip_local,
          'port' => $port,
          'port_forward' => $port_f,
+         'port_audio' => $port_a,
+         'port_audio_f' => $port_a_f,
          'name' => $name,
          'type' => $type
       );
 
       $token = "0000_AVAILABLEDEVICE";
-      if ($this->add_config($ip, $port, $port_f, $token) == true) {
+      if ($this->add_config($ip, $port, $port_f, $token, $port_a, $port_a_f) == true) {
          $this->M_device_manager->insert_data('device', $data);
          // $this->update_config($ip, $port);
 
@@ -77,7 +83,7 @@ class Device_manager extends CI_Controller
       redirect($_SERVER['HTTP_REFERER']);
    }
 
-   public function add_config($ip, $access_port, $forward_port, $access_token)
+   public function add_config($ip, $access_port, $forward_port, $access_token, $port_a, $port_a_f)
    {
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
@@ -89,6 +95,7 @@ class Device_manager extends CI_Controller
       // Configuration to add
       $config_to_add = <<<CONFIG
       frontend ws_frontend_$access_port
+         mode tcp
          bind *:$access_port ssl crt /etc/letsencrypt/live/hypercube.my.id/combination.pem
          acl valid_token_$access_port urlp(token) -m str $access_token
          acl valid_token_$access_port-2 urlp(token) -m str $admin_token
@@ -96,7 +103,18 @@ class Device_manager extends CI_Controller
          use_backend ws_server_$access_port
 
       backend ws_server_$access_port
+         mode tcp
          server ws_$access_port $ip:$forward_port
+
+      frontend ws_frontend_$access_port-audio
+         mode tcp
+         bind *:$port_a ssl crt /etc/letsencrypt/live/hypercube.my.id/combination.pem
+         use_backend ws_server_$access_port-audio
+
+      backend ws_server_$access_port-audio
+         mode tcp
+         server ws_$access_port-audio $ip:$port_a_f
+
          
       CONFIG;
 
@@ -125,6 +143,8 @@ class Device_manager extends CI_Controller
       $ip_local = $this->input->post('txt_ip_local');
       $port = $this->input->post('txt_port');
       $port_f = $this->input->post('txt_port_f');
+      $port_a = $this->input->post('txt_port_a');
+      $port_a_f = $this->input->post('txt_port_a_f');
       $name = $this->input->post('txt_name');
       $type = $this->input->post('txt_type');
 
@@ -137,6 +157,8 @@ class Device_manager extends CI_Controller
          'ip_local' => $ip_local,
          'port' => $port,
          'port_forward' => $port_f,
+         'port_audio' => $port_a,
+         'port_audio_f' => $port_a_f,
          'name' => $name,
          'type' => $type
       );

@@ -40,7 +40,7 @@ class M_device_manager extends CI_Model
 
    function get_last_port($table)
    {
-      $this->db->select('port, port_forward');
+      $this->db->select('port, port_forward, port_audio, port_audio_f');
       $this->db->order_by('port DESC');
       $this->db->limit(1);
 

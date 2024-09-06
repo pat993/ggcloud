@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class M_dashboard extends CI_Model
 {
-   function get_data($table)
+   function get_data($table, $where)
    {
       // Subquery to get kompensasi_total
       $this->db->select('assign_id, SUM(durasi) AS durasi');
@@ -16,7 +16,7 @@ class M_dashboard extends CI_Model
       $this->db->from($table);
       $this->db->join('user', 'user.id = assigned.user_id');
       $this->db->join("($subquery) AS kompensasi_total", 'assigned.id = kompensasi_total.assign_id', 'left');
-      $this->db->where('assigned.status', 'active');
+      $this->db->where($where);
       $this->db->where('assigned.end_date_kompensasi >=', 'NOW()', false); // Ensure proper handling of NOW() in where clause
       $this->db->order_by('assigned.end_date', 'DESC');
 

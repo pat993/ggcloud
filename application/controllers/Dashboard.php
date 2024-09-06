@@ -22,7 +22,7 @@ class Dashboard extends CI_Controller
 
       $where = array(
          'user_id' => $user_id,
-         'status' => 'active'
+         'assigned.status' => 'active'
       );
 
       $data['user_id'] = $user_id;

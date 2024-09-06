@@ -26,12 +26,24 @@ foreach ($device as $result) {
                <input type="text" value="<?= $result["port"]; ?>" name="txt_port">
             </div>
          </td>
+         <td style="width: 70px; vertical-align: middle">Port Audio</td>
+         <td>
+            <div class="input-style has-borders input-style-active">
+               <input type="text" value="<?= $result["port_audio"]; ?>" name="txt_port_a">
+            </div>
+         </td>
       </tr>
       <tr>
          <td style="width: 70px; vertical-align: middle">Port Forward</td>
          <td>
             <div class="input-style has-borders input-style-active">
                <input type="text" value="<?= $result["port_forward"]; ?>" name="txt_port_f">
+            </div>
+         </td>
+         <td style="width: 70px; vertical-align: middle">Port Forward Audio</td>
+         <td>
+            <div class="input-style has-borders input-style-active">
+               <input type="text" value="<?= $result["port_audio_f"]; ?>" name="txt_port_a_f">
             </div>
          </td>
       </tr>

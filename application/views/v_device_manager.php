@@ -82,7 +82,7 @@
   </div>
 
   <div id="menu-create-account" class="menu menu-box-top menu-box-detached rounded-m" style="max-width: 900px; margin: auto">
-     <div class="content">
+     <div class="content" style="overflow: auto;">
         <div class="d-flex ms-3 me-3 mb-3">
            <form method="POST" action="<?= base_url() ?>device_manager/add_device/">
               <!-- <div class="ms-auto"> -->
@@ -102,13 +102,27 @@
               Remote IP Address:
               <input type="text" class="form-control validate-name" id="txt_ip" name="txt_ip_remote">
            </div>
-           <div class="input-style has-borders no-icon mb-4 input-style-active">
-              Port :
-              <input type="number" class="form-control validate-number" id="txt_port" name="txt_port" value="<?= $last_port; ?>">
-           </div>
-           <div class="input-style has-borders no-icon mb-4 input-style-active">
-              Port Forward (Mikrotik, ODP, dsb) :
-              <input type="number" class="form-control validate-number" id="txt_port_f" name="txt_port_f" value="<?= $last_port_f; ?>">
+           <div class="row mb-0">
+              <div class="col-sm">
+                 <div class="input-style has-borders no-icon mb-4 input-style-active">
+                    Port :
+                    <input type="number" class="form-control validate-number" id="txt_port" name="txt_port" value="<?= $last_port; ?>">
+                 </div>
+                 <div class="input-style has-borders no-icon mb-4 input-style-active">
+                    Port Forward (Mikrotik, ODP, dsb) :
+                    <input type="number" class="form-control validate-number" id="txt_port_f" name="txt_port_f" value="<?= $last_port_f; ?>">
+                 </div>
+              </div>
+              <div class="col-sm">
+                 <div class="input-style has-borders no-icon mb-4 input-style-active">
+                    Port Audio :
+                    <input type="number" class="form-control validate-number" id="txt_port_a" name="txt_port_a" value="<?= $last_port_a; ?>">
+                 </div>
+                 <div class="input-style has-borders no-icon mb-4 input-style-active">
+                    Port Forward Audio (Mikrotik, ODP, dsb) :
+                    <input type="number" class="form-control validate-number" id="txt_port_a_f" name="txt_port_a_f" value="<?= $last_port_a_f; ?>">
+                 </div>
+              </div>
            </div>
            <div class="input-style has-borders no-icon mb-4 input-style-active">
               Local IP Address:
