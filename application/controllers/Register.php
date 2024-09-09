@@ -152,12 +152,12 @@ class Register extends CI_Controller
       <div style='background-color: #EEF1FF; padding: 15px 0 15px 0'>
         <div style='max-width: 500px;  padding: 10px 10px 20px 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
             <div style='text-align: center; margin-top: 15px'>
-              <img src='https://dl.dropboxusercontent.com/scl/fi/95ukw80o56g8fd2d1nhiz/ggcloud.png?rlkey=ar7pyu5rgc1g8gz3q1ndxn94j&st=j2cpr87x&dl=0' width='70px' ></a>
+              <img src='https://dl.dropboxusercontent.com/scl/fi/s9ip00dlrkvyd1rxcnbc2/ggcloud_min.png?rlkey=6wnd9cs0rh4w5aqr4yngti2ca&st=d2ix8cfz&dl=0' width='70px' ></a>
            </div>
            <br>
            <div style='padding: 10px; border-radius: 10px'>
               <h3 style='margin-bottom: 1px;'>Aktivasi Pendaftaran</h3><br>
-              Dear " . $username . ",<br>
+              Dear <b>" . $username . "</b>,<br>
               Terima kasih sudah mendaftar di GGCloud.id, silahkan klik tombol di bawah ini untuk melakukan aktivasi akun kamu<br>
               <br>
               

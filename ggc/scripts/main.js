@@ -30,6 +30,19 @@ function stream_quality() {
     }
 }
 
+// Function to read a cookie by name
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) {
+        return parts.pop().split(';').shift();
+    }
+    return null;
+}
+
+// Get the audio port value from the 'audio_port' cookie
+const audio_port = getCookie('venus') || 'error'; // Replace 'default_port_value' with your default port if cookie is not set
+
 let visible_status = true;
 
 class CircularBuffer {
@@ -118,10 +131,9 @@ class AudioStream {
 
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.muteAudio(true); 
             this.stopPing(); 
-            this.updateLatencyDisplay('Disconnected'); // Show disconnected status
-            if (visible_status == true) { // Only reconnect if not muted
+            this.updateLatencyDisplay('Disconnected'); 
+            if (visible_status == true) { 
                 setTimeout(() => this.reconnectWebSocket(), 1000); 
             }
         };
@@ -181,9 +193,9 @@ class AudioStream {
     }
 
     reconnectWebSocket() {
-        this.updateLatencyDisplay('Reconnecting'); // Update status to Reconnecting
+        this.updateLatencyDisplay('Reconnecting'); 
         if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
-            this.setupWebSocket(); // Reinitialize WebSocket connection
+            this.setupWebSocket(); 
         }
     }
 
@@ -208,12 +220,12 @@ class AudioStream {
             const latencyDisplay = document.getElementById('latency-display');
             if (latencyDisplay) {
                 if (status) {
-                    latencyDisplay.innerHTML = status; // Use innerHTML to handle HTML content
+                    latencyDisplay.innerHTML = status; 
                 } else if (this.lastPingTime !== null) {
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
                 }
             } else {
-                setTimeout(updateDisplay, 100); // Retry after a short delay if the element is not yet available
+                setTimeout(updateDisplay, 100); 
             }
         };
     
@@ -242,9 +254,8 @@ function removeDeviceViewElements() {
     });
 }
 
-let isMuted = false; // Define isMuted in the global scope
+let isMuted = false; 
 
-// Visibility change handlers
 let bitrate;
 let blurStartTime = null;
 const blurThreshold = 60000;
@@ -255,7 +266,6 @@ ifvisible.on("blur", function() {
     blurStartTime = Date.now();
 
     if (stream1) {
-        stream1.closeWebSocket();
         stream1.muteAudio(true);
     }
 });
@@ -312,12 +322,12 @@ document.addEventListener('DOMContentLoaded', function() {
         isMuted = !isMuted;
         stream1.muteAudio(isMuted);
 
-        // Toggle FontAwesome icons
         const icon = $(this).find('i');
         if (isMuted) {
-            icon.removeClass('fa-volume-up').addClass('fa-volume-mute'); // Change to mute icon
+            icon.removeClass('fa-volume-up').addClass('fa-volume-mute');
         } else {
-            icon.removeClass('fa-volume-mute').addClass('fa-volume-up'); // Change to unmute icon
+            icon.removeClass('fa-volume-mute').addClass('fa-volume-up');
         }
     });
 });
+

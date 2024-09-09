@@ -239,32 +239,33 @@ class Forget extends CI_Controller
         // Email body content
         $mailContent = "
       <div style='background-color: #EEF1FF; padding: 15px 0 15px 0'>
-         <div style='max-width: 500px;  padding: 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
-            <div style='text-align: center; margin-top: 15px'>
-               <img src='https://ggcloud.id/images/ggcloud.png' width='70px' ></a>
-            </div>
-            <div style='padding: 10px; border-radius: 10px'>
-               <h3 style='margin-bottom: 1px'>Permintaan reset password</h3><br>
-               Dear <b>" . $username . "</b>,<br>
-               Anda telah melakukan permintaan reset password, silahkan klik tombol di bawah ini untuk melakukan reset password akun kamu<br>
-               <br>
-               
-               <div style='width: 100%; margin: 10px 0 10px 0; text-align: center; '>
-               <a style='text-decoration: none; background-color: #98A8F8; border: 0; border-radius: 20px; color: white; padding: 15px; ' href='" . base_url() . "forget/reset_password?token=" . $auth_code . "'>
-               RESET PASSWORD
-               </a>
-               </div>
-               <br>
-               Jika anda merasa tidak melakukan permintaan reset password berikut, silahkan abaikan pesan ini.
+        <div style='max-width: 500px;  padding: 10px; border-radius: 10px; margin: auto; background-color: #ffff'>
+           <div style='text-align: center; margin-top: 15px'>
+              <img src='https://dl.dropboxusercontent.com/scl/fi/s9ip00dlrkvyd1rxcnbc2/ggcloud_min.png?rlkey=6wnd9cs0rh4w5aqr4yngti2ca&st=d2ix8cfz&dl=0' width='70px' ></a>
+           </div>
+           <br>
+           <div style='padding: 10px; border-radius: 10px'>
+              <h3 style='margin-bottom: 1px'>Permintaan reset password</h3><br>
+              Dear <b>" . $username . "</b>,<br>
+              Anda telah melakukan permintaan reset password, silahkan klik tombol di bawah ini untuk melakukan reset password akun kamu<br>
+              <br>
+              
+              <div style='width: 100%; margin: 10px 0 10px 0; text-align: center; '>
+              <a style='text-decoration: none; background-color: #98A8F8; border: 0; border-radius: 20px; color: white; padding: 15px; ' href='" . base_url() . "forget/reset_password?token=" . $auth_code . "'>
+              <b>RESET PASSWORD</b>
+              </a>
+              </div>
+              <br>
+              Jika anda merasa tidak melakukan permintaan ini silahkan abaikan pesan.
 
-               <br>
-               <br>
-               Regards,<br>
-               Ggcloud team<br>
-            </div>
-            <div style='text-align: right; color: white'><small>Ggcloud.id</small></div>
-         </div>
-      </div>";
+              <br>
+              <br>
+              Regards,<br>
+              GGCloud team<br>
+              <a style='font-size: 9px; color: #cfcfcf; float: right'>© " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
+           </div>
+        </div>
+     </div>";
 
         $mail->Body = $mailContent;
 

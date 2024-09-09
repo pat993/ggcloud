@@ -29,10 +29,6 @@
         <button class="btn btn-dark rounded-xl mt-1" id="slide-toggle"><i class="fas fa-ellipsis-h" style="font-size: 10px;"></i></button>
     </div>
 
-    <script>
-        let audio_port = <?= $audio_port; ?>;
-    </script>
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="/ggc/bundle.js"></script>
     <script src="/ggc/scripts/bootstrap.min.js"></script>

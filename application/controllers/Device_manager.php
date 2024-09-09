@@ -224,18 +224,19 @@ class Device_manager extends CI_Controller
          }
 
          $data['dev_id'] = $id;
-         $data['audio_port'] = $audio_port;
+         // $data['audio_port'] = $audio_port;
 
          $d_ip = 'hypercube.my.id';
          $d_port = $dev_port;
          $d_name = 'ADMIN CONTROL';
          $d_token = $access_token;
          $d_end_date = date('Y-m-d H:i:s', strtotime(date('Y-m-d H:i:s') . ' +1 day'));
+         $d_audio_port = $audio_port;
 
          // Delay execution for 500 milliseconds
          usleep(500000);
 
-         $this->set_cookie($d_ip, $d_port, $d_name, $d_token, $d_end_date);
+         $this->set_cookie($d_ip, $d_port, $d_name, $d_token, $d_end_date, $d_audio_port);
 
          $this->load->view('v_player_configure', $data);
       } else {
@@ -245,7 +246,7 @@ class Device_manager extends CI_Controller
       }
    }
 
-   public function set_cookie($ip, $port, $nama, $token, $end_date)
+   public function set_cookie($ip, $port, $nama, $token, $end_date, $audio_port)
    {
       // Set the cookie parameters for username
       $ip_cookie = array(
@@ -304,7 +305,7 @@ class Device_manager extends CI_Controller
       $this->input->set_cookie($token_cookie);
 
       // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-      $token_cookie = array(
+      $e_date_cookie = array(
          'name'   => 'bulan',
          'value'  => $end_date,
          'expire' => time() + 1,
@@ -315,7 +316,21 @@ class Device_manager extends CI_Controller
       );
 
       // Set the cookie using the set_cookie function
-      $this->input->set_cookie($token_cookie);
+      $this->input->set_cookie($e_date_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $audio_cookie = array(
+         'name'   => 'venus',
+         'value'  => $audio_port,
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($audio_cookie);
    }
 
    public function unset_cookie()
@@ -377,7 +392,7 @@ class Device_manager extends CI_Controller
       $this->input->set_cookie($token_cookie);
 
       // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
-      $token_cookie = array(
+      $e_date_cookie = array(
          'name'   => 'bulan',
          'value'  => '',
          'expire' => time() + 1,
@@ -388,7 +403,21 @@ class Device_manager extends CI_Controller
       );
 
       // Set the cookie using the set_cookie function
-      $this->input->set_cookie($token_cookie);
+      $this->input->set_cookie($e_date_cookie);
+
+      // Set the cookie parameters for password (Note: storing passwords in cookies is not recommended)
+      $audio_cookie = array(
+         'name'   => 'venus',
+         'value'  => '',
+         'expire' => time() + 1,
+         'path'   => '/',
+         'domain' => '',
+         'secure' => FALSE,
+         'httponly' => FALSE
+      );
+
+      // Set the cookie using the set_cookie function
+      $this->input->set_cookie($audio_cookie);
    }
 
    public function done_configure($id)
