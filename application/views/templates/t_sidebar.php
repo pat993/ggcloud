@@ -113,6 +113,19 @@
 
       <div class="card card-style">
          <div class="content my-0">
+            <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Customer Support</h5>
+            <div class="list-group list-custom-small list-icon-0">
+               <a href="https://wa.me/6282125564158" target="_blank">
+                  <i class="fab font-12 fa-whatsapp bg-green-dark rounded-s"></i>
+                  <span>Whatsapp</span>
+                  <i class="fa fa-angle-right"></i>
+               </a>
+            </div>
+         </div>
+      </div>
+
+      <div class="card card-style">
+         <div class="content my-0">
             <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">System Setting</h5>
             <!-- <h5 class="font-700 text-uppercase opacity-40 font-12 pt-2 mb-0">Navigation</h5> -->
             <div class="list-group list-custom-small list-icon-0">

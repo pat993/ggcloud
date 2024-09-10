@@ -146,7 +146,8 @@ class Dashboard extends CI_Controller
                   ));
 
                   $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
-                     'status_id' => '3'
+                     'status_id' => '3',
+                     'jenis_paket' => $jenis_paket
                   ));
 
                   $this->session->set_flashdata('success', "Success");
