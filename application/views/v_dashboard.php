@@ -46,7 +46,7 @@
 
                ?>
                <div class="splide__slide">
-                  <div data-card-height="180" class="card mx-3 rounded-m shadow-l card-style preload-img" data-src="images/garuda_basic.png">
+                  <div data-card-height="180" class="card mx-3 rounded-m shadow-l card-style preload-img" data-src="images/gforce_v1.png">
                      <div class="card-bottom ms-3 mb-3" style="color: white">
                         <small>HP</small>
                         <div class="progress mt-0 mb-1" style="height:3px; width: 40px">
