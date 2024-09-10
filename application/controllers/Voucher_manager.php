@@ -170,7 +170,7 @@ class Voucher_manager extends CI_Controller
               <small><b>Penting!</b> Segera lakukan klaim voucher pada akun kamu sebelum tanggal expired!</small>
               <br>
               <br>
-              <a style='font-size: 9px; color: #cfcfcf; float: right'>© " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
+              <a style='font-size: 9px; color: #cfcfcf; float: right'>Copyright " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
            </div>
         </div>
      </div>";

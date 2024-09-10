@@ -5,15 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
     <title>Connecting to Server ...</title>
-    <link rel="stylesheet" href="/ggc/main.css">
-    <link rel="stylesheet" href="/ggc/styles/bootstrap.css">
-    <link rel="stylesheet" href="/ggc/styles/style.css">
-    <link rel="stylesheet" href="/ggc/draggable.css">
-    <link rel="stylesheet" href="/ggc/styles/loader.css">
+    <link rel="stylesheet" href="/asset/main.css">
+    <link rel="stylesheet" href="/asset/styles/bootstrap.css">
+    <link rel="stylesheet" href="/asset/styles/style.css">
+    <link rel="stylesheet" href="/asset/draggable.css">
+    <link rel="stylesheet" href="/asset/styles/loader.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,500,500i,700,700i,900,900i|Source+Sans+Pro:300,300i,400,400i,600,600i,700,700i,900,900i&display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.6.0/css/all.min.css" integrity="sha512-ykRBEJhyZ+B/BIJcBuOyUoIxh0OfdICfHPnPfBy7eIiyJv536ojTCsgX8aqrLQ9VJZHGz4tvYyzOM0lkgmQZGw==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="icon" type="image/x-icon" href="/images/ggc_play.png">
-    <link rel="stylesheet" href="/ggc/styles/custom1.css">
+    <link rel="stylesheet" href="/asset/styles/custom.css">
 </head>
 
 <body style="background-color: black; position: relative" class="theme-dark" data-highlight="highlight-red" data-gradient="body-default">
@@ -32,13 +32,12 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="/ggc/bundle.js"></script>
-    <script src="/ggc/scripts/bootstrap.min.js"></script>
-    <script src="/ggc/scripts/custom.js"></script>
-    <script src="/ggc/draggable.js"></script>
-    <script src="/ggc/scripts/ifvisible.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-    <script src="/ggc/scripts/main.js"></script>
+    <script src="/asset/bundle.js"></script>
+    <script src="/asset/scripts/bootstrap.min.js"></script>
+    <script src="/asset/scripts/custom.js"></script>
+    <script src="/asset/draggable.js"></script>
+    <script src="/asset/scripts/ifvisible.js"></script>
+    <script src="/asset/scripts/main.js"></script>
 
 </body>
 

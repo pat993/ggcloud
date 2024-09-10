@@ -262,7 +262,7 @@ class Forget extends CI_Controller
               <br>
               Regards,<br>
               GGCloud team<br>
-              <a style='font-size: 9px; color: #cfcfcf; float: right'>© " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
+              <a style='font-size: 9px; color: #cfcfcf; float: right'>Copyright " . date('Y') . " GGCloud.id. Business Contact: admin@ggcloud.id</a>
            </div>
         </div>
      </div>";
