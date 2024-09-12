@@ -30,7 +30,7 @@
                <?php
 
                $start = strtotime(date('Y-m-d H:i:s'));
-               $end = strtotime($device['end_date']);
+               $end = strtotime($device['end_date_kompensasi']);
 
                $diff = $end - $start;
 
@@ -117,7 +117,7 @@
 <?php
 foreach ($device_list as $result) {
    $start = strtotime(date('Y-m-d H:i:s'));
-   $end = strtotime($result['end_date']);
+   $end = strtotime($result['end_date_kompensasi']);
 
    $diff = $end - $start;
 
@@ -153,7 +153,7 @@ foreach ($device_list as $result) {
                   <td style="width: 150px">
                      <p>Tanggal Selesai</p>
                   </td>
-                  <td><span><?= date('d-m-Y', strtotime($result["end_date"])); ?></span></td>
+                  <td><span><?= date('d-m-Y', strtotime($result["end_date_kompensasi"])); ?></span></td>
                </tr>
                <tr>
                   <td style="width: 150px">
