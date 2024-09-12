@@ -83,19 +83,19 @@ class AudioStream {
         this.gainNode = this.audioContext.createGain();
         this.channels = 1;
         this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
-        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4); 
+        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
         this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
-        this.isMuted = false; 
-        this.pingInterval = null; 
+        this.isMuted = false;
+        this.pingInterval = null;
         this.pingStartTime = null;
         this.latencyDisplay = document.getElementById('latency-display');
         this.lastPingTime = null;
+        this.highPingCount = 0; // Initialize high ping counter
+        this.normalPingCount = 0; // Initialize normal ping counter
+        this.originalBitrate = null; // Original bitrate chosen by the user
+        this.currentBitrate = null; // Current bitrate being used
         this.initAudio();
         this.setupWebSocket();
-
-        this.highPingCount = 0;
-        this.normalPingCount = 0;
-        this.originalBitrate = null; // To store the current bitrate
     }
 
     initAudio() {
@@ -224,48 +224,55 @@ class AudioStream {
             const latencyDisplay = document.getElementById('latency-display');
             if (latencyDisplay) {
                 if (status) {
-                    latencyDisplay.innerHTML = status; 
+                    latencyDisplay.innerHTML = status;
                 } else if (this.lastPingTime !== null) {
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
-    
+
                     // Check ping conditions and adjust bitrate
                     if (this.lastPingTime > 200) {
                         this.highPingCount++;
                         this.normalPingCount = 0;
-                    } else if (this.lastPingTime < 150) {
+                    } else if (this.lastPingTime < 190) {
                         this.normalPingCount++;
                         this.highPingCount = 0;
                     } else {
                         this.highPingCount = 0;
                         this.normalPingCount = 0;
                     }
-    
-                    // If high ping occurs 3 times in a row, reduce bitrate
+
+                    // Adjust bitrate if ping is consistently high
                     if (this.highPingCount >= 3) {
                         if (!this.originalBitrate) {
                             this.originalBitrate = document.getElementById("in_bitrate").value;
                         }
-                        setStream("524288");
-                        this.highPingCount = 0; // Reset counter after setting bitrate
+                        this.currentBitrate = this.currentBitrate ? this.currentBitrate : this.originalBitrate;
                         
-                        // Display network quality message
-                        latencyDisplay.innerHTML += `<br>Kualitas jaringan buruk, menyesuaikan kualitas video`;
+                        if (this.currentBitrate > 524288) {
+                            this.currentBitrate -= 524288; // Reduce bitrate
+                            setStream(this.currentBitrate.toString());
+                        }
+                        this.highPingCount = 0; // Reset counter after adjusting bitrate
                     }
-    
-                    // If normal ping occurs 3 times in a row, restore original bitrate
-                    if (this.normalPingCount >= 3 && this.originalBitrate) {
-                        setStream(this.originalBitrate);
-                        this.originalBitrate = null; // Reset original bitrate after restoring
+
+                    // Adjust bitrate back to original if ping is consistently low
+                    if (this.normalPingCount >= 3) {
+                        if (this.originalBitrate && this.currentBitrate < this.originalBitrate) {
+                            this.currentBitrate += 524288; // Increase bitrate
+                            if (this.currentBitrate > this.originalBitrate) {
+                                this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
+                            }
+                            setStream(this.currentBitrate.toString());
+                        }
                         this.normalPingCount = 0; // Reset counter after restoring bitrate
                     }
                 }
             } else {
-                setTimeout(updateDisplay, 100); 
+                setTimeout(updateDisplay, 100);
             }
         };
-    
+
         updateDisplay();
-    }    
+    } 
     
 }
 
