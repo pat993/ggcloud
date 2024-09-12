@@ -110,13 +110,11 @@ class AudioStream {
         this.ws.binaryType = 'arraybuffer';
 
         this.ws.onmessage = async (event) => {
-            if (this.isMuted) return;
-
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
                 this.lastPingTime = pingTime;
                 this.updateLatencyDisplay();
-            } else {
+            } else if (!this.isMuted) { // hanya mute audio, tapi tetap terima data
                 const arrayBuffer = event.data;
                 const int16Array = new Int16Array(arrayBuffer);
                 const floatArray = new Float32Array(int16Array.length);
@@ -232,7 +230,7 @@ class AudioStream {
                     if (this.lastPingTime > 200) {
                         this.highPingCount++;
                         this.normalPingCount = 0;
-                    } else if (this.lastPingTime < 190) {
+                    } else if (this.lastPingTime < 150) {
                         this.normalPingCount++;
                         this.highPingCount = 0;
                     } else {
