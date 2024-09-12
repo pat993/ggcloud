@@ -12,7 +12,7 @@ class M_dashboard extends CI_Model
       $subquery = $this->db->get_compiled_select();
 
       // Main query
-      $this->db->select('assigned.id as id, user_id, device_id, device_identifier, access_token, custom_name, start_date, end_date, end_date_kompensasi, assigned.status as status, IFNULL(kompensasi_total.durasi, 0) AS kompensasi, assigned.id AS id_assign, (TIMESTAMPDIFF(HOUR, NOW(), assigned.end_date_kompensasi) + IFNULL(kompensasi_total.durasi, 0)) AS masa_aktif');
+      $this->db->select('assigned.id as id, user_id, device_id, device_identifier, access_token, custom_name, start_date, end_date_kompensasi, assigned.status as status, IFNULL(kompensasi_total.durasi, 0) AS kompensasi, assigned.id AS id_assign, (TIMESTAMPDIFF(HOUR, NOW(), assigned.end_date_kompensasi) + IFNULL(kompensasi_total.durasi, 0)) AS masa_aktif');
       $this->db->from($table);
       $this->db->join('user', 'user.id = assigned.user_id');
       $this->db->join("($subquery) AS kompensasi_total", 'assigned.id = kompensasi_total.assign_id', 'left');
