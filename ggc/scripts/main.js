@@ -16,13 +16,13 @@ function stream_quality() {
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
-        bitrate = "3524288";
+        bitrate = "2524288";
         document.getElementById("in_bitrate").value = "2524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
-        bitrate = "10524288";
+        bitrate = "5024288";
         document.getElementById("in_bitrate").value = "5024288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
@@ -92,6 +92,10 @@ class AudioStream {
         this.lastPingTime = null;
         this.initAudio();
         this.setupWebSocket();
+
+        this.highPingCount = 0;
+        this.normalPingCount = 0;
+        this.originalBitrate = null; // To store the current bitrate
     }
 
     initAudio() {
@@ -223,6 +227,37 @@ class AudioStream {
                     latencyDisplay.innerHTML = status; 
                 } else if (this.lastPingTime !== null) {
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
+    
+                    // Check ping conditions and adjust bitrate
+                    if (this.lastPingTime > 200) {
+                        this.highPingCount++;
+                        this.normalPingCount = 0;
+                    } else if (this.lastPingTime < 150) {
+                        this.normalPingCount++;
+                        this.highPingCount = 0;
+                    } else {
+                        this.highPingCount = 0;
+                        this.normalPingCount = 0;
+                    }
+    
+                    // If high ping occurs 3 times in a row, reduce bitrate
+                    if (this.highPingCount >= 3) {
+                        if (!this.originalBitrate) {
+                            this.originalBitrate = document.getElementById("in_bitrate").value;
+                        }
+                        setStream("524288");
+                        this.highPingCount = 0; // Reset counter after setting bitrate
+                        
+                        // Display network quality message
+                        latencyDisplay.innerHTML += `<br>Kualitas jaringan buruk, menyesuaikan kualitas video`;
+                    }
+    
+                    // If normal ping occurs 3 times in a row, restore original bitrate
+                    if (this.normalPingCount >= 3 && this.originalBitrate) {
+                        setStream(this.originalBitrate);
+                        this.originalBitrate = null; // Reset original bitrate after restoring
+                        this.normalPingCount = 0; // Reset counter after restoring bitrate
+                    }
                 }
             } else {
                 setTimeout(updateDisplay, 100); 
@@ -230,7 +265,8 @@ class AudioStream {
         };
     
         updateDisplay();
-    }
+    }    
+    
 }
 
 // Initialize the AudioStream after both classes are defined
