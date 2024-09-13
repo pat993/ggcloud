@@ -16,14 +16,14 @@ function stream_quality() {
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
-        bitrate = "2524288";
+        bitrate = "3524288";
         document.getElementById("in_bitrate").value = "2524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
-        bitrate = "5024288";
-        document.getElementById("in_bitrate").value = "5024288";
+        bitrate = "8524288";
+        document.getElementById("in_bitrate").value = "8524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
