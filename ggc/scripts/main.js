@@ -56,7 +56,7 @@ class AudioPlayer {
         this.mediaSource = new MediaSource();
         this.sourceBuffer = null;
         this.audioQueue = [];
-        this.bufferSize = 0.5;
+        this.bufferSize = 1;
         this.audioElement = document.createElement('audio');
         this.audioElement.style.display = 'none';
         document.body.appendChild(this.audioElement);
