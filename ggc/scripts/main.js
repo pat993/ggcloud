@@ -41,102 +41,84 @@ function getCookie(name) {
 }
 
 // Get the audio port value from the 'audio_port' cookie
-const audio_port = getCookie('venus') || 'error'; // Replace 'default_port_value' with your default port if cookie is not set
+const audio_port = getCookie('venus') || 'error';
 
 let visible_status = true;
-
-class CircularBuffer {
-    constructor(size) {
-        this.buffer = new Float32Array(size);
-        this.size = size;
-        this.writePointer = 0;
-        this.readPointer = 0;
-    }
-
-    write(data) {
-        for (let i = 0; i < data.length; i++) {
-            this.buffer[this.writePointer] = data[i];
-            this.writePointer = (this.writePointer + 1) % this.size;
-        }
-    }
-
-    read(size) {
-        const output = new Float32Array(size);
-        for (let i = 0; i < size; i++) {
-            output[i] = this.buffer[this.readPointer];
-            this.readPointer = (this.readPointer + 1) % this.size;
-        }
-        return output;
-    }
-
-    available() {
-        return (this.writePointer - this.readPointer + this.size) % this.size;
-    }
-}
 
 class AudioStream {
     constructor(wsUrl, sampleRate = 32000, targetLatency = 100) {
         this.wsUrl = wsUrl;
         this.sampleRate = sampleRate;
         this.targetLatency = targetLatency;
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate });
-        this.gainNode = this.audioContext.createGain();
-        this.channels = 1;
-        this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
-        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
-        this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ 
+            latencyHint: 'interactive',
+            sampleRate: this.sampleRate 
+        });
+        this.mediaSource = new MediaSource();
+        this.sourceBuffer = null;
+        this.audioQueue = [];
+        this.bufferSize = 0.5;
+        this.audioPlayer = document.createElement('audio');
+        this.audioPlayer.style.display = 'none';
+        document.body.appendChild(this.audioPlayer);
+        this.audioPlayer.src = URL.createObjectURL(this.mediaSource);
         this.isMuted = false;
         this.pingInterval = null;
         this.pingStartTime = null;
         this.latencyDisplay = document.getElementById('latency-display');
         this.lastPingTime = null;
-        this.highPingCount = 0; // Initialize high ping counter
-        this.normalPingCount = 0; // Initialize normal ping counter
-        this.originalBitrate = null; // Original bitrate chosen by the user
-        this.currentBitrate = null; // Current bitrate being used
+        this.highPingCount = 0;
+        this.normalPingCount = 0;
+        this.originalBitrate = null;
+        this.currentBitrate = null;
+        this.totalBytesReceived = 0;
+        this.lastBandwidthCheck = Date.now();
+        this.lastBufferUpdate = Date.now();
         this.initAudio();
         this.setupWebSocket();
     }
 
     initAudio() {
-        this.scriptNode = this.audioContext.createScriptProcessor(this.bufferSize, this.channels, this.channels);
-        this.scriptNode.onaudioprocess = this.processAudio.bind(this);
-        this.scriptNode.connect(this.gainNode);
-        this.gainNode.connect(this.audioContext.destination);
+        this.mediaSource.addEventListener('sourceopen', () => {
+            const mimeType = 'audio/aac';
+            this.sourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
+            this.sourceBuffer.mode = 'sequence';
+            this.sourceBuffer.addEventListener('updateend', this.appendNextSegment.bind(this));
+        });
     }
 
     setupWebSocket() {
         this.ws = new WebSocket(this.wsUrl);
         this.ws.binaryType = 'arraybuffer';
 
-        this.ws.onmessage = async (event) => {
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.muteAudio(false);
+            this.startPing();
+        };
+
+        this.ws.onmessage = (event) => {
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
                 this.lastPingTime = pingTime;
                 this.updateLatencyDisplay();
-            } else if (!this.isMuted) { // hanya mute audio, tapi tetap terima data
-                const arrayBuffer = event.data;
-                const int16Array = new Int16Array(arrayBuffer);
-                const floatArray = new Float32Array(int16Array.length);
-                for (let i = 0; i < int16Array.length; i++) {
-                    floatArray[i] = int16Array[i] / 32768.0;
+            } else if (!this.isMuted) {
+                const audioData = new Uint8Array(event.data);
+                this.audioQueue.push(audioData);
+                this.lastBufferUpdate = Date.now();
+                this.totalBytesReceived += audioData.length;
+                if (this.sourceBuffer && !this.sourceBuffer.updating && this.audioQueue.length > 0) {
+                    this.appendNextSegment();
                 }
-                this.circularBuffer.write(floatArray);
             }
-        };
-
-        this.ws.onopen = () => {
-            console.log('WebSocket connected');
-            this.muteAudio(false); 
-            this.startPing(); 
         };
 
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.stopPing(); 
-            this.updateLatencyDisplay('Disconnected'); 
-            if (visible_status == true) { 
-                setTimeout(() => this.reconnectWebSocket(), 1000); 
+            this.stopPing();
+            this.updateLatencyDisplay('Disconnected');
+            if (visible_status == true) {
+                setTimeout(() => this.reconnectWebSocket(), 1000);
             }
         };
 
@@ -145,47 +127,54 @@ class AudioStream {
         };
     }
 
-    processAudio(audioProcessingEvent) {
-        const outputBuffer = audioProcessingEvent.outputBuffer;
-        const channelData = [];
-        for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-            channelData.push(outputBuffer.getChannelData(channel));
-        }
+    appendNextSegment() {
+        if (this.sourceBuffer.updating || this.audioQueue.length === 0) return;
 
-        const availableSamples = this.circularBuffer.available() / this.channels;
+        const segment = this.audioQueue.shift();
+        this.sourceBuffer.appendBuffer(segment);
+        this.updateBufferInfo();
 
-        if (availableSamples >= outputBuffer.length) {
-            const data = this.circularBuffer.read(outputBuffer.length * this.channels);
-            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-                for (let sample = 0; sample < outputBuffer.length; sample++) {
-                    channelData[channel][sample] = data[sample * this.channels + channel];
-                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
-                }
-            }
-        } else {
-            console.warn('Buffer underrun');
-            
-            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-                for (let sample = 0; sample < outputBuffer.length; sample++) {
-                    let previousSample = this.lastSampleData[(sample - 1 + this.channels * outputBuffer.length) % (this.channels * outputBuffer.length)];
-                    let nextSample = 0.0;
-                    
-                    if (availableSamples > 0) {
-                        nextSample = this.circularBuffer.buffer[this.circularBuffer.readPointer];
-                    }
-
-                    let interpolatedSample = previousSample + ((nextSample - previousSample) * (sample / outputBuffer.length));
-                    channelData[channel][sample] = interpolatedSample;
-                    
-                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
-                }
-            }
+        if (this.audioPlayer.paused) {
+            this.audioPlayer.play().catch(e => console.error('Playback failed:', e));
         }
     }
-    
+
+    updateBufferInfo() {
+        const buffered = this.audioPlayer.buffered;
+        let bufferLength = 0;
+
+        if (buffered.length > 0) {
+            bufferLength = buffered.end(buffered.length - 1) - this.audioPlayer.currentTime;
+        }
+
+        if (bufferLength < this.bufferSize * 0.5) {
+            this.audioPlayer.playbackRate = 0.98;
+        } else if (bufferLength > this.bufferSize) {
+            this.audioPlayer.playbackRate = 2;
+        } else {
+            this.audioPlayer.playbackRate = 1.0;
+        }
+
+        const timeSinceLastUpdate = Date.now() - this.lastBufferUpdate;
+        if (timeSinceLastUpdate > 10000) {
+            this.updateLatencyDisplay('Buffer freeze detected. Reconnecting...');
+            this.ws.close();
+        }
+
+        // Calculate and display bandwidth
+        const now = Date.now();
+        const timeDiff = (now - this.lastBandwidthCheck) / 1000; // Convert to seconds
+        if (timeDiff >= 1) { // Update bandwidth every second
+            const bandwidthKBps = (this.totalBytesReceived / timeDiff / 1024).toFixed(2);
+            console.log(`Bandwidth: ${bandwidthKBps} KB/s`);
+            this.totalBytesReceived = 0;
+            this.lastBandwidthCheck = now;
+        }
+    }
+
     muteAudio(mute) {
         this.isMuted = mute;
-        this.gainNode.gain.value = mute ? 0 : 1;
+        this.audioPlayer.muted = mute;
     }
 
     closeWebSocket() {
@@ -195,9 +184,9 @@ class AudioStream {
     }
 
     reconnectWebSocket() {
-        this.updateLatencyDisplay('Reconnecting'); 
+        this.updateLatencyDisplay('Reconnecting');
         if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
-            this.setupWebSocket(); 
+            this.setupWebSocket();
         }
     }
 
@@ -270,11 +259,10 @@ class AudioStream {
         };
 
         updateDisplay();
-    } 
-    
+    }
 }
 
-// Initialize the AudioStream after both classes are defined
+// Initialize the AudioStream after the class is defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
 // Stream quality control
@@ -295,7 +283,7 @@ function removeDeviceViewElements() {
     });
 }
 
-let isMuted = false; 
+let isMuted = false;
 
 let bitrate;
 let blurStartTime = null;
@@ -372,3 +360,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+// Start periodic buffer info update
+setInterval(() => {
+    if (stream1) {
+        stream1.updateBufferInfo();
+    }
+}, 1000);
