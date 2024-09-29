@@ -43,12 +43,12 @@
     <script>
         const audioContext = new(window.AudioContext || window.webkitAudioContext)({
             latencyHint: 'interactive',
-            sampleRate: 44100
+            sampleRate: 32000
         });
         let mediaSource = new MediaSource();
         let sourceBuffer = null;
         let audioQueue = [];
-        const bufferSize = 0.3;
+        const bufferSize = 0.5;
         const audioPlayer = document.getElementById('audioPlayer');
         audioPlayer.src = URL.createObjectURL(mediaSource);
 

@@ -51,12 +51,12 @@ class AudioPlayer {
         this.wsUrl = wsUrl;
         this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
             latencyHint: 'interactive',
-            sampleRate: 44100
+            sampleRate: 32000
         });
         this.mediaSource = new MediaSource();
         this.sourceBuffer = null;
         this.audioQueue = [];
-        this.bufferSize = 0.3;
+        this.bufferSize = 0.5;
         this.audioElement = document.createElement('audio');
         this.audioElement.style.display = 'none';
         document.body.appendChild(this.audioElement);
