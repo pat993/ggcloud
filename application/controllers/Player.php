@@ -174,6 +174,6 @@ class Player extends CI_Controller
 
     public function audio_test()
     {
-        $this->load->view('v_audio_player');
+        $this->load->view('v_audio2');
     }
 }
