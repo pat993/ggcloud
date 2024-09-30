@@ -22,8 +22,8 @@ function stream_quality() {
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
-        bitrate = "8524288";
-        document.getElementById("in_bitrate").value = "8524288";
+        bitrate = "6524288";
+        document.getElementById("in_bitrate").value = "6524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
@@ -98,6 +98,7 @@ class AudioStream {
         };
 
         this.ws.onmessage = (event) => {
+            console.log(event.data);
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
                 this.lastPingTime = pingTime;
