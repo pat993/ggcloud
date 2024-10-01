@@ -46,18 +46,18 @@ const audio_port = getCookie('venus') || 'error';
 let visible_status = true;
 
 class AudioStream {
-    constructor(wsUrl, sampleRate = 32000, targetLatency = 1000) {
+    constructor(wsUrl, sampleRate = 32000, targetLatency = 100) {
         this.wsUrl = wsUrl;
         this.sampleRate = sampleRate;
         this.targetLatency = targetLatency;
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ 
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
             latencyHint: 'interactive',
-            sampleRate: this.sampleRate 
+            sampleRate: this.sampleRate
         });
         this.mediaSource = new MediaSource();
         this.sourceBuffer = null;
         this.audioQueue = [];
-        this.bufferSize = 0.7;
+        this.bufferSize = 0.5;
         this.audioPlayer = document.createElement('audio');
         this.audioPlayer.style.display = 'none';
         document.body.appendChild(this.audioPlayer);
@@ -229,7 +229,7 @@ class AudioStream {
                             this.originalBitrate = document.getElementById("in_bitrate").value;
                         }
                         this.currentBitrate = this.currentBitrate ? this.currentBitrate : this.originalBitrate;
-                        
+
                         if (this.currentBitrate > 524288) {
                             this.currentBitrate -= 524288; // Reduce bitrate
                             setStream(this.currentBitrate.toString());
@@ -259,7 +259,7 @@ let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 // Stream quality control
 function setStream(br) {
     document.getElementById("in_bitrate").value = br;
-    setTimeout(function() {
+    setTimeout(function () {
         const changeVideoBtn = document.getElementById("btn_change_video");
         if (changeVideoBtn) {
             changeVideoBtn.click();
@@ -280,7 +280,7 @@ let bitrate;
 let blurStartTime = null;
 const blurThreshold = 60000;
 
-ifvisible.on("blur", function() {
+ifvisible.on("blur", function () {
     visible_status = false;
     setStream("524288");
     blurStartTime = Date.now();
@@ -290,7 +290,7 @@ ifvisible.on("blur", function() {
     }
 });
 
-ifvisible.on("wakeup", function() {
+ifvisible.on("wakeup", function () {
     visible_status = true;
     if (blurStartTime) {
         const blurDuration = Date.now() - blurStartTime;
@@ -315,20 +315,20 @@ ifvisible.on("wakeup", function() {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(function() {
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(function () {
         $(".control-wrapper").animate({ height: "toggle" });
     }, 1000);
-    
-    $("#slide-toggle").click(function() {
+
+    $("#slide-toggle").click(function () {
         $(".control-wrapper").animate({ height: "toggle" });
-        
+
         if ($('.more-box').is(':visible')) {
             $('#input_show_more').trigger('click');
         }
     });
 
-    $("#fullscreen-toggle").click(function() {
+    $("#fullscreen-toggle").click(function () {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
         } else {
@@ -338,7 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    $("#audio-toggle").click(function() {
+    $("#audio-toggle").click(function () {
         isMuted = !isMuted;
         stream1.muteAudio(isMuted);
 
