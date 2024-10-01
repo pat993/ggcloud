@@ -46,7 +46,7 @@ const audio_port = getCookie('venus') || 'error';
 let visible_status = true;
 
 class AudioStream {
-    constructor(wsUrl, sampleRate = 32000, targetLatency = 100) {
+    constructor(wsUrl, sampleRate = 32000, targetLatency = 1000) {
         this.wsUrl = wsUrl;
         this.sampleRate = sampleRate;
         this.targetLatency = targetLatency;
@@ -234,7 +234,7 @@ class AudioStream {
                             this.currentBitrate -= 524288; // Reduce bitrate
                             setStream(this.currentBitrate.toString());
                         }
-                    } else if (totalPing < 300 && this.originalBitrate && this.currentBitrate < this.originalBitrate) {
+                    } else if (totalPing < 350 && this.originalBitrate && this.currentBitrate < this.originalBitrate) {
                         this.currentBitrate += 524288; // Increase bitrate
                         if (this.currentBitrate > this.originalBitrate) {
                             this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
