@@ -17,7 +17,7 @@ function stream_quality() {
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
         bitrate = "3524288";
-        document.getElementById("in_bitrate").value = "2524288";
+        document.getElementById("in_bitrate").value = "3524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
@@ -66,9 +66,7 @@ class AudioStream {
         this.pingInterval = null;
         this.pingStartTime = null;
         this.latencyDisplay = document.getElementById('latency-display');
-        this.lastPingTime = null;
-        this.highPingCount = 0;
-        this.normalPingCount = 0;
+        this.lastThreePings = [];
         this.originalBitrate = null;
         this.currentBitrate = null;
         this.totalBytesReceived = 0;
@@ -101,7 +99,7 @@ class AudioStream {
             console.log(event.data);
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
-                this.lastPingTime = pingTime;
+                this.updatePingTimes(pingTime);
                 this.updateLatencyDisplay();
             } else if (!this.isMuted) {
                 const audioData = new Uint8Array(event.data);
@@ -207,29 +205,26 @@ class AudioStream {
         }
     }
 
+    updatePingTimes(pingTime) {
+        this.lastThreePings.push(pingTime);
+        if (this.lastThreePings.length > 3) {
+            this.lastThreePings.shift();
+        }
+    }
+
     updateLatencyDisplay(status = null) {
         const updateDisplay = () => {
             const latencyDisplay = document.getElementById('latency-display');
             if (latencyDisplay) {
                 if (status) {
                     latencyDisplay.innerHTML = status;
-                } else if (this.lastPingTime !== null) {
-                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
+                } else if (this.lastThreePings.length > 0) {
+                    const averagePing = this.lastThreePings.reduce((a, b) => a + b, 0) / this.lastThreePings.length;
+                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${Math.round(averagePing)} ms`;
 
                     // Check ping conditions and adjust bitrate
-                    if (this.lastPingTime > 200) {
-                        this.highPingCount++;
-                        this.normalPingCount = 0;
-                    } else if (this.lastPingTime < 150) {
-                        this.normalPingCount++;
-                        this.highPingCount = 0;
-                    } else {
-                        this.highPingCount = 0;
-                        this.normalPingCount = 0;
-                    }
-
-                    // Adjust bitrate if ping is consistently high
-                    if (this.highPingCount >= 3) {
+                    const totalPing = this.lastThreePings.reduce((a, b) => a + b, 0);
+                    if (totalPing > 450) {
                         if (!this.originalBitrate) {
                             this.originalBitrate = document.getElementById("in_bitrate").value;
                         }
@@ -239,19 +234,12 @@ class AudioStream {
                             this.currentBitrate -= 524288; // Reduce bitrate
                             setStream(this.currentBitrate.toString());
                         }
-                        this.highPingCount = 0; // Reset counter after adjusting bitrate
-                    }
-
-                    // Adjust bitrate back to original if ping is consistently low
-                    if (this.normalPingCount >= 3) {
-                        if (this.originalBitrate && this.currentBitrate < this.originalBitrate) {
-                            this.currentBitrate += 524288; // Increase bitrate
-                            if (this.currentBitrate > this.originalBitrate) {
-                                this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
-                            }
-                            setStream(this.currentBitrate.toString());
+                    } else if (totalPing < 300 && this.originalBitrate && this.currentBitrate < this.originalBitrate) {
+                        this.currentBitrate += 524288; // Increase bitrate
+                        if (this.currentBitrate > this.originalBitrate) {
+                            this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
                         }
-                        this.normalPingCount = 0; // Reset counter after restoring bitrate
+                        setStream(this.currentBitrate.toString());
                     }
                 }
             } else {
@@ -265,6 +253,8 @@ class AudioStream {
 
 // Initialize the AudioStream after the class is defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
+
+// The rest of your code remains the same
 
 // Stream quality control
 function setStream(br) {
