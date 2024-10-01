@@ -57,7 +57,7 @@ class AudioStream {
         this.mediaSource = new MediaSource();
         this.sourceBuffer = null;
         this.audioQueue = [];
-        this.bufferSize = 0.7;
+        this.bufferSize = 0.5;
         this.audioPlayer = document.createElement('audio');
         this.audioPlayer.style.display = 'none';
         document.body.appendChild(this.audioPlayer);
