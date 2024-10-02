@@ -57,7 +57,10 @@ class AudioStream {
         this.mediaSource = new MediaSource();
         this.sourceBuffer = null;
         this.audioQueue = [];
-        this.bufferSize = 0.6;
+        this.bufferSize = 0.3; // Increased from 0.3 to 0.5 seconds
+        this.minBufferSize = 0.1; // Minimum buffer size
+        this.maxBufferSize = 1; // Maximum buffer size
+        this.adaptiveBufferAdjustment = 0.05; // Adaptive buffer adjustment step
         this.audioPlayer = document.createElement('audio');
         this.audioPlayer.style.display = 'none';
         document.body.appendChild(this.audioPlayer);
@@ -96,7 +99,6 @@ class AudioStream {
         };
 
         this.ws.onmessage = (event) => {
-            console.log(event.data);
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
                 this.updatePingTimes(pingTime);
@@ -131,6 +133,16 @@ class AudioStream {
 
         const segment = this.audioQueue.shift();
         this.sourceBuffer.appendBuffer(segment);
+
+        // Check if we need to remove old data
+        if (this.sourceBuffer.buffered.length > 0) {
+            const bufferEnd = this.sourceBuffer.buffered.end(0);
+            const currentTime = this.audioPlayer.currentTime;
+            if (bufferEnd - currentTime > this.maxBufferSize) {
+                this.sourceBuffer.remove(0, currentTime - 0.1);
+            }
+        }
+
         this.updateBufferInfo();
 
         if (this.audioPlayer.paused) {
@@ -146,9 +158,12 @@ class AudioStream {
             bufferLength = buffered.end(buffered.length - 1) - this.audioPlayer.currentTime;
         }
 
-        if (bufferLength < this.bufferSize * 0.5) {
-            this.audioPlayer.playbackRate = 0.98;
-        } else if (bufferLength > this.bufferSize) {
+        // Adaptive buffer size adjustment
+        if (bufferLength < this.minBufferSize) {
+            this.bufferSize = Math.min(this.bufferSize + this.adaptiveBufferAdjustment, this.maxBufferSize);
+            this.audioPlayer.playbackRate = 0.95;
+        } else if (bufferLength > this.maxBufferSize) {
+            this.bufferSize = Math.max(this.bufferSize - this.adaptiveBufferAdjustment, this.minBufferSize);
             this.audioPlayer.playbackRate = 2;
         } else {
             this.audioPlayer.playbackRate = 1.0;
@@ -253,8 +268,6 @@ class AudioStream {
 
 // Initialize the AudioStream after the class is defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
-
-// The rest of your code remains the same
 
 // Stream quality control
 function setStream(br) {
