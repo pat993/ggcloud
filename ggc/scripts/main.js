@@ -17,7 +17,7 @@ function stream_quality() {
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
         bitrate = "3524288";
-        document.getElementById("in_bitrate").value = "3524288";
+        document.getElementById("in_bitrate").value = "2524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
@@ -41,85 +41,102 @@ function getCookie(name) {
 }
 
 // Get the audio port value from the 'audio_port' cookie
-const audio_port = getCookie('venus') || 'error';
+const audio_port = getCookie('venus') || 'error'; // Replace 'default_port_value' with your default port if cookie is not set
 
 let visible_status = true;
 
+class CircularBuffer {
+    constructor(size) {
+        this.buffer = new Float32Array(size);
+        this.size = size;
+        this.writePointer = 0;
+        this.readPointer = 0;
+    }
+
+    write(data) {
+        for (let i = 0; i < data.length; i++) {
+            this.buffer[this.writePointer] = data[i];
+            this.writePointer = (this.writePointer + 1) % this.size;
+        }
+    }
+
+    read(size) {
+        const output = new Float32Array(size);
+        for (let i = 0; i < size; i++) {
+            output[i] = this.buffer[this.readPointer];
+            this.readPointer = (this.readPointer + 1) % this.size;
+        }
+        return output;
+    }
+
+    available() {
+        return (this.writePointer - this.readPointer + this.size) % this.size;
+    }
+}
+
 class AudioStream {
-    constructor(wsUrl, sampleRate = 32000, targetLatency = 100) {
+    constructor(wsUrl, sampleRate = 24000, targetLatency = 100) {
         this.wsUrl = wsUrl;
         this.sampleRate = sampleRate;
         this.targetLatency = targetLatency;
-        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({
-            latencyHint: 'interactive',
-            sampleRate: this.sampleRate
-        });
-        this.mediaSource = new MediaSource();
-        this.sourceBuffer = null;
-        this.audioQueue = [];
-        this.bufferSize = 0.3; // Increased from 0.3 to 0.5 seconds
-        this.minBufferSize = 0.1; // Minimum buffer size
-        this.maxBufferSize = 1; // Maximum buffer size
-        this.adaptiveBufferAdjustment = 0.05; // Adaptive buffer adjustment step
-        this.audioPlayer = document.createElement('audio');
-        this.audioPlayer.style.display = 'none';
-        document.body.appendChild(this.audioPlayer);
-        this.audioPlayer.src = URL.createObjectURL(this.mediaSource);
+        this.audioContext = new (window.AudioContext || window.webkitAudioContext)({ sampleRate });
+        this.gainNode = this.audioContext.createGain();
+        this.channels = 1;
+        this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
+        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
+        this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
         this.isMuted = false;
         this.pingInterval = null;
         this.pingStartTime = null;
         this.latencyDisplay = document.getElementById('latency-display');
-        this.lastThreePings = [];
-        this.originalBitrate = null;
-        this.currentBitrate = null;
-        this.totalBytesReceived = 0;
-        this.lastBandwidthCheck = Date.now();
-        this.lastBufferUpdate = Date.now();
+        this.lastPingTime = null;
+        this.highPingCount = 0; // Initialize high ping counter
+        this.normalPingCount = 0; // Initialize normal ping counter
+        this.originalBitrate = null; // Original bitrate chosen by the user
+        this.currentBitrate = null; // Current bitrate being used
         this.initAudio();
         this.setupWebSocket();
     }
 
     initAudio() {
-        this.mediaSource.addEventListener('sourceopen', () => {
-            const mimeType = 'audio/aac';
-            this.sourceBuffer = this.mediaSource.addSourceBuffer(mimeType);
-            this.sourceBuffer.mode = 'sequence';
-            this.sourceBuffer.addEventListener('updateend', this.appendNextSegment.bind(this));
-        });
+        this.scriptNode = this.audioContext.createScriptProcessor(this.bufferSize, this.channels, this.channels);
+        this.scriptNode.onaudioprocess = this.processAudio.bind(this);
+        this.scriptNode.connect(this.gainNode);
+        this.gainNode.connect(this.audioContext.destination);
     }
 
     setupWebSocket() {
         this.ws = new WebSocket(this.wsUrl);
         this.ws.binaryType = 'arraybuffer';
 
-        this.ws.onopen = () => {
-            console.log('WebSocket connected');
-            this.muteAudio(false);
-            this.startPing();
-        };
-
-        this.ws.onmessage = (event) => {
+        this.ws.onmessage = async (event) => {
             if (event.data === 'pong') {
                 const pingTime = Date.now() - this.pingStartTime;
-                this.updatePingTimes(pingTime);
+                this.lastPingTime = pingTime;
                 this.updateLatencyDisplay();
-            } else if (!this.isMuted) {
-                const audioData = new Uint8Array(event.data);
-                this.audioQueue.push(audioData);
-                this.lastBufferUpdate = Date.now();
-                this.totalBytesReceived += audioData.length;
-                if (this.sourceBuffer && !this.sourceBuffer.updating && this.audioQueue.length > 0) {
-                    this.appendNextSegment();
+            } else if (!this.isMuted) { // hanya mute audio, tapi tetap terima data
+                const arrayBuffer = event.data;
+                const int16Array = new Int16Array(arrayBuffer);
+                const floatArray = new Float32Array(int16Array.length);
+                for (let i = 0; i < int16Array.length; i++) {
+                    floatArray[i] = int16Array[i] / 32768.0;
                 }
+                this.circularBuffer.write(floatArray);
             }
+        };
+
+        this.ws.onopen = () => {
+            console.log('WebSocket connected');
+            this.muteAudio(false); 
+            this.startPing(); 
         };
 
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.stopPing();
-            this.updateLatencyDisplay('Disconnected');
-            if (visible_status == true) {
-                setTimeout(() => this.reconnectWebSocket(), 1000);
+            this.stopPing(); 
+            this.updateLatencyDisplay('Disconnected'); 
+            if (visible_status == true) { 
+                setTimeout(() => this.reconnectWebSocket(), 1000); 
             }
         };
 
@@ -128,67 +145,47 @@ class AudioStream {
         };
     }
 
-    appendNextSegment() {
-        if (this.sourceBuffer.updating || this.audioQueue.length === 0) return;
+    processAudio(audioProcessingEvent) {
+        const outputBuffer = audioProcessingEvent.outputBuffer;
+        const channelData = [];
+        for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+            channelData.push(outputBuffer.getChannelData(channel));
+        }
 
-        const segment = this.audioQueue.shift();
-        this.sourceBuffer.appendBuffer(segment);
+        const availableSamples = this.circularBuffer.available() / this.channels;
 
-        // Check if we need to remove old data
-        if (this.sourceBuffer.buffered.length > 0) {
-            const bufferEnd = this.sourceBuffer.buffered.end(0);
-            const currentTime = this.audioPlayer.currentTime;
-            if (bufferEnd - currentTime > this.maxBufferSize) {
-                this.sourceBuffer.remove(0, currentTime - 0.1);
+        if (availableSamples >= outputBuffer.length) {
+            const data = this.circularBuffer.read(outputBuffer.length * this.channels);
+            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+                for (let sample = 0; sample < outputBuffer.length; sample++) {
+                    channelData[channel][sample] = data[sample * this.channels + channel];
+                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
+                }
+            }
+        } else {
+            console.warn('Buffer underrun');
+            
+            for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
+                for (let sample = 0; sample < outputBuffer.length; sample++) {
+                    let previousSample = this.lastSampleData[(sample - 1 + this.channels * outputBuffer.length) % (this.channels * outputBuffer.length)];
+                    let nextSample = 0.0;
+                    
+                    if (availableSamples > 0) {
+                        nextSample = this.circularBuffer.buffer[this.circularBuffer.readPointer];
+                    }
+
+                    let interpolatedSample = previousSample + ((nextSample - previousSample) * (sample / outputBuffer.length));
+                    channelData[channel][sample] = interpolatedSample;
+                    
+                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
+                }
             }
         }
-
-        this.updateBufferInfo();
-
-        if (this.audioPlayer.paused) {
-            this.audioPlayer.play().catch(e => console.error('Playback failed:', e));
-        }
     }
-
-    updateBufferInfo() {
-        const buffered = this.audioPlayer.buffered;
-        let bufferLength = 0;
-
-        if (buffered.length > 0) {
-            bufferLength = buffered.end(buffered.length - 1) - this.audioPlayer.currentTime;
-        }
-
-        // Adaptive buffer size adjustment
-        if (bufferLength < this.minBufferSize) {
-            this.bufferSize = Math.min(this.bufferSize + this.adaptiveBufferAdjustment, this.maxBufferSize);
-            this.audioPlayer.playbackRate = 0.95;
-        } else if (bufferLength > this.maxBufferSize) {
-            this.bufferSize = Math.max(this.bufferSize - this.adaptiveBufferAdjustment, this.minBufferSize);
-            this.audioPlayer.playbackRate = 2;
-        } else {
-            this.audioPlayer.playbackRate = 1.0;
-        }
-
-        const timeSinceLastUpdate = Date.now() - this.lastBufferUpdate;
-        if (timeSinceLastUpdate > 10000) {
-            this.updateLatencyDisplay('Buffer freeze detected. Reconnecting...');
-            this.ws.close();
-        }
-
-        // Calculate and display bandwidth
-        const now = Date.now();
-        const timeDiff = (now - this.lastBandwidthCheck) / 1000; // Convert to seconds
-        if (timeDiff >= 1) { // Update bandwidth every second
-            const bandwidthKBps = (this.totalBytesReceived / timeDiff / 1024).toFixed(2);
-            console.log(`Bandwidth: ${bandwidthKBps} KB/s`);
-            this.totalBytesReceived = 0;
-            this.lastBandwidthCheck = now;
-        }
-    }
-
+    
     muteAudio(mute) {
         this.isMuted = mute;
-        this.audioPlayer.muted = mute;
+        this.gainNode.gain.value = mute ? 0 : 1;
     }
 
     closeWebSocket() {
@@ -198,9 +195,9 @@ class AudioStream {
     }
 
     reconnectWebSocket() {
-        this.updateLatencyDisplay('Reconnecting');
+        this.updateLatencyDisplay('Reconnecting'); 
         if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
-            this.setupWebSocket();
+            this.setupWebSocket(); 
         }
     }
 
@@ -220,41 +217,51 @@ class AudioStream {
         }
     }
 
-    updatePingTimes(pingTime) {
-        this.lastThreePings.push(pingTime);
-        if (this.lastThreePings.length > 3) {
-            this.lastThreePings.shift();
-        }
-    }
-
     updateLatencyDisplay(status = null) {
         const updateDisplay = () => {
             const latencyDisplay = document.getElementById('latency-display');
             if (latencyDisplay) {
                 if (status) {
                     latencyDisplay.innerHTML = status;
-                } else if (this.lastThreePings.length > 0) {
-                    const averagePing = this.lastThreePings.reduce((a, b) => a + b, 0) / this.lastThreePings.length;
-                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${Math.round(averagePing)} ms`;
+                } else if (this.lastPingTime !== null) {
+                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
 
                     // Check ping conditions and adjust bitrate
-                    const totalPing = this.lastThreePings.reduce((a, b) => a + b, 0);
-                    if (totalPing > 450) {
+                    if (this.lastPingTime > 200) {
+                        this.highPingCount++;
+                        this.normalPingCount = 0;
+                    } else if (this.lastPingTime < 150) {
+                        this.normalPingCount++;
+                        this.highPingCount = 0;
+                    } else {
+                        this.highPingCount = 0;
+                        this.normalPingCount = 0;
+                    }
+
+                    // Adjust bitrate if ping is consistently high
+                    if (this.highPingCount >= 3) {
                         if (!this.originalBitrate) {
                             this.originalBitrate = document.getElementById("in_bitrate").value;
                         }
                         this.currentBitrate = this.currentBitrate ? this.currentBitrate : this.originalBitrate;
-
+                        
                         if (this.currentBitrate > 524288) {
                             this.currentBitrate -= 524288; // Reduce bitrate
                             setStream(this.currentBitrate.toString());
                         }
-                    } else if (totalPing < 350 && this.originalBitrate && this.currentBitrate < this.originalBitrate) {
-                        this.currentBitrate += 524288; // Increase bitrate
-                        if (this.currentBitrate > this.originalBitrate) {
-                            this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
+                        this.highPingCount = 0; // Reset counter after adjusting bitrate
+                    }
+
+                    // Adjust bitrate back to original if ping is consistently low
+                    if (this.normalPingCount >= 3) {
+                        if (this.originalBitrate && this.currentBitrate < this.originalBitrate) {
+                            this.currentBitrate += 524288; // Increase bitrate
+                            if (this.currentBitrate > this.originalBitrate) {
+                                this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
+                            }
+                            setStream(this.currentBitrate.toString());
                         }
-                        setStream(this.currentBitrate.toString());
+                        this.normalPingCount = 0; // Reset counter after restoring bitrate
                     }
                 }
             } else {
@@ -263,16 +270,17 @@ class AudioStream {
         };
 
         updateDisplay();
-    }
+    } 
+    
 }
 
-// Initialize the AudioStream after the class is defined
+// Initialize the AudioStream after both classes are defined
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
 // Stream quality control
 function setStream(br) {
     document.getElementById("in_bitrate").value = br;
-    setTimeout(function () {
+    setTimeout(function() {
         const changeVideoBtn = document.getElementById("btn_change_video");
         if (changeVideoBtn) {
             changeVideoBtn.click();
@@ -287,13 +295,13 @@ function removeDeviceViewElements() {
     });
 }
 
-let isMuted = false;
+let isMuted = false; 
 
 let bitrate;
 let blurStartTime = null;
 const blurThreshold = 60000;
 
-ifvisible.on("blur", function () {
+ifvisible.on("blur", function() {
     visible_status = false;
     setStream("524288");
     blurStartTime = Date.now();
@@ -303,7 +311,7 @@ ifvisible.on("blur", function () {
     }
 });
 
-ifvisible.on("wakeup", function () {
+ifvisible.on("wakeup", function() {
     visible_status = true;
     if (blurStartTime) {
         const blurDuration = Date.now() - blurStartTime;
@@ -328,20 +336,20 @@ ifvisible.on("wakeup", function () {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(function () {
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
         $(".control-wrapper").animate({ height: "toggle" });
     }, 1000);
-
-    $("#slide-toggle").click(function () {
+    
+    $("#slide-toggle").click(function() {
         $(".control-wrapper").animate({ height: "toggle" });
-
+        
         if ($('.more-box').is(':visible')) {
             $('#input_show_more').trigger('click');
         }
     });
 
-    $("#fullscreen-toggle").click(function () {
+    $("#fullscreen-toggle").click(function() {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen();
         } else {
@@ -351,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    $("#audio-toggle").click(function () {
+    $("#audio-toggle").click(function() {
         isMuted = !isMuted;
         stream1.muteAudio(isMuted);
 
@@ -364,9 +372,3 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-// Start periodic buffer info update
-setInterval(() => {
-    if (stream1) {
-        stream1.updateBufferInfo();
-    }
-}, 1000);
