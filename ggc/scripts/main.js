@@ -16,7 +16,7 @@ function stream_quality() {
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
-        bitrate = "3524288";
+        bitrate = "2524288";
         document.getElementById("in_bitrate").value = "2524288";
         document.getElementById("in_fps").value = "40";
         document.getElementById("in_max_w").value = "1080";
@@ -93,13 +93,13 @@ class AudioStream {
         
         // Properties for average ping calculation
         this.pingHistory = [];
-        this.maxPingHistory = 5; // Store last 5 pings for average
+        this.maxPingHistory = 5;
         this.originalBitrate = null;
         this.currentBitrate = null;
         
         // Thresholds for bitrate adjustment
-        this.highPingThreshold = 180; // ms
-        this.lowPingThreshold = 120; // ms
+        this.highPingThreshold = 180;
+        this.lowPingThreshold = 120;
         
         this.initAudio();
         this.setupWebSocket();
@@ -121,7 +121,7 @@ class AudioStream {
                 const pingTime = Date.now() - this.pingStartTime;
                 this.lastPingTime = pingTime;
                 this.updateLatencyDisplay();
-            } else if (!this.isMuted) { // hanya mute audio, tapi tetap terima data
+            } else {
                 const arrayBuffer = event.data;
                 const int16Array = new Int16Array(arrayBuffer);
                 const floatArray = new Float32Array(int16Array.length);
@@ -134,17 +134,14 @@ class AudioStream {
 
         this.ws.onopen = () => {
             console.log('WebSocket connected');
-            this.muteAudio(false); 
-            this.startPing(); 
+            this.muteAudio(false);
+            this.startPing();
         };
 
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.stopPing(); 
-            this.updateLatencyDisplay('Disconnected'); 
-            if (visible_status == true) { 
-                setTimeout(() => this.reconnectWebSocket(), 1000); 
-            }
+            this.stopPing();
+            this.updateLatencyDisplay('Disconnected');
         };
 
         this.ws.onerror = (error) => {
@@ -171,7 +168,6 @@ class AudioStream {
             }
         } else {
             console.warn('Buffer underrun');
-            
             for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
                 for (let sample = 0; sample < outputBuffer.length; sample++) {
                     let previousSample = this.lastSampleData[(sample - 1 + this.channels * outputBuffer.length) % (this.channels * outputBuffer.length)];
@@ -195,17 +191,15 @@ class AudioStream {
         this.gainNode.gain.value = mute ? 0 : 1;
     }
 
-    closeWebSocket() {
+    disconnect() {
         if (this.ws) {
             this.ws.close();
+            this.stopPing();
         }
     }
 
-    reconnectWebSocket() {
-        this.updateLatencyDisplay('Reconnecting'); 
-        if (!this.ws || this.ws.readyState === WebSocket.CLOSED || this.ws.readyState === WebSocket.CLOSING) {
-            this.setupWebSocket(); 
-        }
+    reconnect() {
+        this.setupWebSocket();
     }
 
     startPing() {
@@ -251,12 +245,10 @@ class AudioStream {
 
                     // Adjust bitrate based on average ping
                     if (avgPing > this.highPingThreshold && this.currentBitrate > 524288) {
-                        // Reduce bitrate by ~1 Mbps
                         this.currentBitrate = Math.max(524288, this.currentBitrate - 1048576);
                         setStream(this.currentBitrate.toString());
                         console.log(`High average ping (${Math.round(avgPing)}ms), reducing bitrate to ${this.currentBitrate}`);
                     } else if (avgPing < this.lowPingThreshold && this.currentBitrate < this.originalBitrate) {
-                        // Increase bitrate by ~0.5 Mbps
                         this.currentBitrate = Math.min(this.originalBitrate, this.currentBitrate + 524288);
                         setStream(this.currentBitrate.toString());
                         console.log(`Low average ping (${Math.round(avgPing)}ms), increasing bitrate to ${this.currentBitrate}`);
@@ -269,32 +261,12 @@ class AudioStream {
 
         updateDisplay();
     }
-    
 }
 
-// Initialize the AudioStream after both classes are defined
+// Initialize the AudioStream
 let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
-// Stream quality control
-function setStream(br) {
-    document.getElementById("in_bitrate").value = br;
-    setTimeout(function() {
-        const changeVideoBtn = document.getElementById("btn_change_video");
-        if (changeVideoBtn) {
-            changeVideoBtn.click();
-        }
-    }, 1000);
-}
-
-function removeDeviceViewElements() {
-    const deviceViewElements = document.querySelectorAll('.device-view');
-    deviceViewElements.forEach(element => {
-        element.remove();
-    });
-}
-
-let isMuted = false; 
-
+// Bitrate and visibility handling
 let bitrate;
 let blurStartTime = null;
 const blurThreshold = 60000;
@@ -305,7 +277,7 @@ ifvisible.on("blur", function() {
     blurStartTime = Date.now();
 
     if (stream1) {
-        stream1.muteAudio(true);
+        stream1.disconnect();  // Disconnect instead of mute
     }
 });
 
@@ -319,8 +291,7 @@ ifvisible.on("wakeup", function() {
             location.reload();
         } else {
             if (stream1) {
-                stream1.reconnectWebSocket();
-                stream1.muteAudio(false);
+                stream1.reconnect();  // Reconnect the stream
             }
 
             if (bitrate) {
@@ -334,6 +305,25 @@ ifvisible.on("wakeup", function() {
     }
 });
 
+// Utility functions
+function removeDeviceViewElements() {
+    const deviceViewElements = document.querySelectorAll('.device-view');
+    deviceViewElements.forEach(element => {
+        element.remove();
+    });
+}
+
+function setStream(br) {
+    document.getElementById("in_bitrate").value = br;
+    setTimeout(function() {
+        const changeVideoBtn = document.getElementById("btn_change_video");
+        if (changeVideoBtn) {
+            changeVideoBtn.click();
+        }
+    }, 1000);
+}
+
+// DOM ready handlers
 document.addEventListener('DOMContentLoaded', function() {
     setTimeout(function() {
         $(".control-wrapper").animate({ height: "toggle" });
@@ -358,7 +348,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     $("#audio-toggle").click(function() {
-        isMuted = !isMuted;
+        const isMuted = !stream1.isMuted;
         stream1.muteAudio(isMuted);
 
         const icon = $(this).find('i');
@@ -369,4 +359,3 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
