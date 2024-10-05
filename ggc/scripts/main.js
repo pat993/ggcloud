@@ -12,19 +12,19 @@ function stream_quality() {
     if (e == "1") {
         bitrate = "1524288";
         document.getElementById("in_bitrate").value = "1524288";
-        document.getElementById("in_fps").value = "40";
+        document.getElementById("in_fps").value = "25";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "2") {
         bitrate = "2524288";
         document.getElementById("in_bitrate").value = "2524288";
-        document.getElementById("in_fps").value = "40";
+        document.getElementById("in_fps").value = "25";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     } else if (e == "3") {
-        bitrate = "6524288";
-        document.getElementById("in_bitrate").value = "6524288";
-        document.getElementById("in_fps").value = "40";
+        bitrate = "4524288";
+        document.getElementById("in_bitrate").value = "4524288";
+        document.getElementById("in_fps").value = "25";
         document.getElementById("in_max_w").value = "1080";
         document.getElementById("in_max_h").value = "1080";
     }
@@ -317,6 +317,8 @@ function removeDeviceViewElements() {
 
 function setStream(br) {
     document.getElementById("in_bitrate").value = br;
+    document.getElementById("in_fps").value = "25";
+
     setTimeout(function() {
         const changeVideoBtn = document.getElementById("btn_change_video");
         if (changeVideoBtn) {
