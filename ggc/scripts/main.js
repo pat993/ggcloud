@@ -75,7 +75,7 @@ class CircularBuffer {
 }
 
 class AudioStream {
-    constructor(wsUrl, sampleRate = 24000, targetLatency = 100) {
+    constructor(wsUrl, sampleRate = 24000, targetLatency = 50) {
         this.wsUrl = wsUrl;
         this.sampleRate = sampleRate;
         this.targetLatency = targetLatency;
@@ -90,10 +90,17 @@ class AudioStream {
         this.pingStartTime = null;
         this.latencyDisplay = document.getElementById('latency-display');
         this.lastPingTime = null;
-        this.highPingCount = 0; // Initialize high ping counter
-        this.normalPingCount = 0; // Initialize normal ping counter
-        this.originalBitrate = null; // Original bitrate chosen by the user
-        this.currentBitrate = null; // Current bitrate being used
+        
+        // Properties for average ping calculation
+        this.pingHistory = [];
+        this.maxPingHistory = 5; // Store last 5 pings for average
+        this.originalBitrate = null;
+        this.currentBitrate = null;
+        
+        // Thresholds for bitrate adjustment
+        this.highPingThreshold = 180; // ms
+        this.lowPingThreshold = 120; // ms
+        
         this.initAudio();
         this.setupWebSocket();
     }
@@ -224,44 +231,35 @@ class AudioStream {
                 if (status) {
                     latencyDisplay.innerHTML = status;
                 } else if (this.lastPingTime !== null) {
+                    // Update ping history
+                    this.pingHistory.push(this.lastPingTime);
+                    if (this.pingHistory.length > this.maxPingHistory) {
+                        this.pingHistory.shift();
+                    }
+
+                    // Calculate average ping for bitrate adjustment
+                    const avgPing = this.pingHistory.reduce((a, b) => a + b, 0) / this.pingHistory.length;
+                    
+                    // Display current ping
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
 
-                    // Check ping conditions and adjust bitrate
-                    if (this.lastPingTime > 200) {
-                        this.highPingCount++;
-                        this.normalPingCount = 0;
-                    } else if (this.lastPingTime < 150) {
-                        this.normalPingCount++;
-                        this.highPingCount = 0;
-                    } else {
-                        this.highPingCount = 0;
-                        this.normalPingCount = 0;
+                    // Store original bitrate if not already stored
+                    if (!this.originalBitrate) {
+                        this.originalBitrate = parseInt(document.getElementById("in_bitrate").value);
+                        this.currentBitrate = this.originalBitrate;
                     }
 
-                    // Adjust bitrate if ping is consistently high
-                    if (this.highPingCount >= 3) {
-                        if (!this.originalBitrate) {
-                            this.originalBitrate = document.getElementById("in_bitrate").value;
-                        }
-                        this.currentBitrate = this.currentBitrate ? this.currentBitrate : this.originalBitrate;
-                        
-                        if (this.currentBitrate > 524288) {
-                            this.currentBitrate -= 524288; // Reduce bitrate
-                            setStream(this.currentBitrate.toString());
-                        }
-                        this.highPingCount = 0; // Reset counter after adjusting bitrate
-                    }
-
-                    // Adjust bitrate back to original if ping is consistently low
-                    if (this.normalPingCount >= 3) {
-                        if (this.originalBitrate && this.currentBitrate < this.originalBitrate) {
-                            this.currentBitrate += 524288; // Increase bitrate
-                            if (this.currentBitrate > this.originalBitrate) {
-                                this.currentBitrate = this.originalBitrate; // Ensure we do not exceed the original bitrate
-                            }
-                            setStream(this.currentBitrate.toString());
-                        }
-                        this.normalPingCount = 0; // Reset counter after restoring bitrate
+                    // Adjust bitrate based on average ping
+                    if (avgPing > this.highPingThreshold && this.currentBitrate > 524288) {
+                        // Reduce bitrate by ~1 Mbps
+                        this.currentBitrate = Math.max(524288, this.currentBitrate - 1048576);
+                        setStream(this.currentBitrate.toString());
+                        console.log(`High average ping (${Math.round(avgPing)}ms), reducing bitrate to ${this.currentBitrate}`);
+                    } else if (avgPing < this.lowPingThreshold && this.currentBitrate < this.originalBitrate) {
+                        // Increase bitrate by ~0.5 Mbps
+                        this.currentBitrate = Math.min(this.originalBitrate, this.currentBitrate + 524288);
+                        setStream(this.currentBitrate.toString());
+                        console.log(`Low average ping (${Math.round(avgPing)}ms), increasing bitrate to ${this.currentBitrate}`);
                     }
                 }
             } else {
@@ -270,7 +268,7 @@ class AudioStream {
         };
 
         updateDisplay();
-    } 
+    }
     
 }
 
