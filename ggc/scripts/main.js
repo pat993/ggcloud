@@ -93,13 +93,13 @@ class AudioStream {
         
         // Properties for average ping calculation
         this.pingHistory = [];
-        this.maxPingHistory = 5;
+        this.maxPingHistory = 3; // Changed to 3 pings
         this.originalBitrate = null;
         this.currentBitrate = null;
         
         // Thresholds for bitrate adjustment
-        this.highPingThreshold = 180;
-        this.lowPingThreshold = 120;
+        this.highPingThreshold = 180; // Exactly 180ms as requested
+        this.lowPingThreshold = 130; // Exactly 130ms as requested
         
         this.initAudio();
         this.setupWebSocket();
@@ -134,7 +134,6 @@ class AudioStream {
 
         this.ws.onopen = () => {
             console.log('WebSocket connected');
-            this.muteAudio(false);
             this.startPing();
         };
 
@@ -231,27 +230,30 @@ class AudioStream {
                         this.pingHistory.shift();
                     }
 
-                    // Calculate average ping for bitrate adjustment
-                    const avgPing = this.pingHistory.reduce((a, b) => a + b, 0) / this.pingHistory.length;
-                    
                     // Display current ping
                     latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
 
-                    // Store original bitrate if not already stored
-                    if (!this.originalBitrate) {
-                        this.originalBitrate = parseInt(document.getElementById("in_bitrate").value);
-                        this.currentBitrate = this.originalBitrate;
-                    }
+                    // Only proceed with bitrate adjustment if we have enough ping history
+                    if (this.pingHistory.length === this.maxPingHistory) {
+                        // Calculate average of last 3 pings
+                        const avgPing = this.pingHistory.reduce((a, b) => a + b, 0) / this.maxPingHistory;
 
-                    // Adjust bitrate based on average ping
-                    if (avgPing > this.highPingThreshold && this.currentBitrate > 524288) {
-                        this.currentBitrate = Math.max(524288, this.currentBitrate - 1048576);
-                        setStream(this.currentBitrate.toString());
-                        console.log(`High average ping (${Math.round(avgPing)}ms), reducing bitrate to ${this.currentBitrate}`);
-                    } else if (avgPing < this.lowPingThreshold && this.currentBitrate < this.originalBitrate) {
-                        this.currentBitrate = Math.min(this.originalBitrate, this.currentBitrate + 524288);
-                        setStream(this.currentBitrate.toString());
-                        console.log(`Low average ping (${Math.round(avgPing)}ms), increasing bitrate to ${this.currentBitrate}`);
+                        // Store original bitrate if not already stored
+                        if (!this.originalBitrate) {
+                            this.originalBitrate = parseInt(document.getElementById("in_bitrate").value);
+                            this.currentBitrate = this.originalBitrate;
+                        }
+
+                        // Adjust bitrate based on average ping
+                        if (avgPing >= this.highPingThreshold && this.currentBitrate > 524288) {
+                            this.currentBitrate = Math.max(524288, this.currentBitrate - 1048576);
+                            setStream(this.currentBitrate.toString());
+                            console.log(`High average ping (${Math.round(avgPing)}ms), reducing bitrate to ${this.currentBitrate}`);
+                        } else if (avgPing <= this.lowPingThreshold && this.currentBitrate < this.originalBitrate) {
+                            this.currentBitrate = Math.min(this.originalBitrate, this.currentBitrate + 524288);
+                            setStream(this.currentBitrate.toString());
+                            console.log(`Low average ping (${Math.round(avgPing)}ms), increasing bitrate to ${this.currentBitrate}`);
+                        }
                     }
                 }
             } else {
@@ -277,7 +279,7 @@ ifvisible.on("blur", function() {
     blurStartTime = Date.now();
 
     if (stream1) {
-        stream1.disconnect();  // Disconnect instead of mute
+        stream1.disconnect();
     }
 });
 
@@ -291,7 +293,7 @@ ifvisible.on("wakeup", function() {
             location.reload();
         } else {
             if (stream1) {
-                stream1.reconnect();  // Reconnect the stream
+                stream1.reconnect();
             }
 
             if (bitrate) {
