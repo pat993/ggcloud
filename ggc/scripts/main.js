@@ -98,7 +98,7 @@ class AudioStream {
         this.currentBitrate = null;
         
         // Thresholds for bitrate adjustment
-        this.highPingThreshold = 200; // Exactly 180ms as requested
+        this.highPingThreshold = 300; // Exactly 180ms as requested
         this.lowPingThreshold = 150; // Exactly 130ms as requested
         
         this.initAudio();
