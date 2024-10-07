@@ -189,8 +189,8 @@ class Dashboard extends CI_Controller
    {
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
-      $server_username = 'patra';
-      $server_password = '@Nadhira250420';
+      $server_username = 'root';
+      $server_password = '&7G6cT01#spp';
 
       $ssh = new SSH2($server_ip, $server_port);
       if (!$ssh->login($server_username, $server_password)) {

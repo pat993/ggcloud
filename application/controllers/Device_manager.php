@@ -87,8 +87,8 @@ class Device_manager extends CI_Controller
    {
       $server_ip = 'hypercube.my.id';
       $server_port = 22;
-      $server_username = 'patra';
-      $server_password = '@Nadhira250420';
+      $server_username = 'root';
+      $server_password = '&7G6cT01#spp';
 
       $admin_token = 'ADMINTOKENAUTHENTICATION_190119_GGCLOUD';
 
