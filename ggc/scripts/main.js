@@ -12,21 +12,21 @@ function stream_quality() {
     if (e == "1") {
         bitrate = "1524288";
         document.getElementById("in_bitrate").value = "1524288";
-        document.getElementById("in_fps").value = "25";
-        document.getElementById("in_max_w").value = "1080";
-        document.getElementById("in_max_h").value = "1080";
+        document.getElementById("in_fps").value = "23";
+        document.getElementById("in_max_w").value = "900";
+        document.getElementById("in_max_h").value = "900";
     } else if (e == "2") {
         bitrate = "2524288";
         document.getElementById("in_bitrate").value = "2524288";
-        document.getElementById("in_fps").value = "25";
-        document.getElementById("in_max_w").value = "1080";
-        document.getElementById("in_max_h").value = "1080";
+        document.getElementById("in_fps").value = "23";
+        document.getElementById("in_max_w").value = "900";
+        document.getElementById("in_max_h").value = "900";
     } else if (e == "3") {
-        bitrate = "4524288";
-        document.getElementById("in_bitrate").value = "4524288";
-        document.getElementById("in_fps").value = "25";
-        document.getElementById("in_max_w").value = "1080";
-        document.getElementById("in_max_h").value = "1080";
+        bitrate = "5524288";
+        document.getElementById("in_bitrate").value = "5524288";
+        document.getElementById("in_fps").value = "23";
+        document.getElementById("in_max_w").value = "900";
+        document.getElementById("in_max_h").value = "900";
     }
 }
 
@@ -98,7 +98,7 @@ class AudioStream {
         this.currentBitrate = null;
         
         // Thresholds for bitrate adjustment
-        this.highPingThreshold = 300; // Exactly 180ms as requested
+        this.highPingThreshold = 400; // Exactly 180ms as requested
         this.lowPingThreshold = 150; // Exactly 130ms as requested
         
         this.initAudio();
@@ -317,7 +317,9 @@ function removeDeviceViewElements() {
 
 function setStream(br) {
     document.getElementById("in_bitrate").value = br;
-    document.getElementById("in_fps").value = "25";
+    document.getElementById("in_fps").value = "23";
+    document.getElementById("in_max_w").value = "900";
+    document.getElementById("in_max_h").value = "900";
 
     setTimeout(function() {
         const changeVideoBtn = document.getElementById("btn_change_video");
