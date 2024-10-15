@@ -13,20 +13,20 @@ function stream_quality() {
         bitrate = "1524288";
         document.getElementById("in_bitrate").value = "1524288";
         document.getElementById("in_fps").value = "23";
-        document.getElementById("in_max_w").value = "1920";
-        document.getElementById("in_max_h").value = "1920";
+        document.getElementById("in_max_w").value = "1280";
+        document.getElementById("in_max_h").value = "1280";
     } else if (e == "2") {
         bitrate = "2524288";
         document.getElementById("in_bitrate").value = "2524288";
         document.getElementById("in_fps").value = "23";
-        document.getElementById("in_max_w").value = "1920";
-        document.getElementById("in_max_h").value = "1920";
+        document.getElementById("in_max_w").value = "1280";
+        document.getElementById("in_max_h").value = "1280";
     } else if (e == "3") {
         bitrate = "5524288";
         document.getElementById("in_bitrate").value = "5524288";
         document.getElementById("in_fps").value = "23";
-        document.getElementById("in_max_w").value = "1920";
-        document.getElementById("in_max_h").value = "1920";
+        document.getElementById("in_max_w").value = "1280";
+        document.getElementById("in_max_h").value = "1280";
     }
 }
 
@@ -231,7 +231,15 @@ class AudioStream {
                     }
 
                     // Display current ping
-                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> ${this.lastPingTime} ms`;
+                    let pingText = this.lastPingTime;
+                    let textColor = '';
+                    
+                    if (this.lastPingTime > 999) {
+                        pingText = '999+';
+                        textColor = 'color: red;';
+                    }
+                    
+                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> <span style="${textColor}">${pingText} ms</span>`;
 
                     // Only proceed with bitrate adjustment if we have enough ping history
                     if (this.pingHistory.length === this.maxPingHistory) {
@@ -270,13 +278,10 @@ let stream1 = new AudioStream('wss://hypercube.my.id:' + audio_port);
 
 // Bitrate and visibility handling
 let bitrate;
-let blurStartTime = null;
-const blurThreshold = 60000;
 
 ifvisible.on("blur", function() {
     visible_status = false;
     setStream("524288");
-    blurStartTime = Date.now();
 
     if (stream1) {
         stream1.disconnect();
@@ -285,25 +290,15 @@ ifvisible.on("blur", function() {
 
 ifvisible.on("wakeup", function() {
     visible_status = true;
-    if (blurStartTime) {
-        const blurDuration = Date.now() - blurStartTime;
 
-        if (blurDuration >= blurThreshold) {
-            removeDeviceViewElements();
-            location.reload();
-        } else {
-            if (stream1) {
-                stream1.reconnect();
-            }
+    if (stream1) {
+        stream1.reconnect();
+    }
 
-            if (bitrate) {
-                setStream(bitrate);
-            } else {
-                setStream("2524288");
-            }
-        }
-
-        blurStartTime = null;
+    if (bitrate) {
+        setStream(bitrate);
+    } else {
+        setStream("2524288");
     }
 });
 
@@ -318,8 +313,8 @@ function removeDeviceViewElements() {
 function setStream(br) {
     document.getElementById("in_bitrate").value = br;
     document.getElementById("in_fps").value = "23";
-    document.getElementById("in_max_w").value = "1920";
-    document.getElementById("in_max_h").value = "1920";
+    document.getElementById("in_max_w").value = "1280";
+    document.getElementById("in_max_h").value = "1280";
 
     setTimeout(function() {
         const changeVideoBtn = document.getElementById("btn_change_video");
