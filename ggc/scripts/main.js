@@ -84,22 +84,7 @@ class AudioStream {
         this.channels = 1;
         this.bufferSize = Math.pow(2, Math.ceil(Math.log2(this.sampleRate * this.targetLatency / 1000)));
         this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
-        this.lastSampleData = new Float32Array(this.bufferSize * this.channels);
         this.isMuted = false;
-        this.pingInterval = null;
-        this.pingStartTime = null;
-        this.latencyDisplay = document.getElementById('latency-display');
-        this.lastPingTime = null;
-        
-        // Properties for average ping calculation
-        this.pingHistory = [];
-        this.maxPingHistory = 3; // Changed to 3 pings
-        this.originalBitrate = null;
-        this.currentBitrate = null;
-        
-        // Thresholds for bitrate adjustment
-        this.highPingThreshold = 400; // Exactly 180ms as requested
-        this.lowPingThreshold = 150; // Exactly 130ms as requested
         
         this.initAudio();
         this.setupWebSocket();
@@ -113,34 +98,30 @@ class AudioStream {
     }
 
     setupWebSocket() {
+        if (this.ws) {
+            console.log('WebSocket already exists. Closing before creating a new one.');
+            this.disconnect();
+        }
+
         this.ws = new WebSocket(this.wsUrl);
         this.ws.binaryType = 'arraybuffer';
 
         this.ws.onmessage = async (event) => {
-            if (event.data === 'pong') {
-                const pingTime = Date.now() - this.pingStartTime;
-                this.lastPingTime = pingTime;
-                this.updateLatencyDisplay();
-            } else {
-                const arrayBuffer = event.data;
-                const int16Array = new Int16Array(arrayBuffer);
-                const floatArray = new Float32Array(int16Array.length);
-                for (let i = 0; i < int16Array.length; i++) {
-                    floatArray[i] = int16Array[i] / 32768.0;
-                }
-                this.circularBuffer.write(floatArray);
+            const arrayBuffer = event.data;
+            const int16Array = new Int16Array(arrayBuffer);
+            const floatArray = new Float32Array(int16Array.length);
+            for (let i = 0; i < int16Array.length; i++) {
+                floatArray[i] = int16Array[i] / 32768.0;
             }
+            this.circularBuffer.write(floatArray);
         };
 
         this.ws.onopen = () => {
             console.log('WebSocket connected');
-            this.startPing();
         };
 
         this.ws.onclose = () => {
             console.log('WebSocket disconnected');
-            this.stopPing();
-            this.updateLatencyDisplay('Disconnected');
         };
 
         this.ws.onerror = (error) => {
@@ -162,25 +143,12 @@ class AudioStream {
             for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
                 for (let sample = 0; sample < outputBuffer.length; sample++) {
                     channelData[channel][sample] = data[sample * this.channels + channel];
-                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
                 }
             }
         } else {
-            console.warn('Buffer underrun');
+            // If not enough samples, output silence
             for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
-                for (let sample = 0; sample < outputBuffer.length; sample++) {
-                    let previousSample = this.lastSampleData[(sample - 1 + this.channels * outputBuffer.length) % (this.channels * outputBuffer.length)];
-                    let nextSample = 0.0;
-                    
-                    if (availableSamples > 0) {
-                        nextSample = this.circularBuffer.buffer[this.circularBuffer.readPointer];
-                    }
-
-                    let interpolatedSample = previousSample + ((nextSample - previousSample) * (sample / outputBuffer.length));
-                    channelData[channel][sample] = interpolatedSample;
-                    
-                    this.lastSampleData[sample * this.channels + channel] = channelData[channel][sample];
-                }
+                channelData[channel].fill(0);
             }
         }
     }
@@ -192,84 +160,17 @@ class AudioStream {
 
     disconnect() {
         if (this.ws) {
+            this.ws.onclose = null;
             this.ws.close();
-            this.stopPing();
+            this.ws = null;
         }
     }
 
     reconnect() {
+        this.disconnect();
+        this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
+        console.log('Attempting to reconnect WebSocket');
         this.setupWebSocket();
-    }
-
-    startPing() {
-        this.pingInterval = setInterval(() => {
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-                this.pingStartTime = Date.now();
-                this.ws.send('ping');
-            }
-        }, 3000);
-    }
-
-    stopPing() {
-        if (this.pingInterval) {
-            clearInterval(this.pingInterval);
-            this.pingInterval = null;
-        }
-    }
-
-    updateLatencyDisplay(status = null) {
-        const updateDisplay = () => {
-            const latencyDisplay = document.getElementById('latency-display');
-            if (latencyDisplay) {
-                if (status) {
-                    latencyDisplay.innerHTML = status;
-                } else if (this.lastPingTime !== null) {
-                    // Update ping history
-                    this.pingHistory.push(this.lastPingTime);
-                    if (this.pingHistory.length > this.maxPingHistory) {
-                        this.pingHistory.shift();
-                    }
-
-                    // Display current ping
-                    let pingText = this.lastPingTime;
-                    let textColor = '';
-                    
-                    if (this.lastPingTime > 999) {
-                        pingText = '999+';
-                        textColor = 'color: red;';
-                    }
-                    
-                    latencyDisplay.innerHTML = `<i class='fas fa-signal'></i> <span style="${textColor}">${pingText} ms</span>`;
-
-                    // Only proceed with bitrate adjustment if we have enough ping history
-                    if (this.pingHistory.length === this.maxPingHistory) {
-                        // Calculate average of last 3 pings
-                        const avgPing = this.pingHistory.reduce((a, b) => a + b, 0) / this.maxPingHistory;
-
-                        // Store original bitrate if not already stored
-                        if (!this.originalBitrate) {
-                            this.originalBitrate = parseInt(document.getElementById("in_bitrate").value);
-                            this.currentBitrate = this.originalBitrate;
-                        }
-
-                        // Adjust bitrate based on average ping
-                        if (avgPing >= this.highPingThreshold && this.currentBitrate > 524288) {
-                            this.currentBitrate = Math.max(524288, this.currentBitrate - 1048576);
-                            setStream(this.currentBitrate.toString());
-                            console.log(`High average ping (${Math.round(avgPing)}ms), reducing bitrate to ${this.currentBitrate}`);
-                        } else if (avgPing <= this.lowPingThreshold && this.currentBitrate < this.originalBitrate) {
-                            this.currentBitrate = Math.min(this.originalBitrate, this.currentBitrate + 524288);
-                            setStream(this.currentBitrate.toString());
-                            console.log(`Low average ping (${Math.round(avgPing)}ms), increasing bitrate to ${this.currentBitrate}`);
-                        }
-                    }
-                }
-            } else {
-                setTimeout(updateDisplay, 100);
-            }
-        };
-
-        updateDisplay();
     }
 }
 
