@@ -6,6 +6,14 @@ use phpseclib\Net\SSH2;
 class Ssh_test extends CI_Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        if ($this->session->userdata('status') != "login" && $this->session->userdata('username') != "admin") {
+            redirect(base_url("login"));
+        }
+    }
+
     public function index()
     {
         // Konfigurasi koneksi SSH

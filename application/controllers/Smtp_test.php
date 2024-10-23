@@ -11,6 +11,9 @@ class Smtp_test extends CI_Controller
         parent::__construct();
         // Load Composer's autoloader
         require 'vendor/autoload.php'; // Pastikan path ini sesuai dengan struktur proyek Anda
+        if ($this->session->userdata('status') != "login" && $this->session->userdata('username') != "admin") {
+            redirect(base_url("login"));
+        }
     }
 
     public function index()

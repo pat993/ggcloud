@@ -81,7 +81,7 @@
       <div style="overflow: scroll; height: 80vh">
          <h2>Syarat dan Ketentuan Layanan</h2>
 
-         <p>GGCLOUD adalah penyedia layanan emulator Android berbasis cloud untuk keperluan gaming dan AFK (Away From Keyboard). Dengan menggunakan layanan kami, Anda menyetujui syarat dan ketentuan berikut.</p>
+         <p>GGCLOUD adalah penyedia layanan penyewaan perangkat Android berbasis cloud. Dengan menggunakan layanan kami, Anda menyetujui syarat dan ketentuan berikut.</p>
 
          <h3>Penggunaan Layanan</h3>
          <p>1. Anda setuju untuk menggunakan layanan kami sesuai dengan hukum yang berlaku dan tidak melakukan tindakan yang dapat merugikan kami atau pengguna lain.</p>
