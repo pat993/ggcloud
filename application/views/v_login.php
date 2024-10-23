@@ -6,7 +6,7 @@
       <div class="card-center">
          <div class="ps-5 pe-5">
             <div style="padding-bottom: 10px" class="text-center">
-               <img class="text-center" src="images/popo.png" style="width: 200px; height: auto;" alt="">
+               <img class="text-center" src="images/knight.png" style="width: 260px; height: auto;" alt="">
             </div>
             <h1 class="text-center font-200 font-40 mb-4">Account Sign In</h1>
             <!-- <p class="text-center font-12">Sign in to continue</p> -->
