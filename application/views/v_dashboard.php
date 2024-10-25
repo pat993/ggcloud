@@ -58,7 +58,7 @@
                         <a href="#" onclick="window.open('player/go/<?= $device['device_identifier']; ?>');return true;" class="float-end"><i style="font-size: 40px" class="color-white fas fa-play"></i></a>
                      </div>
                      <div class="card-top ms-3 mt-3">
-                        <h3 class="color-white font-200 mb-0"><?= $device['custom_name']; ?></h3>
+                        <h3 style="font-size: 16px;" class="color-white font-200 mb-0"><?= $device['custom_name']; ?></h3>
                         <!-- <p class="color-white font-11 mt-n1 mb-2">Android 8, Octa-core, 4GB RAM, 64GB ROM</p> -->
                      </div>
 
