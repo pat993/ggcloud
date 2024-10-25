@@ -135,7 +135,7 @@ foreach ($device_list as $result) {
          <div id="a-device-info">
             <table class="table table-borderless rounded-sm mb-0" style="overflow: hidden;" id="tb_device">
                <tr>
-                  <td style="width: 150px;">
+                  <td style="width: 110px;">
                      <p>Nama Perangkat</p>
                   </td>
                   <td style="position: relative;">
@@ -154,19 +154,19 @@ foreach ($device_list as $result) {
                   </td>
                </tr>
                <tr>
-                  <td style="width: 150px">
+                  <td style="width: 110px">
                      <p>Tanggal Mulai</p>
                   </td>
                   <td><span><?= date('d-m-Y', strtotime($result["start_date"])); ?></span></td>
                </tr>
                <tr>
-                  <td style="width: 150px">
+                  <td style="width: 110px">
                      <p>Tanggal Selesai</p>
                   </td>
                   <td><span><?= date('d-m-Y', strtotime($result["end_date_kompensasi"])); ?></span></td>
                </tr>
                <tr>
-                  <td style="width: 150px">
+                  <td style="width: 110px">
                      <p>Sisa Masa Aktif</p>
                   </td>
                   <td style="position: relative;">
