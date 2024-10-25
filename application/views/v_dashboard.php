@@ -128,6 +128,7 @@ foreach ($device_list as $result) {
          <h1>
             Device Info <button class="close-menu float-right me-4 opacity-50"><i class="fa fa-times"></i></button>
          </h1>
+         <hr>
       </div>
 
       <div class="content mt-2 pb-4">
@@ -137,8 +138,17 @@ foreach ($device_list as $result) {
                   <td style="width: 150px;">
                      <p>Nama Perangkat</p>
                   </td>
-                  <td style="position: relative;"><span><?= $result["custom_name"]; ?>
-                        <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px"> <i class="fa fa-angle-right"></i>
+                  <td style="position: relative;">
+                     <span>
+                        <?= $result["custom_name"]; ?>
+                        <span>
+                           | ID: <span id="deviceId-<?= $result['id'] ?>">100<?= $result['id'] ?></span>
+                           <button style="opacity: 50%; font-size: 10px" onclick="copyId(<?= $result['id'] ?>)" title="Copy ID">
+                              <i class="fa fa-copy"></i>
+                           </button>
+                        </span>
+                        <button data-menu="menu-edit-device-<?= $result['id'] ?>" style="position:absolute; right:15px">
+                           <i class="fa fa-angle-right"></i>
                         </button>
                      </span>
                   </td>
@@ -157,39 +167,26 @@ foreach ($device_list as $result) {
                </tr>
                <tr>
                   <td style="width: 150px">
-                     <p>Masa Aktif</p>
+                     <p>Sisa Masa Aktif</p>
                   </td>
-                  <td><span><?= $result['masa_aktif']; ?> Jam</span>
+                  <td style="position: relative;">
+                     <span><?= $result['masa_aktif']; ?> Jam</span>
                      <?php if ($result['kompensasi'] != 0) { ?>
                         <span style="border:1px solid green; padding: 1px 5px 1px 5px; color: green; border-radius: 20px"> + <?= $result['kompensasi']; ?> Jam</span>
                      <?php
                      } ?>
+                     <button data-menu="menu-extend-device-<?= $result['id'] ?>" class="btn btn-warning" style="border-radius: 20px; font-size: 9px; position:absolute; right:15px">Perpanjang Masa Aktif</button>
                   </td>
                </tr>
             </table>
-            <hr>
-
-            <form action="<?= base_url() ?>dashboard/voucher_extend/" method="POST">
-               <input type="hidden" value="<?= $result["id"]; ?>" name="txt_assign_id">
-               <div class="ms-2 mt-1 opacity-80">
-                  <b>Tambah durasi</b>
-               </div>
-               <div class="input-style input-style-always-active validate-field no-borders no-icon rounded-xl">
-                  <input style="background-color: #F8F8F8; border-radius: 10px" class="text-center" type="text" name="txt_voucher_ext" placeholder="Input kode voucher disini" autocomplete="off" required>
-               </div>
-               <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-0 mt-2"><i class="far fa-check-circle"></i></button>
-               <div style="font-size: 10px; border-bottom: 0" class="opacity-60 ms-2 mt-2">
-                  <i class="fas fa-info-circle"></i> Lakukan penambahan durasi perangkat sebelum masa aktif berakhir untuk menghindari penghapusan data
-               </div>
-            </form>
          </div>
       </div>
    </div>
 
    <div style="max-width: 700px; margin: auto" id="menu-edit-device-<?= $result['id'] ?>" class="menu menu-box-top menu-box-detached rounded-m">
       <div class="menu-title">
-         <h1>Rename Device</h1>
-         <!-- <p>Claim voucher to add device</p> -->
+         <h1>Nama Perangkat</h1>
+         <hr>
       </div>
       <div class="content">
          <form action="<?= base_url() ?>dashboard/rename_device/" method="POST">
@@ -202,10 +199,33 @@ foreach ($device_list as $result) {
          </form>
       </div>
    </div>
+
+   <div style="max-width: 700px; margin: auto" id="menu-extend-device-<?= $result['id'] ?>" class="menu menu-box-bottom menu-box-detached rounded-m">
+      <div class="menu-title">
+         <h1>Perpanjang Masa Aktif</h1>
+         <hr>
+      </div>
+      <div class="content">
+         <form action="<?= base_url() ?>dashboard/voucher_extend/" method="POST">
+            <div class="input-style input-style-always-active validate-field no-borders no-icon rounded-xl">
+               <input type="hidden" name="txt_assign_id" value="<?= $result["id"]; ?>">
+               <input style="background-color: #F8F8F8; border-radius: 10px" class="text-center" type="text" name="txt_voucher_ext" placeholder="Input kode voucher disini" autocomplete="off" required>
+            </div>
+            <button href="#" type="submit" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-0 mt-2"><i class="far fa-check-circle"></i></button>
+            <div style="font-size: 10px; border-bottom: 0" class="opacity-60 ms-2 mt-2 mb-2">
+               <i class="fas fa-info-circle"></i> Pastikan vocher yang digunakan sesuai dengan syarat dan ketentuan yang berlaku *
+            </div>
+         </form>
+      </div>
+   </div>
 <?php
 } ?>
 
 
 <script>
-
+   function copyId(id) {
+      const idText = document.getElementById('deviceId-' + id).innerText;
+      navigator.clipboard.writeText(idText);
+      alert('ID berhasil disalin: ' + idText);
+   }
 </script>

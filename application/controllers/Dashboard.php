@@ -104,17 +104,6 @@ class Dashboard extends CI_Controller
                $access_token = $this->M_dashboard->randomString(32);
 
                if ($this->update_configuration($available_device, $access_token) ==  true) {
-                  $data = array(
-                     'user_id' => $user_id,
-                     'jenis_id' => $jenis_paket,
-                     'paket_id' => $paket_id,
-                     'harga' => $harga,
-                     'jenis_transaksi' => $jenis_transaksi,
-                     'status' => 'Lunas'
-                  );
-
-                  //insert to invoice
-                  $this->M_dashboard->insert_data('invoice', $data);
 
                   $data = array(
                      'user_id' => $user_id,
@@ -125,7 +114,7 @@ class Dashboard extends CI_Controller
                      'end_date_kompensasi' => $enddate_calc
                   );
 
-                  $this->M_dashboard->insert_data('assigned', $data);
+                  $assign_id = $this->M_dashboard->insert_data('assigned', $data);
 
                   $data2 = array(
                      'package_id' => $paket_id,
@@ -137,6 +126,20 @@ class Dashboard extends CI_Controller
 
                   $this->M_dashboard->insert_data('purchase', $data2);
 
+                  $data = array(
+                     'user_id' => $user_id,
+                     'assign_id' => $assign_id,
+                     'jenis_id' => $jenis_paket,
+                     'paket_id' => $paket_id,
+                     'harga' => $harga,
+                     'jenis_transaksi' => $jenis_transaksi,
+                     'status' => 'Lunas'
+                  );
+
+                  //insert to invoice
+                  $this->M_dashboard->insert_data('invoice', $data);
+
+
                   $assign_id = $this->M_dashboard->get_assign_id('assigned', array('device_identifier' => $device_identifier))[0]['id'];
 
                   $this->M_dashboard->update_data('voucher', array('id' => $voucher_id), array(
@@ -147,7 +150,8 @@ class Dashboard extends CI_Controller
 
                   $this->M_dashboard->update_data('device', array('id' => $available_device[0]['id']), array(
                      'status_id' => '3',
-                     'jenis_paket' => $jenis_paket
+                     'jenis_paket' => $jenis_paket,
+                     'id_paket_existing' => $paket_id
                   ));
 
                   $this->session->set_flashdata('success', "Success");
@@ -237,21 +241,24 @@ class Dashboard extends CI_Controller
 
       foreach ($jenis_paket_ary as $jenis_paket_r) {
          $jenis_paket = $jenis_paket_r['jenis_paket'];
+         $id_paket = $jenis_paket_r['id_paket_existing'];
       }
 
       $where = array(
          'kode_voucher' => $voucher_code,
-         'jenis_voucher' => 'Perpanjang',
          'jenis_paket' => $jenis_paket
       );
 
-      $data_voucher = $this->M_dashboard->cek_voucher('voucher', $where);
+      $data_voucher = $this->M_dashboard->cek_voucher_extend('voucher', $where, $id_paket);
 
       if (count($data_voucher) > 0) {
          foreach ($data_voucher as $data_voucher_r) {
             $voucher_id = $data_voucher_r['voucher_id'];
+            $jenis_paket = $data_voucher_r['jenis_paket'];
             $paket_id = $data_voucher_r['paket_id'];
             $durasi = $data_voucher_r['durasi'];
+            $harga = $data_voucher_r['harga'];
+            $jenis_transaksi = $data_voucher_r['jenis_ecommerce'];
          }
 
          $user_id = $this->session->userdata('user_id');
@@ -288,6 +295,19 @@ class Dashboard extends CI_Controller
                'assign_id' => $assign_id,
                'tanggal_digunakan' => date('Y-m-d h:i:s')
             ));
+
+            $data = array(
+               'user_id' => $user_id,
+               'assign_id' => $assign_id,
+               'jenis_id' => $jenis_paket,
+               'paket_id' => $paket_id,
+               'harga' => $harga,
+               'jenis_transaksi' => $jenis_transaksi,
+               'status' => 'Lunas'
+            );
+
+            //insert to invoice
+            $this->M_dashboard->insert_data('invoice', $data);
 
             $this->session->set_flashdata('success', "Perpanjang Perangkat Berhasil");
 

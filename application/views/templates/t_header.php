@@ -6,7 +6,7 @@
    <!-- <meta name="apple-mobile-web-app-capable" content="yes">
    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, viewport-fit=cover" />
-   <title>GGCLOUD.ID | Android Cloud Emulator</title>
+   <title>GGCLOUD.ID | Android Cloud Gaming & AFK</title>
    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>styles/bootstrap.css">
    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>styles/style.css">
    <link rel="stylesheet" type="text/css" href="<?= base_url(); ?>styles/dataTables.bootstrap4.min.css">

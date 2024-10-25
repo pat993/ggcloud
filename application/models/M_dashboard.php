@@ -27,7 +27,7 @@ class M_dashboard extends CI_Model
 
    function get_jenis_paket($table, $where)
    {
-      $this->db->select('jenis_paket');
+      $this->db->select('jenis_paket, id_paket_existing');
       $this->db->join('device', 'device.id=assigned.device_id');
 
       $result = $this->db->get_where($table, $where)->result_array();
@@ -56,6 +56,19 @@ class M_dashboard extends CI_Model
       return $result;
    }
 
+   function cek_voucher_extend($table, $where, $id_paket)
+   {
+      $this->db->select('voucher.id, paket_id, durasi, voucher.id as voucher_id, jenis_voucher, jenis_paket, harga, jenis_ecommerce');
+      $this->db->join('package', 'voucher.paket_id = package.id', 'left');
+      $this->db->where($where);
+      $this->db->where("FIND_IN_SET('$id_paket', allowed_extend) > 0");
+      $this->db->where('voucher_status', 'Belum Digunakan');
+
+      $result = $this->db->get_where($table)->result_array();
+
+      return $result;
+   }
+
    function cek_available($table)
    {
       $this->db->where('status_id', '2');
@@ -69,6 +82,7 @@ class M_dashboard extends CI_Model
    function insert_data($table, $data)
    {
       $this->db->insert($table, $data);
+      return $this->db->insert_id(); // Mengembalikan ID dari data yang baru di-insert
    }
 
    function update_data($table, $where, $data)
