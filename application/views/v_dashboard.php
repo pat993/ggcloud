@@ -175,7 +175,7 @@ foreach ($device_list as $result) {
                         <span style="border:1px solid green; padding: 1px 5px 1px 5px; color: green; border-radius: 20px"> + <?= $result['kompensasi']; ?> Jam</span>
                      <?php
                      } ?>
-                     <button data-menu="menu-extend-device-<?= $result['id'] ?>" class="btn btn-warning" style="border-radius: 20px; font-size: 9px; position:absolute; right:15px">Perpanjang Masa Aktif</button>
+                     <button data-menu="menu-extend-device-<?= $result['id'] ?>" class="btn btn-warning" style="border-radius: 20px; font-size: 9px; position:absolute; right:15px">Perpanjang</button>
                   </td>
                </tr>
             </table>
@@ -226,6 +226,5 @@ foreach ($device_list as $result) {
    function copyId(id) {
       const idText = document.getElementById('deviceId-' + id).innerText;
       navigator.clipboard.writeText(idText);
-      alert('ID berhasil disalin: ' + idText);
    }
 </script>
