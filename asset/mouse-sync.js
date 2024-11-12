@@ -310,8 +310,10 @@ class MouseSyncSource extends MouseSyncBase {
         this.canvas = canvas;
         this.mouseBroadcast = new BroadcastChannel('mouse-sync-canvas');
         this.isMouseDown = false;
+        this.isTouchActive = false;
         this.lastPos = { x: 0, y: 0 };
         this.isEnabled = false;
+        this.activeTouchId = null;
         
         window.addEventListener('mouseSyncSourceToggle', (e) => {
             this.isEnabled = e.detail.enabled;
@@ -319,7 +321,7 @@ class MouseSyncSource extends MouseSyncBase {
         });
         
         this.initializeEvents();
-        console.log('🎯 Mouse Sync Source initialized');
+        console.log('🎯 Mouse Sync Source initialized with touch support');
     }
     
     broadcastEvent(type, relativeX, relativeY) {
@@ -336,9 +338,9 @@ class MouseSyncSource extends MouseSyncBase {
     }
 
     initializeEvents() {
-        // Mouse down
+        // Mouse Events
         this.canvas.addEventListener('mousedown', (e) => {
-            if (!this.isEnabled || !this.isPointInCanvas(e.clientX, e.clientY)) return;
+            if (!this.isEnabled || !this.isPointInCanvas(e.clientX, e.clientY) || this.isTouchActive) return;
             
             this.isMouseDown = true;
             this.lastPos = this.getRelativePosition(e.clientX, e.clientY);
@@ -346,18 +348,16 @@ class MouseSyncSource extends MouseSyncBase {
             e.preventDefault();
         }, { capture: true });
 
-        // Mouse move
         this.canvas.addEventListener('mousemove', (e) => {
-            if (!this.isEnabled || !this.isMouseDown || !this.isPointInCanvas(e.clientX, e.clientY)) return;
+            if (!this.isEnabled || !this.isMouseDown || !this.isPointInCanvas(e.clientX, e.clientY) || this.isTouchActive) return;
 
             this.lastPos = this.getRelativePosition(e.clientX, e.clientY);
             this.broadcastEvent('mousemove', this.lastPos.x, this.lastPos.y);
             e.preventDefault();
         }, { capture: true });
 
-        // Mouse up
         this.canvas.addEventListener('mouseup', (e) => {
-            if (!this.isEnabled || !this.isMouseDown) return;
+            if (!this.isEnabled || !this.isMouseDown || this.isTouchActive) return;
             
             if (this.isPointInCanvas(e.clientX, e.clientY)) {
                 this.lastPos = this.getRelativePosition(e.clientX, e.clientY);
@@ -368,10 +368,66 @@ class MouseSyncSource extends MouseSyncBase {
             e.preventDefault();
         }, { capture: true });
 
+        // Touch Events
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (!this.isEnabled) return;
+            
+            const touch = e.touches[0];
+            if (!this.isPointInCanvas(touch.clientX, touch.clientY)) return;
+            
+            this.isTouchActive = true;
+            this.activeTouchId = touch.identifier;
+            this.lastPos = this.getRelativePositionFromTouch(touch);
+            this.broadcastEvent('mousedown', this.lastPos.x, this.lastPos.y);
+            e.preventDefault();
+        }, { capture: true, passive: false });
+
+        this.canvas.addEventListener('touchmove', (e) => {
+            if (!this.isEnabled || !this.isTouchActive) return;
+            
+            const touch = Array.from(e.touches).find(t => t.identifier === this.activeTouchId);
+            if (!touch || !this.isPointInCanvas(touch.clientX, touch.clientY)) return;
+            
+            this.lastPos = this.getRelativePositionFromTouch(touch);
+            this.broadcastEvent('mousemove', this.lastPos.x, this.lastPos.y);
+            e.preventDefault();
+        }, { capture: true, passive: false });
+
+        this.canvas.addEventListener('touchend', (e) => {
+            if (!this.isEnabled || !this.isTouchActive) return;
+            
+            const touch = Array.from(e.changedTouches).find(t => t.identifier === this.activeTouchId);
+            if (!touch) return;
+            
+            if (this.isPointInCanvas(touch.clientX, touch.clientY)) {
+                this.lastPos = this.getRelativePositionFromTouch(touch);
+                this.broadcastEvent('mouseup', this.lastPos.x, this.lastPos.y);
+            }
+            
+            this.isTouchActive = false;
+            this.activeTouchId = null;
+            e.preventDefault();
+        }, { capture: true, passive: false });
+
+        // Handle touch cancel the same as touch end
+        this.canvas.addEventListener('touchcancel', (e) => {
+            if (!this.isEnabled || !this.isTouchActive) return;
+            
+            const touch = Array.from(e.changedTouches).find(t => t.identifier === this.activeTouchId);
+            if (!touch) return;
+            
+            this.broadcastEvent('mouseup', this.lastPos.x, this.lastPos.y);
+            this.isTouchActive = false;
+            this.activeTouchId = null;
+            e.preventDefault();
+        }, { capture: true, passive: false });
+
         // Window blur
         window.addEventListener('blur', () => {
-            if (this.isEnabled && this.isMouseDown) {
+            if (this.isEnabled && (this.isMouseDown || this.isTouchActive)) {
                 this.isMouseDown = false;
+                this.isTouchActive = false;
+                this.activeTouchId = null;
                 this.broadcastEvent('mouseup', this.lastPos.x, this.lastPos.y);
             }
         });
