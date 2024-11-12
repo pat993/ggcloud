@@ -25,10 +25,18 @@
     </div>
 
     <div class="DraggableDiv">
-        <button class="btn btn-dark rounded-xl" id="fullscreen-toggle"><i class="fas fa-expand" style="font-size: 10px;"></i></button>
-        <button class="btn btn-dark rounded-xl mt-1" id="audio-toggle"><i class="fas fa-volume-up" style="font-size: 10px;"></i></button>
-        <button class="btn btn-dark rounded-xl mt-1" id="slide-toggle"><i class="fas fa-ellipsis-h" style="font-size: 10px;"></i></button>
-
+        <button class="btn btn-dark rounded-xl" id="fullscreen-toggle">
+            <i class="fas fa-expand" style="font-size: 10px;"></i>
+        </button>
+        <button class="btn btn-dark rounded-xl mt-1" id="audio-toggle">
+            <i class="fas fa-volume-up" style="font-size: 10px;"></i>
+        </button>
+        <button class="btn btn-dark rounded-xl mt-1" id="sync-toggle">
+            <i class="fas fa-sync" style="font-size: 10px;"></i>
+        </button>
+        <button class="btn btn-dark rounded-xl mt-1" id="slide-toggle">
+            <i class="fas fa-ellipsis-h" style="font-size: 10px;"></i>
+        </button>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -38,6 +46,14 @@
     <script src="/asset/draggable.js"></script>
     <script src="/asset/scripts/ifvisible.js"></script>
     <script src="/asset/scripts/main.js"></script>
+    <script src="/asset/mouse-sync.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Inisialisasi sistem dengan selector canvas yang diinginkan
+            const mouseSync = initializeMouseSync('.touch-layer');
+        });
+    </script>
 
 </body>
 
