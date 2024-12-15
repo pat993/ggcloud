@@ -103,7 +103,7 @@
             if ($this->session->userdata('err_count_v') == 1) {
          ?>
 
-               <div class="g-recaptcha " data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
+               <div class="g-recaptcha " data-sitekey="6LcJIZwqAAAAAGGvyV5CWvUqGVsAlzBK4zFNbJBV" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
 
          <?php
             }

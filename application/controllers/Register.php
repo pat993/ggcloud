@@ -38,7 +38,7 @@ class Register extends CI_Controller
       //recaptca
       $response = $this->input->post('g-recaptcha-response');
       $error = "";
-      $secret = "6Lf72FUpAAAAAIdtF5CjQ353d9-Y2dYAcyYZVHg6";
+      $secret = "6LcJIZwqAAAAAGUVhKsHM0kCBiBk9DEOYvciqRcN";
       $url = "https://www.google.com/recaptcha/api/siteverify?secret=$secret&response=$response";
       $verify = json_decode(file_get_contents($url));
 

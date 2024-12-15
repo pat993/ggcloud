@@ -23,7 +23,7 @@
                   <input type="email" class="form-control" id="email" placeholder="Email" name="email" value="" required>
                </div>
 
-               <div class="g-recaptcha mt-4" data-sitekey="6Lf72FUpAAAAAB15KrmicPBHlE7AtktemGLWzyyq" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
+               <div class="g-recaptcha mt-4" data-sitekey="6LcJIZwqAAAAAGGvyV5CWvUqGVsAlzBK4zFNbJBV" style="transform:scale(0.77);-webkit-transform:scale(0.77);transform-origin:0 0;-webkit-transform-origin:0 0;"></div>
 
                <button style="width: 100%" type="submit" name="signup" class="btn btn-full btn-m rounded-sm text-uppercase font-200 btn-grad">Send Reset Link</button>
 
