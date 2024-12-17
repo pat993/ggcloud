@@ -118,15 +118,31 @@ class AudioStream {
 
         this.ws.onopen = () => {
             console.log('WebSocket connected');
+            this.startReconnectTimer = null; // Reset reconnect timer on successful connection
         };
 
-        this.ws.onclose = () => {
-            console.log('WebSocket disconnected');
+        this.ws.onclose = (event) => {
+            console.log('WebSocket disconnected', event);
+            this.autoReconnect();
         };
 
         this.ws.onerror = (error) => {
             console.error('WebSocket error:', error);
+            this.autoReconnect();
         };
+    }
+
+    autoReconnect() {
+        // Jika timer rekonneksi sudah ada, batalkan
+        if (this.startReconnectTimer) {
+            clearTimeout(this.startReconnectTimer);
+        }
+
+        // Rekonneksi secara terus-menerus dengan jeda acak untuk menghindari beban bersamaan
+        this.startReconnectTimer = setTimeout(() => {
+            console.log('Attempting to reconnect WebSocket...');
+            this.reconnect();
+        }, Math.random() * 1000 + 500); // Jeda acak antara 500-1500 milidetik
     }
 
     processAudio(audioProcessingEvent) {
@@ -146,7 +162,7 @@ class AudioStream {
                 }
             }
         } else {
-            // If not enough samples, output silence
+            // Jika tidak ada sampel, output silence
             for (let channel = 0; channel < outputBuffer.numberOfChannels; channel++) {
                 channelData[channel].fill(0);
             }
@@ -159,6 +175,11 @@ class AudioStream {
     }
 
     disconnect() {
+        // Batalkan timer rekonneksi jika ada
+        if (this.startReconnectTimer) {
+            clearTimeout(this.startReconnectTimer);
+        }
+
         if (this.ws) {
             this.ws.onclose = null;
             this.ws.close();
@@ -169,7 +190,6 @@ class AudioStream {
     reconnect() {
         this.disconnect();
         this.circularBuffer = new CircularBuffer(this.bufferSize * this.channels * 4);
-        console.log('Attempting to reconnect WebSocket');
         this.setupWebSocket();
     }
 }
