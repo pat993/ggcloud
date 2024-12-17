@@ -45,7 +45,7 @@
     <script src="/asset/scripts/custom.js"></script>
     <script src="/asset/draggable.js"></script>
     <script src="/asset/scripts/ifvisible.js"></script>
-    <script src="/ggc/scripts/main.js"></script>
+    <script src="/asset/scripts/main.js"></script>
     <script src="/asset/mouse-sync.js"></script>
 
     <script>
