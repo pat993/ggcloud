@@ -35,7 +35,7 @@
     <script src="/asset/scripts/custom.js"></script>
     <script src="/asset/draggable.js"></script>
     <script src="/asset/scripts/ifvisible.js"></script>
-    <script src="/asset/scripts/main.js"></script>
+    <script src="/ggc/scripts/main.js"></script>
 
     <a style="position:absolute; bottom: 10px; right: 10px; z-index: 99" class="btn btn-primary" href="<?= base_url() . 'device_manager/done_configure/' . $dev_id; ?>"><button>Done Configure</button></a>
 </body>
