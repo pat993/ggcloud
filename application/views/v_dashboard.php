@@ -141,9 +141,9 @@ foreach ($device_list as $result) {
                   <td style="position: relative;">
                      <span>
                         <?= $result["custom_name"]; ?>
-                        <span>
-                           | ID: <span id="deviceId-<?= $result['id'] ?>">100<?= $result['id'] ?></span>
-                           <button style="opacity: 50%; font-size: 10px" onclick="copyId(<?= $result['id'] ?>)" title="Copy ID">
+                        <span style="border: 1px solid black; border-radius: 20px; padding: 1px 2px 1px 2px; font-size: 11px; opacity: 50%;">
+                           ID: <span id="deviceId-<?= $result['id'] ?>">100<?= $result['id'] ?></span>
+                           <button style="font-size: 10px" onclick="copyId(<?= $result['id'] ?>)" title="Copy ID">
                               <i class="fa fa-copy"></i>
                            </button>
                         </span>
@@ -175,11 +175,12 @@ foreach ($device_list as $result) {
                         <span style="border:1px solid green; padding: 1px 5px 1px 5px; color: green; border-radius: 20px"> + <?= $result['kompensasi']; ?> Jam</span>
                      <?php
                      } ?>
-                     <button data-menu="menu-extend-device-<?= $result['id'] ?>" class="btn btn-warning" style="border-radius: 20px; font-size: 9px; position:absolute; right:15px">Perpanjang</button>
                   </td>
                </tr>
             </table>
          </div>
+         <button data-menu="menu-extend-device-<?= $result['id'] ?>" style="width: 100%" class="btn btn-full btn-m rounded-m btn-grad font-700 text-uppercase mb-0 mt-2">Perpanjang</i></button>
+         <!-- <button data-menu="menu-extend-device-<?= $result['id'] ?>" class="btn btn-warning" style="border-radius: 20px; font-size: 9px;">Perpanjang</button> -->
       </div>
    </div>
 
